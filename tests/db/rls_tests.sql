@@ -17,10 +17,10 @@ grant execute on function public._ok(text, boolean, text) to authenticated, anon
 
 -- Sign-up rules
 do $$ begin
-  begin insert into auth.users (email, raw_user_meta_data) values ('d@test', '{"username":"alice"}');
+  begin insert into auth.users (id, email, raw_user_meta_data) values (gen_random_uuid(), 'd@test', '{"username":"alice"}');
         perform _ok('duplicate username rejected', false);
   exception when others then perform _ok('duplicate username rejected', sqlerrm like '%USERNAME_TAKEN%', sqlerrm); end;
-  begin insert into auth.users (email, raw_user_meta_data) values ('e@test', '{"username":"No Spaces!"}');
+  begin insert into auth.users (id, email, raw_user_meta_data) values (gen_random_uuid(), 'e@test', '{"username":"No Spaces!"}');
         perform _ok('invalid username rejected', false);
   exception when others then perform _ok('invalid username rejected', sqlerrm like '%USERNAME_INVALID%', sqlerrm); end;
   perform _ok('profiles created for 3 users', (select count(*) from profiles) = 3);
