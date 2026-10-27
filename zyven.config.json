@@ -1,0 +1,5 @@
+{
+  "_comment": "PUBLIC values only. Supabase designs the anon key to be shipped inside apps; your data is protected by the row-level security rules in supabase/migrations. Never put the service_role key, an sb_secret_ key, or the database password here.",
+  "supabaseUrl": "https://uztkmmwegwyjfqphcxkg.supabase.co",
+  "supabaseAnonKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6dGttbXdlZ3d5amZxcGhjeGtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMxMDMxMzksImV4cCI6MjEwODY3OTEzOX0.nhB32T12rXmJ28ySxVFfOpJaK2Ub6MAL_444-jzN7u4"
+}

@@ -34,8 +34,8 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: |
-          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
-            echo "::warning title=Server not connected::The SUPABASE_URL and SUPABASE_ANON_KEY secrets are not set. The APK will open on a 'Server not connected' screen. See README → Connect your server."
+          if { [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; } && [ ! -f zyven.config.json ]; then
+            echo "::warning title=Server not connected::No server address found (secrets or zyven.config.json). The APK will open on a 'Server not connected' screen. See README → Connect your server."
           fi
           npm run build
 

@@ -52,8 +52,11 @@ function readEnvFile() {
   return vals;
 }
 const envFile = readEnvFile();
-const supabaseUrl = (process.env.SUPABASE_URL || envFile.SUPABASE_URL || '').trim().replace(/\/+$/, '');
-const supabaseAnonKey = (process.env.SUPABASE_ANON_KEY || envFile.SUPABASE_ANON_KEY || '').trim();
+// Fallback: zyven.config.json in the repository (public values only).
+let fileCfg = {};
+try { fileCfg = JSON.parse(readFileSync(join(root, 'zyven.config.json'), 'utf8')); } catch (e) { fileCfg = {}; }
+const supabaseUrl = (process.env.SUPABASE_URL || envFile.SUPABASE_URL || fileCfg.supabaseUrl || '').trim().replace(/\/+$/, '');
+const supabaseAnonKey = (process.env.SUPABASE_ANON_KEY || envFile.SUPABASE_ANON_KEY || fileCfg.supabaseAnonKey || '').trim();
 if (supabaseAnonKey) {
   if (/^sb_secret_/.test(supabaseAnonKey)) fail('SUPABASE_ANON_KEY is a SECRET key (sb_secret_…). Use the publishable/anon key instead. Never put a secret key in the app.');
   const parts = supabaseAnonKey.split('.');

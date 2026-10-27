@@ -742,7 +742,7 @@ $$;
 -- Everything the chat list needs, in one call (respects RLS: invoker).
 create or replace function public.my_unread_counts()
 returns table (conversation_id uuid, unread bigint)
-language sql stable as $$
+language sql stable set search_path = '' as $$
   select s.conversation_id, count(m.id)
   from public.member_state s
   join public.messages m on m.conversation_id = s.conversation_id
@@ -755,7 +755,7 @@ $$;
 -- Latest messages of every conversation (invoker: RLS decides visibility).
 create or replace function public.recent_messages(per_conversation integer default 40)
 returns setof public.messages
-language sql stable as $$
+language sql stable set search_path = '' as $$
   select m.* from public.member_state s
   cross join lateral (
     select * from public.messages x

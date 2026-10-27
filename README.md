@@ -23,28 +23,19 @@ On your Android phone, open:
 Tap the downloaded file → **Install** (allow installs from this source if
 asked; if Play Protect warns, tap **More details → Install anyway**).
 
-> The app only works after its server is connected (next section). Until
-> then it opens on a “Server not connected” screen.
+> If an older ZYVEN is installed, uninstall it first (see *Limitations*).
 
 ---
 
-## Connect your server (once, about 10 minutes)
+## Your server
 
-### 1. Create a Supabase project
-1. Go to [supabase.com](https://supabase.com) and sign up (free plan is fine).
-2. Click **New project**. Pick a name (e.g. `zyven`), a region near you, and
-   a database password. Keep that password to yourself. ZYVEN never needs it.
-3. Wait until the project says it’s ready.
+ZYVEN is connected to the Supabase project **uztkmmwegwyjfqphcxkg**
+(`https://uztkmmwegwyjfqphcxkg.supabase.co`). The database, security rules,
+storage, and realtime are already set up there, and the app’s public
+address and key are in `zyven.config.json`.
 
-### 2. Create the ZYVEN database
-1. Open this file on GitHub:
-   [`supabase/migrations/20261027000000_zyven_init.sql`](supabase/migrations/20261027000000_zyven_init.sql)
-   and click the **Copy raw file** button (two overlapping squares).
-2. In Supabase, open **SQL Editor** (left menu) → **New query**.
-3. Paste, then click **Run**. You should see “Success. No rows returned”.
-   Run it only once; a second run says things “already exist”.
+Two settings can only be changed in the Supabase dashboard:
 
-### 3. Two sign-in settings
 In Supabase, go to **Authentication**:
 1. **Sign In / Providers → Email**: turn **off** “Confirm email”, then
    **Save**. People can then use the app right after signing up. (If you
@@ -57,30 +48,15 @@ In Supabase, go to **Authentication**:
 > fine for testing. For real use, add your own email provider in
 > **Authentication → Emails → SMTP Settings**.
 
-### 4. Copy your server’s two public values
-In Supabase: **Project Settings → API Keys** (or the **Connect** button):
-- **Project URL**, like `https://abcdefgh.supabase.co`
-- **anon public** key (a long text starting with `eyJ`), or the
-  **publishable** key (starting with `sb_publishable_`)
-
-Both are meant to be inside apps; your data is protected by the database
-rules from step 2. **Never** use the `service_role` key or a `sb_secret_`
-key. The build stops if it sees one.
-
-### 5. Give them to GitHub
-In your GitHub repository: **Settings → Secrets and variables → Actions →
-New repository secret**. Add two secrets:
-
-| Name | Value |
-|---|---|
-| `SUPABASE_URL` | your Project URL |
-| `SUPABASE_ANON_KEY` | your anon public (or publishable) key |
-
-### 6. Build the connected app
-**Actions** tab → **Build ZYVEN Android APK** → **Run workflow** → **Run
-workflow**. When it shows a green tick (about 5–10 minutes), download the APK
-from the link at the top of this page and install it. If an older ZYVEN is
-installed, uninstall it first (see *Limitations*).
+### Using a different Supabase project
+1. Create a project, open **SQL Editor → New query**, paste
+   [`supabase/migrations/20261027000000_zyven_init.sql`](supabase/migrations/20261027000000_zyven_init.sql), and **Run**.
+2. Do the two settings above.
+3. Put its **Project URL** and **anon public** key into `zyven.config.json`
+   (or into the GitHub secrets `SUPABASE_URL` and `SUPABASE_ANON_KEY`, which
+   take priority). Never use the `service_role` key or a `sb_secret_` key;
+   the build stops if it sees one.
+4. **Actions → Build ZYVEN Android APK → Run workflow**.
 
 ---
 
@@ -328,6 +304,7 @@ jobs → Re-run all jobs** to try again.
 | `tests/` | Database rule tests and two-account end-to-end tests |
 | `.github/workflows/build-android.yml` | Builds the APK and publishes the download link |
 | `.github/workflows/test-backend.yml` | Runs the tests on a temporary Supabase server |
+| `zyven.config.json` | The server’s public address and anon key (safe to publish) |
 | `.env.example` | Placeholder values for building on your own computer |
 
 ### Building on your own computer (optional)
