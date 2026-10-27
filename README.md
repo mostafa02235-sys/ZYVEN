@@ -13,6 +13,15 @@ you on GitHub, so you don't need Android Studio or a terminal.
 
 ---
 
+## Download ZYVEN (easiest)
+
+Open this link on your Android phone. It downloads the newest APK directly:
+
+**https://github.com/mostafa02235-sys/ZYVEN/releases/latest/download/ZYVEN-debug.apk**
+
+Then tap the downloaded file → **Install** (allow installs from this source if asked).
+Every new build replaces the file at that same link.
+
 ## Get your APK in 10 steps (no terminal needed)
 
 ### 1. Get the project files
@@ -115,7 +124,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write  # lets the build publish the APK as a direct download
 
 jobs:
   build:
@@ -219,6 +228,20 @@ jobs:
           name: package-lock
           path: package-lock.json
           retention-days: 30
+
+      - name: Publish ZYVEN-debug.apk as a direct download link
+        if: github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh release delete latest --yes --cleanup-tag || true
+          gh release create latest ZYVEN-debug.apk \
+            --target "${{ github.sha }}" \
+            --title "ZYVEN (latest build)" \
+            --notes "Tap ZYVEN-debug.apk below to download, then open it on your Android phone to install." \
+            --latest
+          echo "Direct download: https://github.com/${{ github.repository }}/releases/latest/download/ZYVEN-debug.apk" >> "$GITHUB_STEP_SUMMARY"
 ```
 
 ---

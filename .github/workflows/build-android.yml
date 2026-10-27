@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write  # lets the build publish the APK as a direct download
 
 jobs:
   build:
@@ -112,3 +112,17 @@ jobs:
           name: package-lock
           path: package-lock.json
           retention-days: 30
+
+      - name: Publish ZYVEN-debug.apk as a direct download link
+        if: github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh release delete latest --yes --cleanup-tag || true
+          gh release create latest ZYVEN-debug.apk \
+            --target "${{ github.sha }}" \
+            --title "ZYVEN (latest build)" \
+            --notes "Tap ZYVEN-debug.apk below to download, then open it on your Android phone to install." \
+            --latest
+          echo "Direct download: https://github.com/${{ github.repository }}/releases/latest/download/ZYVEN-debug.apk" >> "$GITHUB_STEP_SUMMARY"
