@@ -56,7 +56,7 @@ async function apiTests() {
   for (const [u, c] of [[A, ca], [B, cb], [C, cc]]) {
     const { data, error } = await c.auth.signUp({ email: u.email, password: u.password, options: { data: { username: u.username, display_name: u.name } } });
     ok(`sign up ${u.username}`, !error && data.session, error?.message);
-    u.id = data?.user?.id;
+    u.id = data?.user?.id; u.token = data?.session?.access_token;
   }
   ok('each account has a unique id', A.id && B.id && C.id && new Set([A.id, B.id, C.id]).size === 3);
   const { data: prof } = await ca.from('profiles').select('id,username,display_name').eq('id', A.id).maybeSingle();
@@ -91,6 +91,7 @@ async function apiTests() {
 
   // realtime delivery
   const got = [];
+  await cb.realtime.setAuth(B.token); await cc.realtime.setAuth(C.token);
   const ch = cb.channel('t-b').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, e => got.push(e.new));
   await new Promise(res => ch.subscribe(st => { if (st === 'SUBSCRIBED') res(); }));
   const spy = []; // C must never get A↔B messages
