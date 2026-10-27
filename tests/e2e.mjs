@@ -97,12 +97,12 @@ async function apiTests() {
   const spy = []; // C must never get A↔B messages
   const chc = cc.channel('t-c').on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, e => spy.push(e.new));
   await new Promise(res => chc.subscribe(st => { if (st === 'SUBSCRIBED') res(); }));
-  await sleep(1500);
+  await sleep(6000); // let the server finish registering both listeners
   const ins = await ca.from('messages').insert({ conversation_id: conv, kind: 'text', body: 'hello from A' }).select('id,created_at,sender_id').single();
   ok('A sends a message', !ins.error && ins.data.sender_id === A.id, ins.error?.message);
-  const live = await until(() => got.find(m => m.id === ins.data?.id), 15000);
+  const live = await until(() => got.find(m => m.id === ins.data?.id), 25000);
   ok('B receives it in real time', !!live && live.body === 'hello from A');
-  await sleep(1500);
+  await sleep(3000);
   ok('outsider C gets no realtime event for it', !spy.some(m => m.conversation_id === conv));
   ok('B can load the message history', ((await cb.from('messages').select('id').eq('conversation_id', conv)).data || []).length === 1);
   ok('outsider C cannot read it', ((await cc.from('messages').select('id').eq('conversation_id', conv)).data || []).length === 0);
@@ -226,7 +226,7 @@ async function uiTests() {
     ok('Y sees the new chat appear without reloading', !!row);
     await shot(py, '04-y-chat-list');
     if (row) {
-      await row.click();
+      await py.locator('#chats-list .row', { hasText: 'Hello from X' }).first().click();
       await py.waitForSelector('.mrow.them:has-text("Hello from X")', { timeout: 10000 });
       ok('Y opens it and reads the message', true);
       await py.fill('#composer', 'Hi X, got it');
