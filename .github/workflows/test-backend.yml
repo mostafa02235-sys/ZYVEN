@@ -51,8 +51,18 @@ jobs:
       - name: Database rules (78 privacy and permission checks)
         run: |
           set -a; . ./supabase.env; set +a
-          psql "$DB_URL" -v ON_ERROR_STOP=1 -q -f tests/db/rls_tests.sql | tee db-results.txt
-          grep -E '^ +[0-9]+ +\| +[0-9]+$' db-results.txt | tail -1 | awk '{ if ($3 != 0) exit 1 }'
+          set +e
+          psql "$DB_URL" -v ON_ERROR_STOP=1 -q -f tests/db/rls_tests.sql > db-results.txt 2>&1
+          code=$?
+          set -e
+          cat db-results.txt
+          summary=$(grep -E '^ +[0-9]+ +\| +[0-9]+$' db-results.txt | tail -1)
+          if [ $code -ne 0 ] || [ -z "$summary" ] || [ "$(echo "$summary" | awk '{print $3}')" != "0" ]; then
+            msg=$( (grep -E 'FAIL|ERROR|error' db-results.txt; tail -15 db-results.txt) | head -40 | sed 's/%/%25/g' | sed ':a;N;$!ba;s/\n/%0A/g')
+            echo "::error title=Database rules failed::${msg}"
+            exit 1
+          fi
+          echo "::notice title=Database rules::$summary (passed | failed)"
 
       - name: Build the app against the test server
         run: |
@@ -64,19 +74,31 @@ jobs:
           set -a; . ./supabase.env; set +a
           npx --yes http-server www -p 8080 -a 127.0.0.1 -s &
           sleep 3
+          set +e
           SUPABASE_URL="$API_URL" SUPABASE_ANON_KEY="${ANON_KEY:-$PUBLISHABLE_KEY}" \
           MAIL_URL="${MAILPIT_URL:-${INBUCKET_URL:-http://127.0.0.1:54324}}" APP_URL="http://127.0.0.1:8080/index.html" \
-          node tests/e2e.mjs
+          node tests/e2e.mjs > e2e-output.txt 2>&1
+          code=$?
+          set -e
+          cat e2e-output.txt
+          echo "::notice title=End-to-end::$(tail -1 e2e-output.txt)"
+          if [ $code -ne 0 ]; then
+            msg=$( (grep -E '^FAIL|Error|error' e2e-output.txt; tail -5 e2e-output.txt) | head -40 | sed 's/%/%25/g' | sed ':a;N;$!ba;s/\n/%0A/g')
+            echo "::error title=End-to-end tests failed::${msg}"
+            exit 1
+          fi
 
       - name: Publish the test report
         if: always()
         run: |
           mkdir -p tests/results
-          cp db-results.txt tests/results/ 2>/dev/null || true
-          { echo "## Database rules"; echo '```'; tail -90 db-results.txt 2>/dev/null; echo '```'; cat tests/results/e2e.md 2>/dev/null; } >> "$GITHUB_STEP_SUMMARY"
+          cp db-results.txt e2e-output.txt tests/results/ 2>/dev/null || true
+          { echo "## Database rules"; echo '```'; tail -90 db-results.txt 2>/dev/null; echo '```'; cat tests/results/e2e.md 2>/dev/null; } >> "$GITHUB_STEP_SUMMARY" || true
           cd tests/results
-          git init -q -b test-results
-          git config user.name "zyven-tests"; git config user.email "tests@zyven.invalid"
           echo "Run ${{ github.run_id }} for ${{ github.sha }}" > RUN.txt
-          git add -A && git commit -qm "Test results for ${{ github.sha }}"
-          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" test-results
+          git init -q
+          git checkout -q -b test-results
+          git config user.name "zyven-tests"; git config user.email "tests@zyven.invalid"
+          git add -A
+          git commit -qm "Test results for ${{ github.sha }}"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:test-results 2>&1 | sed 's/x-access-token:[^@]*@/***@/' || echo "::warning::Could not publish the report branch"

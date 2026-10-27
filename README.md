@@ -1,117 +1,158 @@
 # ZYVEN
 
 ZYVEN is a messaging app with an AMOLED-black design, customizable message
-bubbles, stickers, voice messages, groups, and privacy settings. This
-repository packages it as an Android app and builds the installable APK for
-you on GitHub, so you don't need Android Studio or a terminal.
+bubbles, stickers, voice messages, and groups. People create real accounts,
+find each other by username, and chat live between phones. Messages, files,
+and profiles are stored on your own **Supabase** server.
 
-- **App name:** ZYVEN
-- **Android app ID:** `com.zyven.messaging`
-- **Built with:** plain HTML/CSS/JavaScript (one file, `src/app.html`) wrapped
-  for Android with [Capacitor 7](https://capacitorjs.com)
-- **Output:** `ZYVEN-debug.apk`, built by GitHub Actions
+- **App name:** ZYVEN · **Android app ID:** `com.zyven.messaging`
+- **App code:** plain HTML/CSS/JavaScript in `src/app.html`, packaged for
+  Android with [Capacitor 7](https://capacitorjs.com)
+- **Server:** [Supabase](https://supabase.com) (accounts, database, file
+  storage, realtime). Setup is one SQL file: `supabase/migrations/…_zyven_init.sql`
+- **APK:** built automatically by GitHub Actions
 
 ---
 
-## Download ZYVEN (easiest)
+## Download the app
 
-Open this link on your Android phone. It downloads the newest APK directly:
+On your Android phone, open:
 
 **https://github.com/mostafa02235-sys/ZYVEN/releases/latest/download/ZYVEN-debug.apk**
 
-Then tap the downloaded file → **Install** (allow installs from this source if asked).
-Every new build replaces the file at that same link.
+Tap the downloaded file → **Install** (allow installs from this source if
+asked; if Play Protect warns, tap **More details → Install anyway**).
 
-## Get your APK in 10 steps (no terminal needed)
+> The app only works after its server is connected (next section). Until
+> then it opens on a “Server not connected” screen.
 
-### 1. Get the project files
-Download `zyven-android-project.zip` and **extract it** (Windows: right-click →
-*Extract All*; Mac: double-click). You get a folder named `zyven` with these
-items inside:
+---
 
-```
-.github/          ← contains the build instructions for GitHub (important!)
-.gitignore
-README.md
-capacitor.config.json
-package.json
-resources/
-scripts/
-src/
-```
+## Connect your server (once, about 10 minutes)
 
-> **Mac users:** folders whose names start with a dot (`.github`, `.gitignore`)
-> are hidden in Finder. Press **Cmd + Shift + .** (period) in the folder to show them.
+### 1. Create a Supabase project
+1. Go to [supabase.com](https://supabase.com) and sign up (free plan is fine).
+2. Click **New project**. Pick a name (e.g. `zyven`), a region near you, and
+   a database password. Keep that password to yourself. ZYVEN never needs it.
+3. Wait until the project says it’s ready.
 
-### 2. Create a GitHub repository
-1. Sign in at [github.com](https://github.com) (create a free account if needed).
-2. Click **+** (top right) → **New repository**.
-3. Name it `zyven`. Choose **Private** (recommended) or Public.
-4. Leave "Add a README" **unticked**. Click **Create repository**.
+### 2. Create the ZYVEN database
+1. Open this file on GitHub:
+   [`supabase/migrations/20261027000000_zyven_init.sql`](supabase/migrations/20261027000000_zyven_init.sql)
+   and click the **Copy raw file** button (two overlapping squares).
+2. In Supabase, open **SQL Editor** (left menu) → **New query**.
+3. Paste, then click **Run**. You should see “Success. No rows returned”.
+   Run it only once; a second run says things “already exist”.
 
-### 3. Upload the files
-1. On the new, empty repository page, click the link **uploading an existing file**.
-2. Open the extracted `zyven` folder on your computer, select **everything inside
-   it** (including `.github` and `.gitignore`), and drag it onto the GitHub page.
-   Drag the *contents*, not the `zyven` folder itself.
-3. Wait until all files are listed, then click **Commit changes**.
-4. Check that the repository now shows a `.github` folder. If it doesn't, see
-   [If the .github folder is missing](#if-the-github-folder-is-missing) below.
+### 3. Two sign-in settings
+In Supabase, go to **Authentication**:
+1. **Sign In / Providers → Email**: turn **off** “Confirm email”, then
+   **Save**. People can then use the app right after signing up. (If you
+   leave it on, they must click a link in an email before their first sign-in.)
+2. **Emails → Reset Password** (under Templates): replace the message body
+   with the contents of [`supabase/templates/recovery.html`](supabase/templates/recovery.html)
+   and **Save**. This puts the 6-digit reset code into the email, which the app asks for.
 
-### 4. Find the workflow
-Click the **Actions** tab at the top of your repository. You'll see
-**Build ZYVEN Android APK** in the list on the left. (If GitHub asks you to
-enable workflows, click the green button to enable them.)
+> Supabase’s built-in email service only sends a few emails per hour, which is
+> fine for testing. For real use, add your own email provider in
+> **Authentication → Emails → SMTP Settings**.
 
-### 5. Run the workflow
-Uploading the files already starts a build automatically. To start one
-yourself: click **Build ZYVEN Android APK** → **Run workflow** (right side) →
-**Run workflow**.
+### 4. Copy your server’s two public values
+In Supabase: **Project Settings → API Keys** (or the **Connect** button):
+- **Project URL**, like `https://abcdefgh.supabase.co`
+- **anon public** key (a long text starting with `eyJ`), or the
+  **publishable** key (starting with `sb_publishable_`)
 
-### 6. Check whether the build succeeded
-Each run shows an icon:
-- 🟡 yellow circle = still running (takes about 5–10 minutes)
-- ✅ green tick = success
-- ❌ red cross = failed (see [If the build fails](#if-the-build-fails))
+Both are meant to be inside apps; your data is protected by the database
+rules from step 2. **Never** use the `service_role` key or a `sb_secret_`
+key. The build stops if it sees one.
 
-### 7. Open the successful run
-Click the run with the green tick.
+### 5. Give them to GitHub
+In your GitHub repository: **Settings → Secrets and variables → Actions →
+New repository secret**. Add two secrets:
 
-### 8. Download the APK
-Scroll to the bottom of the run page to **Artifacts** and click
-**ZYVEN-debug-apk**. A ZIP file downloads.
+| Name | Value |
+|---|---|
+| `SUPABASE_URL` | your Project URL |
+| `SUPABASE_ANON_KEY` | your anon public (or publishable) key |
 
-### 9. Extract it
-GitHub always wraps artifacts in a ZIP. Extract it to get **`ZYVEN-debug.apk`**.
-(On the phone, the Files app can extract ZIPs too: tap the ZIP → *Extract*.)
+### 6. Build the connected app
+**Actions** tab → **Build ZYVEN Android APK** → **Run workflow** → **Run
+workflow**. When it shows a green tick (about 5–10 minutes), download the APK
+from the link at the top of this page and install it. If an older ZYVEN is
+installed, uninstall it first (see *Limitations*).
 
-### 10. Install on your Android phone
-1. Copy `ZYVEN-debug.apk` to your phone (USB cable, Google Drive, email to
-   yourself, or download the artifact directly on the phone's browser while
-   signed in to GitHub).
-2. Tap the APK file. Android will ask to allow installing apps from this
-   source (for example *Files* or *Chrome*): tap **Settings** → turn on
-   **Allow from this source** → go back → **Install**.
-3. If **Google Play Protect** warns about an unknown app, tap
-   **More details → Install anyway**. This is normal for apps not from the Play
-   Store; the debug APK is signed with a temporary development key.
-4. Open **ZYVEN** from your home screen.
+---
 
-**Updating later:** each GitHub build signs the APK with a new temporary key,
-so Android usually won't install a new build over an old one. Use **Back up
-data** in the app, uninstall the old ZYVEN, install the new APK, then
-**Restore from backup**. (See *Limitations*.)
+## What works
+
+| Works for real | Not built yet |
+|---|---|
+| Sign up with email and password, sign in, sign out, reset a forgotten password with an emailed code, change password | Voice and video calls |
+| Unique username, display name, bio, colour, and profile photo, editable any time | Notifications while the app is closed (push) |
+| Searching real registered people by @username or name, adding contacts | End-to-end encryption |
+| Private chats and group chats between different phones, delivered live | A moderation team for reports |
+| Text, photos, videos, files, voice messages, stickers (including your own), locations | |
+| Replies, edits, delete for everyone / for me, reactions, pins, forwarding | |
+| Sending, sent, delivered, read, and “not sent · retry” states | |
+| Typing indicators, online status, last seen | |
+| Group admins, adding/removing members, leaving, group info and picture | |
+| Blocking, reporting, disappearing messages | |
+| Privacy for online status, last seen, profile photo, read receipts | |
+| Your theme, bubble design, stickers, saved messages (kept on the phone) | |
+
+There are no sample people or demo chats: a new account starts empty.
+
+### How your data is protected
+- Every table has **row-level security**: people can only read conversations
+  they are members of, and only change what the rules allow (e.g. only the
+  sender can edit; only admins can add members). The app’s key cannot get
+  around these rules.
+- Photos, videos, voice messages, and files are stored privately. Only
+  members of the chat get short-lived download links.
+- Passwords are handled by Supabase Auth (stored hashed, never in plain text).
+- Messages are protected by these access rules but are **not** end-to-end
+  encrypted: whoever runs the Supabase project could read them.
+
+### Permissions on the phone
+- **Microphone:** asked the first time you record a voice message.
+- **Location:** asked only when you share your location.
+- Photos, videos, and files use Android’s own picker, so no storage permission is needed.
+
+---
+
+## Automatic tests
+
+Every change runs **Test ZYVEN backend** (Actions tab). It starts a private,
+temporary Supabase server on GitHub, loads the database, and checks:
+
+- 78 database rules (outsiders can’t read, post, react, pin, upload, or
+  download in other people’s chats; blocked people can’t message; group
+  admin rules; disappearing messages; no fake system messages or backdating)
+- accounts, search, contacts, live delivery between two accounts, file
+  storage permissions, password reset by email code
+- the real app in two separate browsers: both sign up, one finds and adds
+  the other, they chat live, see read receipts, share a photo, create a
+  group, sign out and back in
+
+The report appears on the run’s summary page and in the `test-results` branch.
+
+---
+
+## Updating the app on your phone
+
+Every change pushed to `main` builds a new APK at the same download link.
+Your chats live on the server, so reinstalling loses nothing except the
+settings kept on the phone (theme, bubble design, stickers, saved messages:
+use **Profile → Account → Back up settings** first if you want to keep them).
 
 ---
 
 ## If the .github folder is missing
 
-Some computers hide or skip it when uploading. Create the file by hand:
-
-1. In your repository click **Add file → Create new file**.
-2. In the name box type exactly: `.github/workflows/build-android.yml`
-   (typing the `/` creates the folders).
-3. Paste the complete contents below, then click **Commit changes**.
+Create the build file by hand: **Add file → Create new file**, name it
+exactly `.github/workflows/build-android.yml`, paste the contents below, and
+click **Commit changes**.
 
 ```yaml
 name: Build ZYVEN Android APK
@@ -145,8 +186,15 @@ jobs:
         run: |
           if [ -f package-lock.json ]; then npm ci; else npm install; fi
 
-      - name: Build the web app
-        run: npm run build
+      - name: Build the web app (with your Supabase server address)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "::warning title=Server not connected::The SUPABASE_URL and SUPABASE_ANON_KEY secrets are not set. The APK will open on a 'Server not connected' screen. See README → Connect your server."
+          fi
+          npm run build
 
       - name: Create the Android project (first build only)
         run: |
@@ -244,110 +292,47 @@ jobs:
           echo "Direct download: https://github.com/${{ github.repository }}/releases/latest/download/ZYVEN-debug.apk" >> "$GITHUB_STEP_SUMMARY"
 ```
 
----
+## If a build fails
 
-## If the build fails
-
-1. Open the failed run, click the **Build ZYVEN-debug.apk** job, and expand the
-   step with the red ❌ to read the error.
-2. Most first-time failures are a missing file from the upload. Compare your
-   repository with the file list in step 1.
-3. Click **Re-run jobs → Re-run all jobs** to try again (occasional download
-   hiccups on GitHub's side fix themselves).
-
----
-
-## What works in the Android app
-
-Everything in ZYVEN runs **on your phone only**. There is no server yet, so
-messages never leave the device.
-
-| Works for real, on the device | Simulated (demo only) | Needs a backend (not built yet) |
-|---|---|---|
-| The whole interface: Chats (All / Unread), Contacts, Groups, Profile | Other people, their replies, typing indicators, online status | Sending messages to real people |
-| Sending, replying, editing, deleting, reacting, pinning, forwarding, saved messages | Delivered/read ticks | Accounts and sign-in |
-| Bubble designs, Default design, colors, radius, spacing, text size, per-chat styles | Group members other than you | Syncing between devices |
-| Stickers: creating, animated stickers, sending | Disappearing messages for other people | Push notifications |
-| Photos, videos, files: picking and previewing | | Media storage in the cloud |
-| Voice messages: real microphone recording, playback, pause, progress | | Voice/video calls (not planned yet) |
-| Location sharing (real GPS position) | | |
-| Profile, privacy, notification, and theme settings | | |
-| Back up and restore all data (Profile → account sheet) | | |
-
-Data is saved inside the app on the phone. Uninstalling the app deletes it,
-so use **Back up data** first.
-
-### Moving data from the Claude Artifact version
-The Artifact and the Android app store data separately. In the Artifact, use
-**Back up data** to save a `.json` file, put it on your phone, then in the
-Android app use **Restore from backup**.
-
-### Permissions
-ZYVEN asks only when a feature needs it:
-- **Microphone** — the first time you record a voice message.
-- **Location** — only when you share your location.
-- Photos, videos, and files use Android's own file picker, so no storage
-  permission is needed.
-- Vibration and internet (for the optional web font) are granted automatically.
-
-If you tap "Don't allow" by mistake: **Settings → Apps → ZYVEN → Permissions**.
-
----
-
-## Making ZYVEN a real multi-user messenger (future work)
-
-To message real people, ZYVEN needs a backend. That means:
-1. **User accounts** (sign-up, sign-in, phone or email verification).
-2. **A database** for users, chats, and messages.
-3. **Real-time sync** so messages arrive instantly on every device.
-4. **Access rules** so each person can read only their own chats.
-5. **Media storage** for photos, videos, voice messages, and stickers.
-6. **Push notifications** (Firebase Cloud Messaging on Android).
-7. Ideally **end-to-end encryption**.
-
-Services such as Firebase or Supabase provide most of this. Their keys must
-be configured through GitHub **Secrets**, never written into the code.
+Open the failed run, click the job, and expand the step with the red ❌.
+Most problems are a missing file or a mistyped secret name. Click **Re-run
+jobs → Re-run all jobs** to try again.
 
 ---
 
 ## Limitations
 
-- **Debug build:** `ZYVEN-debug.apk` is for installing and testing yourself.
-  It can't be uploaded to the Google Play Store, which needs a *release* build
-  signed with your own private key (kept in GitHub Secrets).
-- **Signing key changes:** each debug build is signed with a key GitHub
-  creates for that run. If Android refuses to install an update over an older
-  copy ("App not installed" / package conflict), back up your data,
-  uninstall the old app, then install the new APK and restore.
-- **Fonts:** the app's web fonts load from the internet. Offline, it uses the
-  phone's built-in fonts; everything else works offline.
-- **No lockfile yet:** dependencies are pinned to Capacitor 7.x
-  (`^7.0.0` in `package.json`). Each build also uploads a `package-lock`
-  artifact; upload that `package-lock.json` file to the repository to lock
-  the exact versions for future builds.
+- **Debug build:** `ZYVEN-debug.apk` is for installing yourself. Google Play
+  needs a release build signed with your own private key.
+- **Updates need a reinstall:** each GitHub build signs the APK with a new
+  temporary key, so Android won’t install a new build over an old one.
+  Uninstall the old ZYVEN, then install the new APK and sign in.
+- **Push notifications** (alerts while the app is closed) need Firebase Cloud
+  Messaging and a server function. Not set up yet.
+- **Email sending** on Supabase’s free built-in service is limited to a few
+  emails per hour. Add your own SMTP provider for real use.
+- **Fonts** load from the internet; offline, the phone’s fonts are used.
 
 ---
 
-## Project structure (for the curious)
+## Project structure
 
 | Path | What it is |
 |---|---|
-| `src/app.html` | The ZYVEN app itself: all screens, styles, and logic |
-| `scripts/build-web.mjs` | Turns `src/app.html` into the web bundle (`www/`) that goes inside the APK |
-| `scripts/configure-android.mjs` | Applies the ZYVEN name, app ID, permissions, black bars, icons, and splash to the Android project |
-| `scripts/make-icons.py` | Redraws the icons from the logo (only needed if the logo changes) |
-| `resources/` | ZYVEN logo (`logo.svg`, `icon-1024.png`) and the generated Android icons/splash |
-| `capacitor.config.json` | App name, app ID, and Android settings |
-| `package.json` | Dependencies and build commands |
-| `.github/workflows/build-android.yml` | The GitHub Actions build |
-
-The `android/` project is generated fresh by Capacitor during each build
-(`npx cap add android`), then customised by `configure-android.mjs`. If you
-later want to edit the Android project by hand, commit the generated
-`android/` folder; the workflow will then use it as-is.
+| `src/app.html` | The ZYVEN app: screens, styles, logic, and the server connection (section “4b. CLOUD”) |
+| `supabase/migrations/` | The database: tables, security rules, functions, storage, realtime |
+| `supabase/templates/recovery.html` | Password-reset email with the 6-digit code |
+| `scripts/build-web.mjs` | Builds `www/` and writes your public server values into it |
+| `scripts/configure-android.mjs` | App name, ID, permissions, black bars, icons, splash |
+| `scripts/make-icons.py` | Redraws icons from the logo |
+| `tests/` | Database rule tests and two-account end-to-end tests |
+| `.github/workflows/build-android.yml` | Builds the APK and publishes the download link |
+| `.github/workflows/test-backend.yml` | Runs the tests on a temporary Supabase server |
+| `.env.example` | Placeholder values for building on your own computer |
 
 ### Building on your own computer (optional)
-Requires Node.js 20+, JDK 21, and the Android SDK:
+Requires Node.js 20+, JDK 21, and the Android SDK. Copy `.env.example` to
+`.env` and fill in your two public values, then:
 
 ```
 npm install
