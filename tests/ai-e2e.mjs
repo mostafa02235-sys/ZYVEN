@@ -144,6 +144,8 @@ async function uiTests(users) {
   const page = await ctx.newPage();
   page.on('pageerror', e => errors.push(e.message));
   page.on('console', m => { if (m.type() === 'error' && !/fonts\.g|ERR_|favicon|Failed to load resource/.test(m.text())) errors.push(m.text()); });
+  const BOT = '#ai .ai-row.bot .ai-b:not(.typing-b)';
+  const closeSheet = async () => { await page.evaluate(() => closeOverlay()); await sleep(500); };
   const shot = name => page.screenshot({ path: `${OUT}/screens/ai-${name}.png` }).catch(() => {});
   const U = { name: 'Ayla AI', username: `ui_ai_${run}`, email: `ui_ai_${run}@example.com`, password: `Ui-${run}-ai-123` };
   try {
@@ -173,8 +175,8 @@ async function uiTests(users) {
     await shot('02-consent');
     await page.click('[data-action="dlg-yes"]');
     await page.waitForSelector('#ai .typing-b', { timeout: 5000 }).then(() => ok('shows a loading indicator while waiting', true)).catch(() => ok('shows a loading indicator while waiting', true, 'answer came back too fast to see'));
-    await page.waitForSelector('#ai .ai-row.bot .ai-b', { timeout: 30000 });
-    const answer = await page.textContent('#ai .ai-row.bot .ai-b');
+    await page.waitForSelector(BOT, { timeout: 30000 });
+    const answer = await page.textContent(BOT);
     ok('answer from the server appears', /Mock answer to: How do I change my privacy settings/.test(answer), answer.slice(0, 120));
     ok('answer formatting is rendered (lists, bold, code)', !!(await page.$('#ai .ai-b.bot ol li')) && !!(await page.$('#ai .ai-b.bot b')) && !!(await page.$('#ai .ai-b.bot code')));
     const acts = await page.$$eval('#ai .ai-act', b => b.map(x => x.textContent.trim()));
@@ -193,12 +195,12 @@ async function uiTests(users) {
 
     // Profile entry, follow-up, Arabic
     await page.click('#tab-profile [data-action="open-ai"]');
-    await page.waitForSelector('#ai.open .ai-row.bot', { timeout: 6000 });
+    await page.waitForSelector(`#ai.open ${BOT.replace('#ai ', '')}`, { timeout: 6000 });
     ok('conversation is still there when you come back', (await page.$$('#ai .ai-row')).length === 2);
     await page.fill('#ai-input', 'كيف أغيّر إعدادات الخصوصية للمجموعات؟');
     await page.click('#ai-send');
-    await page.waitForFunction(() => document.querySelectorAll('#ai .ai-row.bot').length === 2, null, { timeout: 30000 });
-    const ar = page.locator('#ai .ai-row.bot .ai-b').nth(1);
+    await page.waitForFunction(sel => document.querySelectorAll(sel).length === 2, BOT, { timeout: 30000 });
+    const ar = page.locator(BOT).nth(1);
     ok('Arabic answer is shown', /جواب تجريبي/.test(await ar.textContent()));
     ok('Arabic text runs right-to-left', await ar.evaluate(el => getComputedStyle(el).direction === 'rtl'));
     ok('follow-up uses the earlier messages', /Turns in context: 3/.test(await ar.textContent()));
@@ -233,7 +235,7 @@ async function uiTests(users) {
     ok('diagnostics show version and connection facts', /ZYVEN server reachable/.test(dg) && /ZYVEN AI service/.test(dg));
     ok('diagnostics contain no email, token, or message text', !dg.includes(U.email) && !/eyJ/.test(dg));
     await shot('08-diagnostics');
-    await page.click('.overlay [data-action="close-overlay"] >> nth=0').catch(() => {});
+    await closeSheet();
     await sleep(500);
     await page.click('#ai-diag-bar .ai-diag-toggle');
     await page.fill('#ai-input', 'Is my connection okay?');
@@ -266,7 +268,7 @@ async function uiTests(users) {
     await page.waitForSelector('.overlay .ck-item', { timeout: 8000 });
     ok('ordinary users get the testing guide', /Testing checklist/.test(await page.textContent('.overlay h3')));
     ok('ordinary users don’t see developer controls', !(await page.$('.overlay [data-action="ck-set"]')));
-    await page.click('[data-action="close-overlay"] >> nth=0').catch(() => {});
+    await closeSheet();
     await admin.from('dev_testers').insert({ user_id: me.id });
     await page.evaluate(() => { ui.ai.devChecked = null; ui.ai.results = null; AI._dev = null; });
     await sleep(400);
@@ -281,7 +283,7 @@ async function uiTests(users) {
     const { data: tr } = await admin.from('test_results').select('*').eq('user_id', me.id);
     ok('marking a test passed saves it on the server', tr?.length === 1 && tr[0].status === 'pass' && tr[0].item_key === 'auth.signup');
     await shot('10-dev-checklist');
-    await page.click('[data-action="close-overlay"] >> nth=0').catch(() => {});
+    await closeSheet();
     await sleep(400);
 
     // History: reopen, then clear everything
