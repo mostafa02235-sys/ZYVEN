@@ -97,12 +97,74 @@ There are no sample people or demo chats: a new account starts empty.
 
 ---
 
+## ZYVEN AI
+
+A built-in assistant (sparkle button on the Chats screen, or Profile → ZYVEN AI).
+
+- **Assistant:** answers questions about every ZYVEN feature, helps fix
+  problems, and chats in Arabic or English (right-to-left for Arabic). It
+  keeps the context of the conversation, so follow-up questions work.
+- **App Testing Assistant** (the Testing switch): step-by-step tests,
+  checklists, “confirmed bug vs possible issue”, and structured bug reports.
+- **Buttons under answers** open real screens (Privacy, Account, New group…).
+  Opening a screen never changes a setting; you do that yourself.
+- **Share app diagnostics** (off by default, one message at a time): app
+  version, connection checks, recent error messages. Never passwords,
+  sign-in tokens, keys, message text, or anyone else’s data.
+- **Bug report form**, saved to the `bug_reports` table on your server.
+- **History:** reopen, delete one conversation, or clear everything.
+- **Developer Testing Mode:** a checklist where you mark each feature
+  Passed / Failed / Not tested. Only accounts listed in `dev_testers` get it
+  (see below). Everyone else gets a read-only testing guide.
+
+### How it works
+The app never holds an AI key. It calls the `zyven-ai` server function on
+your Supabase project, which checks who you are, counts the request against
+your limits, and calls the **Claude API** (model `claude-haiku-5-5`) with the
+key stored in the function’s secrets. Only what you type in ZYVEN AI is sent,
+never your chats with other people.
+
+Limits per account: 12 questions a minute, 60 an hour, 200 a day, plus
+5,000 a day for the whole app (a cost safety net). Change them in
+`supabase/migrations/20261028000000_zyven_ai.sql` (`ai_take_quota`).
+
+### Switching it on (you need to do this once)
+1. Create an account at [console.anthropic.com](https://console.anthropic.com),
+   add a payment method / credit, and create an API key.
+2. Open your project’s secrets page:
+   https://supabase.com/dashboard/project/uztkmmwegwyjfqphcxkg/functions/secrets
+3. Add a secret named `ANTHROPIC_API_KEY` with your key as the value.
+
+Until then, ZYVEN AI shows “ZYVEN AI isn’t switched on yet”. Never put the
+key in the app, in `zyven.config.json`, or in GitHub.
+
+Optional secrets: `AI_MODEL` (default `claude-haiku-5-5`), `AI_EFFORT`
+(`low` by default; `none` for models without the effort setting).
+
+### Cost
+The Claude API is **paid per use**. With `claude-haiku-5-5` ($0.10 per million
+input tokens and $0.50 per million output tokens for normal-length prompts),
+one question costs roughly a tenth of a US cent. 1,000 questions ≈ $1. The
+daily limits above cap the worst case. You can also set a spending limit in
+the Anthropic console. Supabase Edge Functions are included in the free plan
+(500,000 calls a month).
+
+### Making someone a developer tester
+Supabase dashboard → SQL Editor → run (with their account’s email):
+```sql
+insert into public.dev_testers (user_id)
+select id from auth.users where email = 'their-email@example.com';
+```
+Remove with `delete from public.dev_testers where user_id = (select id from auth.users where email = '…');`
+
+---
+
 ## Automatic tests
 
 Every change runs **Test ZYVEN backend** (Actions tab). It starts a private,
 temporary Supabase server on GitHub, loads the database, and checks:
 
-- 78 database rules (outsiders can’t read, post, react, pin, upload, or
+- 105 database rules (outsiders can’t read, post, react, pin, upload, or
   download in other people’s chats; blocked people can’t message; group
   admin rules; disappearing messages; no fake system messages or backdating)
 - accounts, search, contacts, live delivery between two accounts, file
@@ -110,6 +172,15 @@ temporary Supabase server on GitHub, loads the database, and checks:
 - the real app in two separate browsers: both sign up, one finds and adds
   the other, they chat live, see read receipts, share a photo, create a
   group, sign out and back in
+
+- ZYVEN AI against the real `zyven-ai` function with a stand-in AI
+  (`tests/mock-ai.mjs`, so tests cost nothing): only signed-in users,
+  answers and follow-ups, tokens and keys stripped, diagnostics filtered,
+  private chats never sent, nobody can read anyone else’s AI history, outage
+  + retry, rate limits, invented screens filtered out; and the AI screen in a
+  browser: consent notice, answers, Arabic RTL, copy, offline + Retry, “not
+  switched on”, diagnostics, bug report from the AI draft, developer mode,
+  history and Clear all
 
 The report appears on the run’s summary page and in the `test-results` branch.
 
@@ -324,6 +395,7 @@ so you must uninstall the old app before installing a new one.
 |---|---|
 | `src/app.html` | The ZYVEN app: screens, styles, logic, and the server connection (section “4b. CLOUD”) |
 | `supabase/migrations/` | The database: tables, security rules, functions, storage, realtime |
+| `supabase/functions/zyven-ai/` | The ZYVEN AI server function (`index.ts`), what the AI knows about the app (`prompt.ts`), and safety helpers |
 | `supabase/templates/recovery.html` | Password-reset email with the 6-digit code |
 | `scripts/build-web.mjs` | Builds `www/` and writes your public server values into it |
 | `scripts/configure-android.mjs` | App name, ID, permissions, black bars, icons, splash |
