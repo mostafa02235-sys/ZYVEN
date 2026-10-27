@@ -1,0 +1,82 @@
+name: Test ZYVEN backend
+
+# Starts a private, temporary Supabase server on GitHub's machine, loads the
+# ZYVEN database from supabase/migrations, then tests accounts, privacy
+# rules, realtime messaging, file storage, and the real app in two browsers.
+# Nothing here touches your own Supabase project.
+on:
+  push:
+    branches: [main]
+    paths: ['supabase/**', 'src/**', 'scripts/**', 'tests/**', 'package.json', '.github/workflows/test-backend.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write  # publishes the test report to the "test-results" branch
+
+jobs:
+  test:
+    name: Accounts, privacy, and messaging
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Install dependencies and the test browser
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm install; fi
+          npm install --no-save playwright@1
+          npx playwright install --with-deps chromium
+
+      - name: Set up the Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Start a local Supabase server with the ZYVEN database
+        run: |
+          [ -f supabase/config.toml ] || supabase init --force
+          if ! grep -q '^\[auth.email.template.recovery\]' supabase/config.toml; then
+            printf '\n[auth.email.template.recovery]\nsubject = "Reset your ZYVEN password"\ncontent_path = "./supabase/templates/recovery.html"\n' >> supabase/config.toml
+          fi
+          supabase start -x studio,imgproxy,edge-runtime,logflare,vector || supabase start
+          supabase status -o env > supabase.env
+          sed 's/=.*/=…/' supabase.env
+
+      - name: Database rules (78 privacy and permission checks)
+        run: |
+          set -a; . ./supabase.env; set +a
+          psql "$DB_URL" -v ON_ERROR_STOP=1 -q -f tests/db/rls_tests.sql | tee db-results.txt
+          grep -E '^ +[0-9]+ +\| +[0-9]+$' db-results.txt | tail -1 | awk '{ if ($3 != 0) exit 1 }'
+
+      - name: Build the app against the test server
+        run: |
+          set -a; . ./supabase.env; set +a
+          SUPABASE_URL="$API_URL" SUPABASE_ANON_KEY="${ANON_KEY:-$PUBLISHABLE_KEY}" npm run build
+
+      - name: End-to-end tests (two accounts, two browsers)
+        run: |
+          set -a; . ./supabase.env; set +a
+          npx --yes http-server www -p 8080 -a 127.0.0.1 -s &
+          sleep 3
+          SUPABASE_URL="$API_URL" SUPABASE_ANON_KEY="${ANON_KEY:-$PUBLISHABLE_KEY}" \
+          MAIL_URL="${MAILPIT_URL:-${INBUCKET_URL:-http://127.0.0.1:54324}}" APP_URL="http://127.0.0.1:8080/index.html" \
+          node tests/e2e.mjs
+
+      - name: Publish the test report
+        if: always()
+        run: |
+          mkdir -p tests/results
+          cp db-results.txt tests/results/ 2>/dev/null || true
+          { echo "## Database rules"; echo '```'; tail -90 db-results.txt 2>/dev/null; echo '```'; cat tests/results/e2e.md 2>/dev/null; } >> "$GITHUB_STEP_SUMMARY"
+          cd tests/results
+          git init -q -b test-results
+          git config user.name "zyven-tests"; git config user.email "tests@zyven.invalid"
+          echo "Run ${{ github.run_id }} for ${{ github.sha }}" > RUN.txt
+          git add -A && git commit -qm "Test results for ${{ github.sha }}"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" test-results

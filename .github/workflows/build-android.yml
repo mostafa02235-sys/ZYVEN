@@ -29,8 +29,15 @@ jobs:
         run: |
           if [ -f package-lock.json ]; then npm ci; else npm install; fi
 
-      - name: Build the web app
-        run: npm run build
+      - name: Build the web app (with your Supabase server address)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "::warning title=Server not connected::The SUPABASE_URL and SUPABASE_ANON_KEY secrets are not set. The APK will open on a 'Server not connected' screen. See README → Connect your server."
+          fi
+          npm run build
 
       - name: Create the Android project (first build only)
         run: |

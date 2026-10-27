@@ -27,14 +27,48 @@ if (!/<script>[\s\S]*<\/script>/.test(body)) fail('src/app.html has no inline <s
 // (Filesystem, Share) without a bundler. It comes from npm install.
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
-const capRuntime = join(root, 'node_modules', '@capacitor', 'core', 'dist', 'capacitor.js');
-let capTag = '';
-if (existsSync(capRuntime)) {
-  copyFileSync(capRuntime, join(out, 'capacitor.js'));
-  capTag = '<script src="capacitor.js"></script>';
-} else {
-  console.warn('build-web: @capacitor/core is not installed, so capacitor.js was not copied. Run "npm install" first for an Android build.');
+const vendor = [
+  ['@capacitor/core/dist/capacitor.js', 'capacitor.js', 'Capacitor'],
+  ['@supabase/supabase-js/dist/umd/supabase.js', 'supabase.js', 'Supabase client'],
+];
+const scriptTags = [];
+for (const [from, to, label] of vendor) {
+  const file = join(root, 'node_modules', from);
+  if (existsSync(file)) { copyFileSync(file, join(out, to)); scriptTags.push(`<script src="${to}"></script>`); }
+  else console.warn(`build-web: ${label} (${from}) is not installed. Run "npm install" first.`);
 }
+
+// Server connection. Only the PUBLIC values go into the app: the project
+// URL and the anon/publishable key. They come from environment variables
+// (GitHub Actions secrets) or a local .env file, never from the source code.
+function readEnvFile() {
+  const f = join(root, '.env');
+  if (!existsSync(f)) return {};
+  const vals = {};
+  for (const line of readFileSync(f, 'utf8').split(/\r?\n/)) {
+    const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/);
+    if (m) vals[m[1]] = m[2].replace(/^['"]|['"]$/g, '');
+  }
+  return vals;
+}
+const envFile = readEnvFile();
+const supabaseUrl = (process.env.SUPABASE_URL || envFile.SUPABASE_URL || '').trim().replace(/\/+$/, '');
+const supabaseAnonKey = (process.env.SUPABASE_ANON_KEY || envFile.SUPABASE_ANON_KEY || '').trim();
+if (supabaseAnonKey) {
+  if (/^sb_secret_/.test(supabaseAnonKey)) fail('SUPABASE_ANON_KEY is a SECRET key (sb_secret_…). Use the publishable/anon key instead. Never put a secret key in the app.');
+  const parts = supabaseAnonKey.split('.');
+  if (parts.length === 3) {
+    let role = '';
+    try { role = JSON.parse(Buffer.from(parts[1].replace(/-/g, '+').replace(/_/g, '/'), 'base64').toString('utf8')).role || ''; } catch (e) { /* not a JWT */ }
+    if (role === 'service_role') fail('SUPABASE_ANON_KEY is the service_role key. Use the anon (public) key instead. The service_role key must never be in the app.');
+  }
+}
+if (supabaseUrl && !/^https:\/\/[^\s/]+$|^http:\/\/(127\.0\.0\.1|localhost|10\.0\.2\.2)(:\d+)?$/.test(supabaseUrl)) fail(`SUPABASE_URL doesn't look like a Supabase project URL: ${supabaseUrl}`);
+const connected = !!(supabaseUrl && supabaseAnonKey);
+if (!connected) console.warn('build-web: SUPABASE_URL / SUPABASE_ANON_KEY are not set. The app will build, but it will show "Server not connected" instead of the sign-in screen.');
+writeFileSync(join(out, 'config.js'), `window.ZYVEN_CONFIG = ${JSON.stringify(connected ? { supabaseUrl, supabaseAnonKey } : {})};\n`);
+scriptTags.push('<script src="config.js"></script>');
+const capTag = scriptTags.join('\n');
 
 const html = `<!doctype html>
 <html lang="en">
@@ -64,4 +98,4 @@ writeFileSync(join(out, 'index.html'), html);
 // Sanity checks so a broken build fails here, not on the phone.
 if (!html.includes(`appName: '${config.appName}'`)) fail(`the app's CONFIG.appName is not "${config.appName}".`);
 const kb = Math.round(Buffer.byteLength(html) / 1024);
-console.log(`build-web: wrote www/index.html (${kb} KB)${capTag ? ' and www/capacitor.js' : ''}`);
+console.log(`build-web: wrote www/index.html (${kb} KB) with ${scriptTags.length} scripts; server ${connected ? `connected to ${supabaseUrl}` : 'NOT connected'}`);

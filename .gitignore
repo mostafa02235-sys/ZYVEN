@@ -17,6 +17,7 @@ android/app/src/main/assets/public/
 *.jks
 .env
 .env.*
+!.env.example
 
 # Editors and OS files
 .idea/

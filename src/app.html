@@ -597,6 +597,25 @@ label.btn{cursor:pointer}
 .gate-card{display:flex;align-items:center;gap:12px;width:100%;max-width:320px;padding:14px;border-radius:22px;background:var(--surface);margin-top:12px;text-align:left}
 .gate-card .row-main{flex:1}
 .gate .btn{width:100%;max-width:320px}
+.gate.auth{justify-content:flex-start;overflow-y:auto;padding:max(48px,env(safe-area-inset-top)) 22px 40px;gap:10px}
+.gate.auth > *{flex:none}
+.auth-brand{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.auth-brand .wordmark{font-family:var(--f-display);font-weight:700;font-size:26px;letter-spacing:.04em}
+.auth-card{width:100%;max-width:360px;text-align:left;margin-top:8px}
+.auth-card .btn{max-width:none}
+.auth-card .linkish{align-self:center;margin-top:2px}
+.auth-card .note{margin:0;padding:14px;border-radius:18px;background:var(--surface)}
+.auth-alt{margin:6px 0 0;color:var(--muted);font-size:14px}
+.ok.taken{color:var(--danger,#FF6B63)}
+.auth-card .err{display:block;color:#FF6B63;font-size:13.5px;min-height:0}
+.older{display:flex;justify-content:center;margin:4px 0 12px}
+.older .chip{gap:6px}
+.older .chip svg{width:15px;height:15px}
+.bubble.sending{opacity:.72}
+.tick-pend svg,.tick-fail svg{width:14px;height:14px}
+.tick-fail{color:#FF6B63}
+.retry{display:inline-flex;align-items:center;gap:5px;align-self:flex-end;margin-top:4px;padding:3px 8px;border-radius:10px;font-size:12px;color:#FF6B63;background:color-mix(in srgb,#FF6B63 12%,transparent)}
+.retry svg{width:13px;height:13px}
 
 /* =========================================================
    AMOLED monochrome layer — loaded last, wins over earlier rules.
@@ -1099,7 +1118,7 @@ input[type=range]:disabled{opacity:.4}
 const CONFIG = {
   appName: 'ZYVEN',
   tagline: 'Quiet, private conversations',
-  version: '0.1.0 · prototype',
+  version: '1.0.0',
   storageKey: 'murmur.prototype.v1', /* internal key from the app's first name; kept so saved data survives the rename */
   /* bubble: outgoing bubbles + primary buttons. tint: selection, toggles, badges, links.
      White keeps the clean white bubble and pairs it with an iris tint. */
@@ -1175,7 +1194,7 @@ const EMOJI = {
   Hearts:   { tab: '❤️', list: '❤️ 🧡 💛 💚 💙 💜 🖤 🤍 🤎 💔 💕 💞 💖 ✨ 🔥 💯 ⭐ 🌙 ☀️ 🌈 ⚡ 🎶 💫 🌟' },
   Things:   { tab: '☕', list: '☕ 🍕 🍰 🎉 🎁 🎬 🎧 📷 🎮 ⚽ 🏔️ 🌊 🌿 🌸 🚗 ✈️ 🏠 💡 📚 🗓️ 🧳 🎨 🥐 🍵' },
 };
-/* Demo "photos" are painted with CSS so the prototype needs no image hosting. */
+/* Painted scenes used for group pictures (no image hosting needed). */
 const SCENES = {
   rooftop: { ratio: 4 / 3, bg: 'radial-gradient(circle at 68% 61%, #ffe3b0 0 4.5%, rgba(255,210,150,.45) 5.5%, transparent 17%), linear-gradient(180deg, transparent 72%, #17141b 72.4%), repeating-linear-gradient(90deg, transparent 0 7%, rgba(10,8,14,.9) 7% 11%, transparent 11% 15%, rgba(10,8,14,.9) 15% 17%) 0 64%/100% 9% no-repeat, linear-gradient(180deg,#261f3c 0%,#6a3c5b 34%,#d3775a 60%,#f1b26c 72%)' },
   tiles:   { ratio: 1, bg: 'radial-gradient(circle, #f3efe6 17%, transparent 18%) 0 0/36px 36px, radial-gradient(circle, #2b5a9e 28%, transparent 29%) 18px 18px/36px 36px, repeating-conic-gradient(#e8e2d4 0 25%, #c9d6ea 0 50%) 0 0/36px 36px' },
@@ -1185,8 +1204,6 @@ const SCENES = {
   sea:     { ratio: 16 / 9, bg: 'radial-gradient(ellipse at 50% 46%, #ffe7c2 0 4%, transparent 14%), repeating-linear-gradient(180deg, rgba(255,255,255,.09) 0 2px, transparent 2px 13px) 0 100%/100% 52% no-repeat, linear-gradient(180deg,#f5c79e 0%,#e8987a 34%,#3d6e8d 48%,#1d3c54 100%)' },
   night:   { ratio: 16 / 9, bg: 'radial-gradient(circle at 20% 25%, #fff 0 .4%, transparent .6%), radial-gradient(circle at 70% 18%, #fff 0 .35%, transparent .55%), radial-gradient(circle at 82% 30%, #fff 0 .3%, transparent .5%), radial-gradient(circle at 78% 26%, #f4ecd6 0 5%, transparent 5.5%), linear-gradient(170deg, transparent 62%, #0d1018 62.3%), linear-gradient(180deg,#0e1730 0%,#2a3a66 70%,#55607e 100%)' },
 };
-const PHOTO_SCENES = ['rooftop', 'tiles', 'trail', 'coffee'];
-const VIDEO_SCENES = ['sea', 'night', 'rooftop'];
 const I = (name, extra = '') =>
   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" ${extra}>${ICONS[name] || ''}</svg>`;
 
@@ -1212,7 +1229,13 @@ const LOGO = (size = 30) => `
    ========================================================= */
 const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const uid = () => Math.random().toString(36).slice(2, 10);
+/* Message and conversation ids are UUIDs, the server's id format. */
+const uid = () => {
+  try { if (crypto.randomUUID) return crypto.randomUUID(); } catch (e) {}
+  const b = crypto.getRandomValues(new Uint8Array(16)); b[6] = (b[6] & 15) | 64; b[8] = (b[8] & 63) | 128;
+  const h = [...b].map(x => x.toString(16).padStart(2, '0')).join('');
+  return `${h.slice(0, 8)}-${h.slice(8, 12)}-${h.slice(12, 16)}-${h.slice(16, 20)}-${h.slice(20)}`;
+};
 const now = () => Date.now();
 const pick = arr => arr[Math.floor(Math.random() * arr.length)];
 const MIN = 60000, DAY = 86400000;
@@ -1277,185 +1300,82 @@ function resample(arr, n) {
 /* =========================================================
    4. DATA — seed + local persistence
    ========================================================= */
-function seed() {
-  const t = mins => now() - mins * MIN;
-  const users = [
-    { id: 'layla', name: 'Layla Haddad', username: 'layla.h', hue: 28, online: true, bio: 'Architect. Collects rooftops and old maps.' },
-    { id: 'omar', name: 'Omar Nasser', username: 'omarn', hue: 215, online: true, bio: 'Padel on Tuesdays, code the rest of the week.' },
-    { id: 'maya', name: 'Maya Chen', username: 'mayachen', hue: 320, online: false, lastSeen: t(35), bio: 'Film editor. Currently color grading something you’ll love.' },
-    { id: 'jonas', name: 'Jonas Weber', username: 'jweber', hue: 150, online: false, lastSeen: t(300), bio: 'Bikes, bread, and Berlin.' },
-    { id: 'amira', name: 'Amira Saleh', username: 'amira.designs', hue: 350, online: true, bio: 'Product designer building calm software.' },
-    { id: 'theo', name: 'Theo Laurent', username: 'theol', hue: 250, online: false, lastSeen: t(1440 * 2), bio: 'Travelling slowly through Portugal.' },
-    { id: 'noor', name: 'Noor Khalil', username: 'noork', hue: 48, online: false, lastSeen: t(90), bio: 'Pharmacist, plant parent, terrible at replying.' },
-    { id: 'hana', name: 'Hana Sato', username: 'hanasato', hue: 190, online: true, bio: 'Design lead. Will ask “why” three times.' },
-    { id: 'karim', name: 'Karim Aziz', username: 'karim.a', hue: 95, online: false, lastSeen: t(20), bio: 'Front-end engineer and amateur chef.' },
-    { id: 'sofia', name: 'Sofia Ramos', username: 'sofiar', hue: 285, online: true, bio: 'Trail runner. Early mornings only.' },
-    { id: 'yusuf', name: 'Yusuf Demir', username: 'ydemir', hue: 28, online: false, lastSeen: t(600), bio: 'Photographer based in Istanbul.' },
-    { id: 'elena', name: 'Elena Petrova', username: 'elenap', hue: 215, online: false, lastSeen: t(1440 * 4), bio: 'Reads more than she sleeps.' },
-  ];
-  const m = (mins, from, text, extra = {}) => ({ id: uid(), from, text, t: t(mins), status: from === 'me' ? 'read' : undefined, ...extra });
-  const dm = (userId, msgs, opts = {}) => ({ id: 'c_' + userId, type: 'dm', userId, pinned: false, muted: false, unread: 0, draft: '', messages: msgs, ...opts });
-  const grp = (id, name, hue, members, desc, msgs, opts = {}) => ({ id, type: 'group', name, hue, members, desc, pinned: false, muted: false, unread: 0, draft: '', messages: msgs, ...opts });
-
-  const chats = [
-    dm('layla', [
-      m(190, 'layla', 'Did you see the new venue for Friday?'),
-      m(186, 'me', 'Not yet, send it over'),
-      m(14, 'layla', 'It’s the rooftop place near the old port. Booked for 8.'),
-      m(13, 'layla', 'Bring a jacket, it gets windy up there'),
-    ], { pinned: true, unread: 2 }),
-    dm('maya', [
-      m(1520, 'me', 'Sending the final cut tonight'),
-      m(1505, 'maya', 'Perfect. The color grade on the second scene is gorgeous'),
-      m(62, 'me', 'Thanks! It took three tries to get the skin tones right'),
-      m(58, 'maya', 'Worth it. Can we hop on a call tomorrow to lock the music?'),
-      m(55, 'me', 'Yes, 11 works for me'),
-    ], { pinned: true }),
-    dm('omar', [
-      m(2900, 'omar', 'Good game last week'),
-      m(2890, 'me', 'You got lucky in the third set'),
-      m(41, 'omar', 'Are we still on for padel tomorrow?'),
-    ], { unread: 1 }),
-    dm('amira', [
-      m(1650, 'amira', 'Could you review my portfolio this week? No rush'),
-      m(1600, 'me', 'Of course. Thursday works'),
-      m(1598, 'amira', 'You’re the best'),
-    ]),
-    dm('jonas', [
-      m(3400, 'me', 'Shipped the package this morning'),
-      m(2950, 'jonas', 'It arrived! The coffee smells incredible, thank you'),
-    ]),
-    dm('theo', [
-      m(7300, 'theo', 'Landed in Lisbon'),
-      m(7250, 'me', 'Bon voyage! Send photos of the tiles'),
-      m(7240, 'theo', 'Already have forty of them'),
-    ]),
-    dm('noor', [
-      m(11800, 'me', 'Happy birthday Noor!'),
-      m(11500, 'noor', 'Thank you!! Sorry, I saw this three days late'),
-    ], { muted: true }),
-    grp('g_design', 'Design Crit', 190, ['hana', 'karim', 'maya', 'amira'], 'Weekly critique for the product team. Bring screens, not slides.', [
-      m(1440 + 300, 'hana', 'Reminder: crit moves to Thursday this week'),
-      m(70, 'hana', 'New onboarding flow is up for review'),
-      m(52, 'karim', 'The second screen feels crowded'),
-      m(46, 'maya', 'Agree, maybe move the toggles below the fold'),
-      m(25, 'hana', 'Updated. Take another look?'),
-    ], { unread: 4 }),
-    grp('g_hike', 'Weekend Hike', 150, ['omar', 'sofia', 'yusuf', 'noor'], 'Saturday trails, sunrise starts.', [
-      m(1500, 'sofia', 'Trail opens at 7. Meet at the north gate?'),
-      m(1480, 'yusuf', 'I’ll bring the camera'),
-      m(1470, 'me', 'Count me in'),
-    ]),
-    grp('g_books', 'Book Club', 48, ['elena', 'jonas', 'sofia', 'hana', 'theo', 'maya'], 'One book a month. Spoilers after the 20th.', [
-      m(4400, 'elena', 'Next pick: The Remains of the Day'),
-      m(4380, 'jonas', 'Finally, a short one'),
-    ], { muted: true }),
-  ];
-
+/* Every account starts empty: no sample people, chats, or messages.
+   Conversations, contacts, and profiles come from the ZYVEN server
+   (see 4b. CLOUD). This object is the on-device copy of what the server
+   sent, plus device-only preferences (theme, bubble design, stickers,
+   saved messages, pinned and muted chats). */
+const DEFAULT_SETTINGS = () => ({
+  privacy: { lastSeen: 'everyone', onlineStatus: 'everyone', photo: 'everyone', readReceipts: true, typing: true },
+  notify: { messages: true, groups: true, previews: true, sounds: false, vibrate: false, badges: true, quiet: false },
+  appearance: { mode: 'dark', accent: 'white' },
+});
+function blankState() {
   return {
-    v: 1,
-    profile: { name: 'Nhgg', username: 'nhgg', bio: 'Making things on the internet. Replies when the kettle boils.', hue: 48 },
-    users,
-    chats,
-    settings: {
-      privacy: { lastSeen: true, onlineStatus: true, readReceipts: true },
-      notify: { messages: true, groups: true, previews: true, sounds: false },
-      appearance: { mode: 'dark', accent: 'white' },
-    },
+    v: 7,
+    profile: { id: null, name: '', username: '', bio: '', hue: 250, photo: null, email: '' },
+    users: [], chats: [], blocked: [], reports: [], saved: [], hiddenMsgs: {},
+    settings: DEFAULT_SETTINGS(),
+    stickers: { mine: [], favorites: [], recent: [] }, recentEmoji: [],
+    chatStyle: { design: 'default', in: 'design', out: 'design', wall: 'black', radius: null, spacing: 'design' },
+    session: {},
   };
 }
-
-/* v1 → v2: adds rich demo messages (photos, video, voice, a reply, reactions)
-   to existing chats without touching anything the user created. */
+/* Fills in anything missing from an older on-device copy. */
 function migrate(s) {
-  if (s.v === 1) {
-    const t = mins => now() - mins * MIN;
-    const chat = id => s.chats.find(c => c.id === id);
-    const add = (cid, msg) => { const c = chat(cid); if (c) { c.messages.push({ id: uid(), ...msg }); c.messages.sort((a, b) => a.t - b.t); } };
-    const mine = extra => ({ from: 'me', status: 'read', ...extra });
-    add('c_layla', { from: 'layla', type: 'image', scene: 'rooftop', caption: 'This is the view from the terrace', t: t(15) });
-    add('c_maya', mine({ type: 'video', scene: 'sea', duration: 24, caption: 'Rough cut of the opening', t: t(61) }));
-    add('c_maya', { from: 'maya', type: 'voice', duration: 14, wave: makeWave(2.3), t: t(57) });
-    add('c_theo', { from: 'theo', type: 'image', scene: 'tiles', caption: 'Forty-one now', t: t(7239) });
-    add('c_jonas', { from: 'jonas', type: 'image', scene: 'coffee', t: t(2949) });
-    add('g_design', { from: 'hana', type: 'image', scene: 'screen', caption: 'Onboarding v3', t: t(69) });
-    add('g_design', { from: 'karim', type: 'voice', duration: 9, wave: makeWave(5.1), t: t(50) });
-    add('g_hike', { from: 'sofia', type: 'image', scene: 'trail', caption: 'Last time we did this route', t: t(1497) });
-    const d = chat('g_design');
-    if (d) {
-      const img = d.messages.find(m => m.scene === 'screen');
-      const crowded = d.messages.find(m => m.text === 'The second screen feels crowded');
-      if (img && crowded) crowded.replyTo = img.id;
-      if (img) img.reactions = { '🔥': ['karim', 'maya'], '👀': ['amira'] };
-    }
-    const mv = chat('c_maya')?.messages.find(m => m.type === 'video');
-    if (mv) mv.reactions = { '😍': ['maya'] };
-    s.recentEmoji = s.recentEmoji || [];
-    s.v = 2;
-  }
-  /* v2 → v3: privacy audiences, blocking, extra notification options, profile photo, session */
-  if (s.v === 2) {
-    const pr = s.settings.privacy;
-    const aud = v => v === true ? 'everyone' : v === false ? 'nobody' : (v || 'everyone');
-    pr.lastSeen = aud(pr.lastSeen); pr.onlineStatus = aud(pr.onlineStatus); pr.photo = pr.photo || 'everyone';
-    if (pr.readReceipts === undefined) pr.readReceipts = true;
-    const n = s.settings.notify;
-    if (n.vibrate === undefined) n.vibrate = false;
-    if (n.badges === undefined) n.badges = true;
-    if (n.quiet === undefined) n.quiet = false;
-    s.blocked = s.blocked || [];
-    s.profile.photo = s.profile.photo || null;
-    s.session = s.session || { loggedIn: true, since: now() };
-    s.v = 3;
-  }
-  /* v3 → v4: sticker library + a few sample sticker messages */
-  if (s.v === 3) {
-    s.stickers = s.stickers || { mine: [], favorites: ['pk:loops:heart', 'pk:friends:lol'], recent: [] };
-    const add = (cid, msg) => { const c = s.chats.find(x => x.id === cid); if (c) { c.messages.push({ id: uid(), type: 'sticker', ...msg }); c.messages.sort((a, b) => a.t - b.t); } };
-    add('c_layla', { from: 'layla', stickerId: 'pk:friends:hi', t: now() - 12.5 * MIN });
-    add('g_design', { from: 'karim', stickerId: 'pk:loops:typing', t: now() - 48 * MIN });
-    add('c_omar', { from: 'omar', stickerId: 'pk:loops:hop', t: now() - 40 * MIN });
-    s.v = 4;
-  }
-  /* v4 → v5: pins, disappearing timers, admin roles, saved messages, reports, chat style */
-  if (s.v === 4) {
-    s.saved = s.saved || []; s.reports = s.reports || [];
-    s.chatStyle = s.chatStyle || { in: 'graphite', out: 'accent', wall: 'black', radius: 20 };
-    if (s.settings.privacy.typing === undefined) s.settings.privacy.typing = true;
-    const adm = { g_design: ['me', 'hana'], g_hike: ['sofia'], g_books: ['elena'] };
-    s.chats.forEach(c => {
-      c.pins = c.pins || []; if (c.ttl === undefined) c.ttl = null;
-      if (c.type === 'group') { if (!c.admins) c.admins = adm[c.id] || ['me']; if (!c.editInfo) c.editInfo = c.id === 'g_hike' ? 'admins' : 'all'; }
-    });
-    const d = s.chats.find(c => c.id === 'g_design'); const img = d && d.messages.find(m => m.scene === 'screen');
-    if (img && !d.pins.includes(img.id)) d.pins.push(img.id);
-    s.v = 5;
-  }
-  /* v5 → v6: bubble designs. Everyone starts on the reference-based Default;
-     colour or corner choices made earlier carry over as overrides. */
-  if (s.v === 5) {
-    const old = s.chatStyle || {};
-    s.chatStyle = {
-      design: 'default',
-      out: old.out && old.out !== 'accent' && old.out !== 'design' ? old.out : 'design',
-      in: old.in && old.in !== 'graphite' && old.in !== 'design' ? old.in : 'design',
-      radius: typeof old.radius === 'number' && old.radius !== 20 ? old.radius : null,
-      spacing: 'design', wall: old.wall || 'black',
-    };
-    s.v = 6;
-  }
+  const b = blankState();
+  if (!s || typeof s !== 'object' || s.v !== 7) return b;
+  for (const k of Object.keys(b)) if (s[k] === undefined) s[k] = b[k];
+  s.settings = { ...b.settings, ...s.settings };
+  for (const k of ['privacy', 'notify', 'appearance']) s.settings[k] = { ...b.settings[k], ...(s.settings[k] || {}) };
   return s;
 }
 
+/* On-device copy, one per account. The first app version kept a single
+   demo data set under CONFIG.storageKey; only its personal preferences
+   (theme, bubble design, stickers) are carried over, never its sample
+   people or chats. */
 const Store = {
   ok: (() => { try { const k = '__m'; localStorage.setItem(k, '1'); localStorage.removeItem(k); return true; } catch (e) { return false; } })(),
-  load() { try { const raw = localStorage.getItem(CONFIG.storageKey); return raw ? JSON.parse(raw) : null; } catch (e) { return null; } },
-  save(s) { try { localStorage.setItem(CONFIG.storageKey, JSON.stringify(s)); return true; } catch (e) { return false; } },
+  key: id => `zyven.account.${id}`,
+  load(id) { try { const raw = localStorage.getItem(this.key(id)); return raw ? JSON.parse(raw) : null; } catch (e) { return null; } },
+  save(s) {
+    if (!s?.profile?.id) return true;
+    try { localStorage.setItem(this.key(s.profile.id), JSON.stringify(cacheCopy(s))); return true; } catch (e) { return false; }
+  },
+  forget(id) { try { localStorage.removeItem(this.key(id)); } catch (e) {} },
+  legacyPrefs() {
+    try {
+      const old = JSON.parse(localStorage.getItem(CONFIG.storageKey) || 'null');
+      if (!old || typeof old !== 'object') return null;
+      return { stickers: old.stickers, chatStyle: old.chatStyle, recentEmoji: old.recentEmoji,
+        appearance: old.settings?.appearance, notify: old.settings?.notify };
+    } catch (e) { return null; }
+  },
+  device: {
+    get() { try { return JSON.parse(localStorage.getItem('zyven.device') || '{}'); } catch (e) { return {}; } },
+    set(v) { try { localStorage.setItem('zyven.device', JSON.stringify({ ...this.get(), ...v })); } catch (e) {} },
+  },
 };
+/* What goes on disk: recent messages only, and no temporary blob:/data:
+   media (the server copy is fetched again on start). */
+function cacheCopy(s) {
+  const strip = m => {
+    const o = {};
+    for (const [k, v] of Object.entries(m)) {
+      if (typeof v === 'string' && (v.startsWith('blob:') || (v.startsWith('data:') && v.length > 4096))) continue;
+      o[k] = v;
+    }
+    return o;
+  };
+  return { ...s, chats: s.chats.map(c => ({ ...c, messages: c.messages.filter(m => !m.pending && !m.localOnly).slice(-80).map(strip) })) };
+}
 
-let state = Store.load();
-if (!state || ![1, 2, 3, 4, 5, 6].includes(state.v)) state = seed();
-state = migrate(state);
+let state = blankState();
+{
+  const dev = Store.device.get();
+  if (dev.appearance) state.settings.appearance = { ...state.settings.appearance, ...dev.appearance };
+}
 
 /* UI-only state (never persisted) */
 const ui = {
@@ -1471,9 +1391,10 @@ let saveTimer = null;
 const save = () => {
   clearTimeout(saveTimer);
   saveTimer = setTimeout(() => {
+    Store.device.set({ appearance: S().appearance });
     if (!Store.save(state) && Store.ok && !ui.storeWarned) {
       ui.storeWarned = true;
-      toast('Browser storage is full, so new photos may not be kept after reload', 'info');
+      toast('Phone storage is full, so ZYVEN can’t keep an offline copy. Your chats are safe on the server.', 'info');
     }
   }, 150);
 };
@@ -1483,7 +1404,7 @@ const getUser = id => state.users.find(u => u.id === id);
 const getChat = id => state.chats.find(c => c.id === id);
 const lastMsg = c => c.messages[c.messages.length - 1];
 const chatTitle = c => c.type === 'dm' ? (getUser(c.userId)?.name || 'Unknown') : c.name;
-const chatTime = c => lastMsg(c)?.t || 0;
+const chatTime = c => lastMsg(c)?.t || c.lastAt || c.createdAt || 0;
 const sortedChats = () => [...state.chats].sort((a, b) => chatTime(b) - chatTime(a));
 const isBlocked = id => (state.blocked || []).includes(id);
 /* Hiding your own last seen hides everyone else's too, like most messengers. */
@@ -1512,7 +1433,10 @@ const avatar = (name, hue, size = 48, { online = false, square = false } = {}) =
   `<span class="av ${square ? 'sq' : ''}" style="--s:${size}px;--h:${hue}" aria-hidden="true">${esc(initials(name))}${online ? '<i class="dot"></i>' : ''}</span>`;
 const userAvatar = (id, size = 48, showOnline = true) => {
   const u = getUser(id);
-  return u ? avatar(u.name, u.hue, size, { online: showOnline && u.online && !isBlocked(u.id) }) : avatar('?', 0, size);
+  if (!u) return avatar('?', 0, size);
+  const online = showOnline && u.online && !isBlocked(u.id);
+  if (!u.photo) return avatar(u.name, u.hue, size, { online });
+  return `<span class="av" style="--s:${size}px;--h:${u.hue};background:url('${u.photo}') center/cover no-repeat" aria-hidden="true">${online ? '<i class="dot"></i>' : ''}</span>`;
 };
 const avatarFor = (p, size) => p.photo
   ? `<span class="av" style="--s:${size}px;--h:${p.hue};background:url('${p.photo}') center/cover no-repeat" aria-hidden="true"></span>`
@@ -1582,6 +1506,8 @@ const chip = (label, on, action, value, n) =>
   `<button class="chip ${on ? 'on' : ''}" data-action="${action}" data-value="${value}" aria-pressed="${on}">${label}${n != null ? ` <span class="n">${n}</span>` : ''}</button>`;
 
 const tickIcon = status => {
+  if (status === 'sending') return `<span class="tick-pend" style="display:inline-flex" title="Sending">${I('clock')}</span>`;
+  if (status === 'failed') return `<span class="tick-fail" style="display:inline-flex" title="Not sent">${I('alert')}</span>`;
   const s = (!S().privacy.readReceipts && status === 'read') ? 'delivered' : status;
   if (s === 'sent') return I('check');
   return `<span class="${s === 'read' ? 'read' : ''}" style="display:inline-flex">${I('checks')}</span>`;
@@ -1740,7 +1666,7 @@ function renderShell() {
         </div>
         <button type="submit" class="icon-btn send" id="send-btn" aria-label="Record voice message">${I('mic')}</button>
       </form>
-      <div class="left-bar" id="left-bar" hidden>${I('logout')}<span>You left this group. Its history stays on this device.</span>
+      <div class="left-bar" id="left-bar" hidden>${I('logout')}<span>You’re no longer in this group. You can still read its history.</span>
         <button type="button" class="btn secondary" data-action="delete-group-chat">Delete chat</button></div>
       <div class="left-bar" id="block-bar" hidden>${I('block')}<span id="block-bar-t"></span>
         <button type="button" class="btn secondary" data-action="unblock-open">Unblock</button></div>
@@ -1790,7 +1716,7 @@ function renderChatsList() {
 
   const box = $('#chats-list');
   if (!state.chats.length) {
-    box.innerHTML = emptyState({ icon: 'inbox', title: 'No conversations yet', body: 'Start one with a contact or create a group. Everything stays on this device for now.', action: 'new-chat', label: 'Start a conversation' });
+    box.innerHTML = emptyState({ icon: 'inbox', title: 'No conversations yet', body: 'Find people by their username, add them to your contacts, and start talking.', action: 'new-chat', label: 'Start a conversation' });
     return;
   }
   if (q) {
@@ -1820,18 +1746,19 @@ function renderChatsList() {
 
 function renderContactsList() {
   const q = ui.contactQuery.trim().toLowerCase();
-  const online = state.users.filter(u => u.online).length;
-  $('#contact-count').textContent = state.users.length;
+  const people = state.users.filter(u => u.contact);
+  const online = people.filter(u => u.online).length;
+  $('#contact-count').textContent = people.length;
   $('#contact-chips').innerHTML =
     chip('Everyone', ui.contactFilter === 'all', 'contact-filter', 'all') +
     chip('Online now', ui.contactFilter === 'online', 'contact-filter', 'online', online);
   const box = $('#contacts-list');
   if (!ui.visited.has('contacts')) { box.innerHTML = skeletonRows(); return; }
-  if (!state.users.length) {
-    box.innerHTML = emptyState({ icon: 'contacts', title: 'Your contact list is empty', body: 'Add people by their username to start talking.', action: 'add-contact', label: 'Add a contact' });
+  if (!people.length) {
+    box.innerHTML = emptyState({ icon: 'contacts', title: 'Your contact list is empty', body: 'Search for people on ZYVEN by their username or name, then add them here.', action: 'add-contact', label: 'Find people' });
     return;
   }
-  const list = state.users
+  const list = people
     .filter(u => ui.contactFilter !== 'online' || u.online)
     .filter(u => !q || u.name.toLowerCase().includes(q) || u.username.toLowerCase().includes(q.replace(/^@/, '')))
     .sort((a, b) => a.name.localeCompare(b.name));
@@ -1905,7 +1832,7 @@ function renderProfile() {
       <div class="group">
         <span class="group-label">Account</span>
         <div class="card">
-          ${linkRow('account', 'user', 'Account', 'Name, username, storage, and sign-in')}
+          ${linkRow('account', 'user', 'Account', 'Email, password, and backups')}
           ${linkRow('edit-profile', 'pen', 'Edit profile', 'Photo, display name, username, and bio')}
         </div>
       </div>
@@ -1919,9 +1846,9 @@ function renderProfile() {
           ${toggleRow('privacy.readReceipts', 'read', 'Read receipts', 'Show when you’ve read messages. Turning this off hides others’ receipts too.')}
           ${toggleRow('privacy.typing', 'chat', 'Typing indicator', 'Show when you’re typing. Turning this off hides others’ typing too.')}
           ${linkRow('blocked', 'block', 'Blocked users', blockedN ? `${blockedN} blocked` : 'Nobody blocked')}
-          ${linkRow('reports', 'flag', 'Reports you’ve made', (state.reports || []).length ? `${state.reports.length} saved on this device · not sent` : 'None')}
+          ${linkRow('reports', 'flag', 'Reports you’ve made', (state.reports || []).length ? `${state.reports.length} sent` : 'None')}
         </div>
-        <p class="note">${I('info')}Privacy choices are simulated and only change what this device shows.</p>
+        <p class="note">${I('info')}Online status, last seen, photo, and read receipts are saved to your account and enforced by the server. Typing indicators are controlled on this phone.</p>
       </div>
 
       <div class="group">
@@ -1936,7 +1863,7 @@ function renderProfile() {
           ${toggleRow('notify.quiet', 'moon', 'Quiet hours', 'Silence banners from 22:00 to 07:00')}
           ${linkRow('test-notification', 'sparkles', 'Send a test banner', 'Preview an alert with your current settings')}
         </div>
-        <p class="note">${I('info')}These are in-app banners only. Real push notifications need a server and the Android app.</p>
+        <p class="note">${I('info')}Banners appear while ZYVEN is open. Notifications when the app is closed (push) aren’t set up yet.</p>
       </div>
 
       <div class="group">
@@ -1972,20 +1899,12 @@ function renderProfile() {
       </div>
 
       <div class="group">
-        <span class="group-label">Prototype data</span>
-        <div class="card">
-          ${linkRow('clear-chats', 'eraser', 'Clear all conversations', 'See the empty state. Contacts stay.')}
-          ${linkRow('reset-demo', 'refresh', 'Restore demo data', 'Bring back the sample people and chats')}
-        </div>
-      </div>
-
-      <div class="group">
-        <div class="card">${linkRow('about', 'info', `About ${esc(CONFIG.appName)}`, 'What works today and what’s simulated')}</div>
+        <div class="card">${linkRow('about', 'info', `About ${esc(CONFIG.appName)}`, 'What works today and what’s coming')}</div>
       </div>
       <div class="group">
-        <div class="card">${linkRow('logout', 'logout', 'Log out', 'Return to the welcome screen', 'danger')}</div>
+        <div class="card">${linkRow('logout', 'logout', 'Log out', state.profile.email ? `Signed in as ${esc(state.profile.email)}` : 'Sign out of this phone', 'danger')}</div>
       </div>
-      <p class="foot">${esc(CONFIG.appName)} <code>${esc(CONFIG.version)}</code><br>${Store.ok ? 'Data is saved in this browser only' : 'Storage is unavailable here, so changes reset on reload'}</p>
+      <p class="foot">${esc(CONFIG.appName)} <code>${esc(CONFIG.version)}</code><br>${Cloud.connected ? 'Connected to the ZYVEN server' : Cloud.me ? 'Connecting to the ZYVEN server…' : 'Not signed in'}</p>
     </div>`;
 }
 
@@ -2048,7 +1967,7 @@ function voiceBlock(m) {
   return `<div class="voice ${has ? '' : 'noaudio'}" data-voice="${m.id}">
     <button type="button" class="vplay" data-action="voice-play" data-msg="${m.id}" aria-label="${has ? 'Play voice message' : 'Sample voice note without audio'}">${I('play')}</button>
     <div class="vwave" data-action="voice-seek" data-msg="${m.id}" role="slider" aria-label="Playback position" aria-valuemin="0" aria-valuemax="${m.duration}"><div class="vbars">${bars}</div><div class="vbars fill">${bars}</div></div>
-    <span class="vdur">${has ? fmtDur(m.durationExact || m.duration) : (m.audioLost ? 'expired' : 'no audio')}</span></div>`;
+    <span class="vdur">${has ? fmtDur(m.durationExact || m.duration) : fmtDur(m.duration)}</span></div>`;
 }
 
 function msgBubble(c, m, { cont = false, first = true, isNew = false, peek = false } = {}) {
@@ -2063,7 +1982,7 @@ function msgBubble(c, m, { cont = false, first = true, isNew = false, peek = fal
   let cls = '', inner;
   if (m.deleted) {
     cls = 'del';
-    inner = `<span class="btext">${I('block')}${m.deletedBy === 'admin' ? 'Removed by an admin (you)' : mine ? 'You deleted this message' : 'This message was deleted'}</span>${meta}`;
+    inner = `<span class="btext">${I('block')}${m.deletedBy === 'admin' ? 'Removed by an admin' : mine ? 'You deleted this message' : 'This message was deleted'}</span>${meta}`;
   } else {
     const quote = fwd + (m.replyTo ? quoteHtml(c, m.replyTo) : '');
     if (type === 'file') {
@@ -2089,12 +2008,12 @@ function msgBubble(c, m, { cont = false, first = true, isNew = false, peek = fal
   }
   const rx = !m.deleted && m.reactions ? Object.entries(m.reactions).filter(([, us]) => us.length) : [];
   const reacts = rx.length ? `<div class="reacts">${rx.map(([e, us]) =>
-    `<button type="button" class="react ${us.includes('me') ? 'mine' : ''}" data-action="react" data-msg="${m.id}" data-e="${e}" aria-label="${e} reaction, ${us.length}">${e}${us.length > 1 ? `<b>${us.length}</b>` : ''}</button>`).join('')}</div>` : '';
+    `<button type="button" class="react ${us.includes('me') ? 'mine' : ''}" data-action="react" data-msg="${m.id}" data-e="${esc(e)}" aria-label="${esc(e)} reaction, ${us.length}">${esc(e)}${us.length > 1 ? `<b>${us.length}</b>` : ''}</button>`).join('')}</div>` : '';
   const deco = !['stk-b', 'jumbo', 'del'].includes(cls);
   const dt = deco && !['has-media', 'has-file', 'has-loc', 'has-voice'].includes(cls);
   return `<div class="mrow ${mine ? 'me' : 'them'} ${cont ? 'cont' : 'tail'} ${isNew ? 'new' : ''} ${deco ? 'dc' : ''}" data-mid="${m.id}">
     ${isGroup && !mine ? `<span class="mav">${!cont ? userAvatar(m.from, 28, false) : ''}</span>` : ''}
-    <div class="mcol"><div class="bubble ${cls} ${deco ? 'deco' : ''} ${dt ? 'dt' : ''}" ${m.deleted || peek ? '' : `data-msgpress="${m.id}"`}>${inner}</div>${reacts}</div></div>`;
+    <div class="mcol"><div class="bubble ${cls} ${deco ? 'deco' : ''} ${dt ? 'dt' : ''} ${m.pending ? 'sending' : ''}" ${m.deleted || peek ? '' : `data-msgpress="${m.id}"`}>${inner}</div>${reacts}${m.status === 'failed' && !peek ? `<button type="button" class="retry" data-action="msg-retry" data-msg="${m.id}">${I('alert')}Not sent · Tap to retry</button>` : ''}</div></div>`;
 }
 
 function convoEmpty(c) {
@@ -2119,7 +2038,9 @@ function renderMessages() {
   const dayOf = m => startOfDay(m.t);
   const joins = (a, b) => a && b && !a.system && !b.system && a.from === b.from && dayOf(a) === dayOf(b) && Math.abs(b.t - a.t) < 5 * MIN && !b.replyTo;
 
-  let html = `<div class="sim-note">${I('lock')}<span>Prototype conversation. Messages stay on this device. Delivery, read receipts, and typing are simulated until a server is connected.</span></div>`;
+  let html = c.hasMore
+    ? `<div class="older"><button type="button" class="chip" data-action="load-older" id="load-older">${I('refresh')}Load earlier messages</button></div>`
+    : `<div class="sim-note">${I('lock')}<span>Only people in this chat can read these messages. They’re kept on the ZYVEN server so they reach every device.</span></div>`;
   let lastDay = null;
   c.messages.forEach((m, i) => {
     const d = dayOf(m);
@@ -2206,7 +2127,11 @@ function startEdit(id) {
 
 /* ---------- Reactions ---------- */
 function toggleReaction(id, emoji) {
-  const m = findMsg(id); if (!m || m.deleted) return;
+  const m = findMsg(id); if (!m || m.deleted || m.pending || m.status === 'failed') return;
+  const c = getChat(ui.openChatId); if (!c || c.left) return;
+  const before = JSON.stringify(m.reactions || {});
+  Cloud.rpc('toggle_reaction', { msg: id, emoji }).then(r => { m.reactions = mapReactions(r); refresh(); },
+    e => { m.reactions = JSON.parse(before); refresh(); toast(cloudError(e), 'info'); });
   m.reactions = m.reactions || {};
   const had = (m.reactions[emoji] || []).includes('me');
   Object.keys(m.reactions).forEach(k => {
@@ -2271,7 +2196,7 @@ function insertAtCaret(text) {
    Audio is kept as a data URL on the message (≤1.5 MB) so it survives reloads;
    larger clips play from a blob URL for this session only.
    ========================================================= */
-const VOICE_MAX_SECS = 120, VOICE_KEEP_BYTES = 1.5 * 1024 * 1024;
+const VOICE_MAX_SECS = 120;
 ui.audioUrls = new Map();
 const voiceSrc = m => (m && (ui.audioUrls.get(m.id) || m.audio)) || null;
 function getAudioCtx() {
@@ -2314,7 +2239,7 @@ function toggleVoice(id) {
   const m = findMsg(id); if (!m) return;
   const src = voiceSrc(m);
   if (!src) {
-    toast(m.audioLost ? 'This recording was too large to keep after reload.' : 'This sample voice note has no recorded audio. Record or share your own to hear it.', 'info');
+    toast(m.pending ? 'Still sending. Try again in a moment.' : 'This voice message isn’t available right now. Check your connection.', 'info');
     return;
   }
   const a = audioEl();
@@ -2453,12 +2378,10 @@ async function addVoiceMessage(blob, dur, wave, source) {
   const mime = blob.type || 'audio/webm';
   if (!canPlay(mime)) { toast(`This browser can’t play ${mime.split(';')[0]} audio, so it wasn’t sent.`, 'info'); return; }
   if (!ui.openChatId) return;
-  let data = null;
-  if (blob.size <= VOICE_KEEP_BYTES) { try { data = await blobToDataURL(blob); } catch (e) { data = null; } }
+  if (blob.size > 25 * 1024 * 1024) { toast('Voice messages can be up to 25 MB.', 'info'); return; }
   const id = uid();
   ui.audioUrls.set(id, URL.createObjectURL(blob));
-  postMine({ id, type: 'voice', duration: Math.max(1, Math.round(dur)), durationExact: +dur.toFixed(2), wave, audio: data, audioMime: mime, audioBytes: blob.size, source, audioLost: !data });
-  if (!data) toast('This recording is too large to keep after reload. It plays until then.', 'info');
+  postMine({ id, type: 'voice', duration: Math.max(1, Math.round(dur)), durationExact: +dur.toFixed(2), wave, audioMime: mime, source, _files: { main: blob } });
 }
 /* Real audio from a file (or the phone's own recorder app via capture). */
 async function handleAudioFile(file) {
@@ -2518,17 +2441,9 @@ function openViewer(id) {
   let body = frame, foot = '';
   ui.vid = null;
   if (m.type === 'video') {
-    if (m.local && ui.blobs.has(m.id)) {
-      body = `<video class="vw-media" src="${m.blob}" controls autoplay playsinline style="aspect-ratio:${r}"></video>`;
-      foot = `<span class="vw-note">${I('info')}Playing from this device. It won’t be here after you reload.</span>`;
-    } else if (m.local) {
-      foot = `<span class="vw-note">${I('info')}This video was added in an earlier session. Keeping videos needs cloud storage.</span>`;
-    } else {
-      foot = `<div class="vw-ctrl"><button type="button" class="vw-play" data-action="vid-toggle" aria-label="Pause">${I('pause')}</button>
-        <div class="vw-track"><i id="vw-bar"></i></div><time id="vw-time">0:00 / ${fmtDur(m.duration)}</time></div>
-        <span class="vw-note">${I('info')}Sample clip. Playback is simulated.</span>`;
-      ui.vid = { dur: Math.max(1, m.duration), pos: 0, playing: true, last: performance.now() };
-    }
+    const vsrc = m.url || (m.blob && ui.blobs.has(m.id) ? m.blob : null);
+    if (vsrc) body = `<video class="vw-media" src="${vsrc}" controls autoplay playsinline style="aspect-ratio:${r}"></video>`;
+    else foot = `<span class="vw-note">${I('info')}${m.pending ? 'Still uploading. Try again in a moment.' : 'This video isn’t available right now. Check your connection.'}</span>`;
   }
   v.innerHTML = `
     <div class="vw-head">
@@ -2635,18 +2550,43 @@ function newChatSheet() {
 function renderNewChatList() {
   const q = ui.newChatQuery.trim().toLowerCase();
   const qq = q.replace(/^@/, '');
-  const list = [...state.users].sort((a, b) => a.name.localeCompare(b.name)).filter(u => !qq || u.name.toLowerCase().includes(qq) || u.username.includes(qq));
+  const contacts = state.users.filter(u => u.contact);
+  const list = contacts.sort((a, b) => a.name.localeCompare(b.name)).filter(u => !qq || u.name.toLowerCase().includes(qq) || u.username.includes(qq));
   const box = $('#newchat-list'); if (!box) return;
-  if (!state.users.length) {
-    box.innerHTML = emptyState({ icon: 'contacts', title: 'No contacts yet', body: 'Add someone by username to start a private conversation.', action: 'add-contact', label: 'Add a contact' });
-    return;
-  }
   const hasChat = id => state.chats.some(c => c.type === 'dm' && c.userId === id && c.messages.length);
-  box.innerHTML = `<div class="section-label">${q ? 'Matches' : 'Contacts'} · ${list.length}</div>` + (list.length
-    ? list.map(u => `<button class="row" data-action="open-dm" data-user="${u.id}">${userAvatar(u.id, 44)}
+  const row = u => `<button class="row" data-action="open-dm" data-user="${u.id}">${userAvatar(u.id, 44)}
         <span class="row-main"><span class="row-name">${esc(u.name)}</span><span class="row-sub">@${esc(u.username)} · ${userStatus(u)}</span></span>
-        ${hasChat(u.id) ? '<span class="tag">Open chat</span>' : ''}</button>`).join('')
-    : `<p class="hint">No contacts match “${esc(ui.newChatQuery)}”</p><div style="display:flex;justify-content:center"><button class="btn secondary" data-action="add-contact">${I('userPlus')}Add a contact</button></div>`);
+        ${hasChat(u.id) ? '<span class="tag">Open chat</span>' : ''}</button>`;
+  let html = '';
+  if (list.length) html += `<div class="section-label">${q ? 'Your contacts' : 'Contacts'} · ${list.length}</div>${list.map(row).join('')}`;
+  else if (!q) html += emptyState({ icon: 'contacts', title: 'No contacts yet', body: 'Type a username or name above to find people on ZYVEN.' });
+  if (qq) {
+    const found = (ui.peopleResults?.q === qq ? ui.peopleResults.list : null);
+    const others = (found || []).filter(u => !list.some(x => x.id === u.id));
+    html += `<div class="section-label">People on ${esc(CONFIG.appName)}</div>`;
+    if (!found) html += `<p class="hint">${ui.peopleError ? esc(ui.peopleError) : 'Searching…'}</p>`;
+    else if (!others.length) html += `<p class="hint">${list.length ? 'No one else matches' : 'No one on ZYVEN matches'} “${esc(ui.newChatQuery.trim())}”.</p>`;
+    else html += others.map(u => { Cloud.remember(u); return row(u); }).join('');
+  }
+  box.innerHTML = html;
+}
+/* Server search, shared by "New conversation" and "Find people". */
+function searchPeople(raw, render) {
+  const qq = raw.trim().toLowerCase().replace(/^@/, '');
+  clearTimeout(ui.peopleTimer);
+  ui.peopleError = '';
+  if (!qq) { ui.peopleResults = null; render(); return; }
+  if (ui.peopleResults?.q !== qq) ui.peopleResults = null;
+  render();
+  ui.peopleTimer = setTimeout(async () => {
+    try {
+      const list = await Cloud.search(qq);
+      if ((ui.lastPeopleQ || '') !== qq) return;
+      ui.peopleResults = { q: qq, list };
+    } catch (e) { ui.peopleError = cloudError(e, 'Search isn’t available right now.'); }
+    render();
+  }, 280);
+  ui.lastPeopleQ = qq;
 }
 
 /* Sheet: conversation actions (long-press or ••• menu) */
@@ -2704,7 +2644,9 @@ function userProfileSheet(id) {
           ? `<button class="act" data-action="unblock-user" data-user="${id}" data-from="profile">${I('check')}Unblock ${esc(u.name.split(' ')[0])}</button>`
           : `<button class="act danger" data-action="block-user" data-user="${id}" data-from="profile">${I('block')}Block ${esc(u.name.split(' ')[0])}</button>`}
         <button class="act danger" data-action="report-user" data-user="${id}">${I('flag')}Report ${esc(u.name.split(' ')[0])}</button>
-        <button class="act danger" data-action="remove-contact" data-user="${id}">${I('trash')}Remove contact</button>
+        ${u.contact
+          ? `<button class="act danger" data-action="remove-contact" data-user="${id}">${I('trash')}Remove contact</button>`
+          : `<button class="act" data-action="contact-add" data-user="${id}" data-from="profile">${I('userPlus')}Add to contacts</button>`}
       </div>
     </div>`);
 }
@@ -2746,13 +2688,12 @@ function groupInfoSheet(id) {
           </button>`).join('')}
         ${!members.length ? `<p class="hint" style="text-align:left;padding:8px 10px">No other members${admin ? ' yet. Add people to start talking.' : ''}</p>` : ''}
       </div>
-      ${!left && !admin ? `<p class="admin-note">${I('crown')}<span>Only admins can add or remove members${g.editInfo === 'admins' ? ', and edit the group’s name, picture, and pins' : ''}. This permission check is simulated on this device; a server would enforce it for everyone.</span></p>` : ''}
+      ${!left && !admin ? `<p class="admin-note">${I('crown')}<span>Only admins can add or remove members${g.editInfo === 'admins' ? ', and edit the group’s name, picture, and pins' : ''}.</span></p>` : ''}
       <div class="act-list wide" style="margin-top:14px">
         ${left
           ? `<button class="act danger" data-action="delete-group-chat" data-id="${id}">${I('trash')}Delete chat</button>`
           : `<button class="act danger" data-action="leave-group" data-id="${id}">${I('logout')}Leave group</button>`}
       </div>
-      <p class="sim-tag wide">${I('info')}<span>This group exists only on this device. Changes aren’t synced and members aren’t notified until a server is connected.</span></p>
     </div>`);
 }
 function memberMenuSheet(gid, uid2) {
@@ -2765,8 +2706,7 @@ function memberMenuSheet(gid, uid2) {
       <button class="act" data-action="user-profile" data-user="${u.id}">${I('user')}View profile</button>
       <button class="act" data-action="member-admin" data-id="${gid}" data-user="${u.id}">${I('crown')}${isAdm ? 'Dismiss as admin' : 'Make group admin'}</button>
     </div>
-    <div class="act-list" style="margin-top:10px"><button class="act danger" data-action="group-remove-member" data-id="${gid}" data-user="${u.id}">${I('trash')}Remove from group</button></div>
-    <p class="sim-tag">${I('info')}<span>Admin changes are saved on this device only.</span></p>`);
+    <div class="act-list" style="margin-top:10px"><button class="act danger" data-action="group-remove-member" data-id="${gid}" data-user="${u.id}">${I('trash')}Remove from group</button></div>`);
 }
 
 function groupRenameSheet(id) {
@@ -2787,14 +2727,13 @@ function groupPicSheet(id) {
   openSheet(`
     <div class="sheet-head"><h3>Group picture</h3><button class="icon-btn" data-action="group-info-back" data-id="${id}" aria-label="Back">${I('back')}</button></div>
     <div style="display:flex;justify-content:center;margin-bottom:18px">${chatAvatar(g, 96)}</div>
-    ${picGrid(g.pic || { kind: 'hue', hue: g.hue }, id, g.name)}
-    <p class="sim-tag">${I('info')}<span>The picture is saved on this device only.</span></p>`);
+    ${picGrid(g.pic || { kind: 'hue', hue: g.hue }, id, g.name)}`);
 }
 
 function groupAddSheet(id) {
   const g = getChat(id); if (!g) return;
   ui.addDraft = new Set();
-  const cands = state.users.filter(u => !g.members.includes(u.id)).sort((a, b) => a.name.localeCompare(b.name));
+  const cands = state.users.filter(u => u.contact && !g.members.includes(u.id)).sort((a, b) => a.name.localeCompare(b.name));
   openSheet(`
     <div class="sheet-head"><h3>Add members</h3><button class="icon-btn" data-action="group-info-back" data-id="${id}" aria-label="Back">${I('back')}</button></div>
     ${cands.length ? `
@@ -2821,7 +2760,7 @@ function renderDraftMembers() {
 }
 function createGroupSheet(preselect) {
   ui.gdraft = { pic: { kind: 'hue', hue: pick(PIC_HUES) }, members: new Set(preselect ? [preselect] : []) };
-  const people = [...state.users].sort((a, b) => a.name.localeCompare(b.name));
+  const people = state.users.filter(u => u.contact).sort((a, b) => a.name.localeCompare(b.name));
   openSheet(`
     <div class="sheet-head"><h3>New group</h3><button class="icon-btn" data-action="close-overlay" aria-label="Close">${I('x')}</button></div>
     <form class="form" data-form="group">
@@ -2851,9 +2790,9 @@ function applyGroupPic(target, pic) {
     return;
   }
   const g = getChat(target); if (!g) return;
-  g.pic = pic; if (pic.hue != null) g.hue = pic.hue;
-  sysMsg(g, 'You changed the group picture');
-  refresh(); groupInfoSheet(g.id); toast('Group picture updated', 'image');
+  toast('Updating group picture…', 'image');
+  Cloud.updateGroup(g, { pic }).then(() => { if (getChat(g.id)) groupInfoSheet(g.id); toast('Group picture updated', 'image'); },
+    e => toast(cloudError(e), 'info'));
 }
 function squarePhoto(file, cb) {
   const reader = new FileReader();
@@ -2888,15 +2827,30 @@ function filterPicks(listSel, q, raw) {
 
 /* Sheet: add contact */
 function addContactSheet() {
+  ui.findQuery = ''; ui.peopleResults = null;
   openSheet(`
-    <div class="sheet-head"><h3>Add a contact</h3><button class="icon-btn" data-action="close-overlay" aria-label="Close">${I('x')}</button></div>
-    <form class="form" data-form="contact">
-      <div class="fld"><label for="c-name">Name</label><input id="c-name" maxlength="40" placeholder="Full name" autocomplete="off"></div>
-      <div class="fld"><label for="c-user">Username</label><div class="prefix"><span>@</span><input id="c-user" maxlength="24" placeholder="username" autocomplete="off" autocapitalize="off"></div>
-        <span class="err" id="c-err"></span></div>
-      <p class="hint" style="padding:0;text-align:left">In this prototype the contact is added locally. Finding real people needs a server.</p>
-      <button class="btn block" type="submit">${I('userPlus')}Add contact</button>
-    </form>`, { onMount: () => setTimeout(() => $('#c-name')?.focus(), 350) });
+    <div class="sheet-head"><h3>Find people</h3><button class="icon-btn" data-action="close-overlay" aria-label="Close">${I('x')}</button></div>
+    ${searchField('find-search', 'Search by @username or name')}
+    <div class="list" id="find-list" style="margin-top:10px"></div>`, { onMount: () => { renderFindList(); setTimeout(() => $('#find-search')?.focus(), 350); } });
+}
+function renderFindList() {
+  const box = $('#find-list'); if (!box) return;
+  const qq = (ui.findQuery || '').trim().toLowerCase().replace(/^@/, '');
+  if (!qq) { box.innerHTML = `<p class="hint">Type a username or a name. Only people with a ${esc(CONFIG.appName)} account show up.</p>`; return; }
+  const found = ui.peopleResults?.q === qq ? ui.peopleResults.list : null;
+  if (!found) { box.innerHTML = `<p class="hint">${ui.peopleError ? esc(ui.peopleError) : 'Searching…'}</p>`; return; }
+  if (!found.length) {
+    box.innerHTML = emptyState({ icon: 'search', title: 'No one found', body: `No ${esc(CONFIG.appName)} account matches “${esc(ui.findQuery.trim())}”. Check the spelling, or ask them for their username.` });
+    return;
+  }
+  box.innerHTML = found.map(u => {
+    Cloud.remember(u);
+    const isC = getUser(u.id)?.contact;
+    return `<div class="row" style="cursor:default">${userAvatar(u.id, 44)}
+      <span class="row-main"><span class="row-name">${esc(u.name)}</span><span class="row-sub">@${esc(u.username)}${u.bio ? ` · ${esc(u.bio)}` : ''}</span></span>
+      ${isC ? '<span class="tag">Contact</span>' : `<button class="btn secondary sm" data-action="contact-add" data-user="${u.id}" data-from="find">${I('userPlus')}Add</button>`}
+      <button class="row-action" data-action="open-dm" data-user="${u.id}" aria-label="Message ${esc(u.name)}">${I('chat')}</button></div>`;
+  }).join('');
 }
 
 /* Sheet: edit profile */
@@ -2922,7 +2876,7 @@ function editProfileSheet() {
       <div class="fld"><div class="fld-row"><label for="p-bio">Bio</label><span class="count" id="bio-count">${p.bio.length}/140</span></div>
         <textarea id="p-bio" maxlength="140" data-input="bio-count" placeholder="A line about you">${esc(p.bio)}</textarea></div>
       <div class="acts2"><button type="button" class="btn secondary" data-action="close-overlay">Cancel</button><button class="btn" type="submit">Save changes</button></div>
-      <p class="sim-tag" style="margin-top:0">${I('info')}<span>Your profile is saved on this device. Other people won’t see changes until accounts sync through a server.</span></p>
+      <p class="sim-tag" style="margin-top:0">${I('info')}<span>Your profile is saved to your account. People see the changes the next time their app refreshes.</span></p>
     </form>`, { onMount: () => { renderPfControls(); renderPfPreview(); } });
 }
 function renderPfControls() {
@@ -2933,7 +2887,7 @@ function renderPfControls() {
 function usernameIssue(raw) {
   const u = raw.trim().replace(/^@/, '').toLowerCase();
   if (!/^[a-z0-9._]{3,24}$/.test(u)) return [u, 'Use 3–24 letters, numbers, dots, or underscores.'];
-  if (state.users.some(x => x.username === u)) return [u, `@${u} belongs to one of your contacts.`];
+  if (u !== state.profile.username && ui.unameCheck?.u === u && ui.unameCheck.free === false) return [u, `@${u} is already taken.`];
   return [u, ''];
 }
 function renderPfPreview() {
@@ -2953,7 +2907,7 @@ function renderPfPreview() {
   if (err && ok) {
     const changed = user !== state.profile.username;
     err.textContent = issue && ($('#p-user').value.trim() ? issue : '');
-    ok.textContent = !issue && changed ? `@${user} is available on this device` : '';
+    ok.textContent = !issue && changed && ui.unameCheck?.u === user && ui.unameCheck.free ? `@${user} is available` : '';
   }
 }
 
@@ -2968,7 +2922,7 @@ function privacySheet(key) {
         <button class="act radio ${cur === v ? 'on' : ''}" data-action="set-privacy" data-key="${key}" data-value="${v}" role="radio" aria-checked="${cur === v}">
           <span class="t">${label}<small>${sub}</small></span><span class="radio-dot"></span></button>`).join('')}
     </div>
-    <p class="sim-tag">${I('info')}<span>Simulated. This only changes what this device shows; nobody else’s app is affected until a server is connected.</span></p>`);
+    <p class="sim-tag">${I('info')}<span>Saved to your account. The server applies it to everyone who views your profile.</span></p>`);
 }
 
 /* Sheets: blocking */
@@ -2980,12 +2934,12 @@ function blockedSheet() {
       <div class="row" style="cursor:default">${userAvatar(u.id, 44, false)}
         <span class="row-main"><span class="row-name">${esc(u.name)}</span><span class="row-sub">@${esc(u.username)}</span></span>
         <button class="btn secondary sm" data-action="unblock-user" data-user="${u.id}" data-from="list">Unblock</button></div>`).join('')}</div>`
-      : emptyState({ icon: 'shield', title: 'No one is blocked', body: 'People you block can’t send you messages in this prototype. You can unblock them any time.' })}
+      : emptyState({ icon: 'shield', title: 'No one is blocked', body: 'People you block can’t send you private messages, and you can’t message them. You can unblock them any time.' })}
     <button class="btn secondary block" data-action="block-pick" style="margin-top:14px">${I('block')}Block a contact</button>
-    <p class="sim-tag">${I('info')}<span>Blocking is simulated on this device. It stops their simulated replies and hides their status here. Nobody is notified.</span></p>`);
+    <p class="sim-tag">${I('info')}<span>Blocking is enforced by the server for private chats. They aren’t notified. In groups you share, you’ll still see each other’s messages.</span></p>`);
 }
 function blockPickSheet() {
-  const cands = state.users.filter(u => !isBlocked(u.id)).sort((a, b) => a.name.localeCompare(b.name));
+  const cands = state.users.filter(u => u.contact && !isBlocked(u.id)).sort((a, b) => a.name.localeCompare(b.name));
   openSheet(`
     <div class="sheet-head"><h3>Block a contact</h3><button class="icon-btn" data-action="blocked" aria-label="Back">${I('back')}</button></div>
     ${cands.length ? `${searchField('block-search', 'Search contacts')}
@@ -2997,17 +2951,17 @@ function blockPickSheet() {
 }
 async function blockUser(id, from) {
   const u = getUser(id); if (!u) return;
-  const ok = await confirmDialog({ title: `Block ${esc(u.name)}?`, body: 'In the prototype this only changes your device: their simulated messages stop and their status is hidden. They aren’t notified.', confirmLabel: 'Block', danger: true });
+  const ok = await confirmDialog({ title: `Block ${esc(u.name)}?`, body: 'Neither of you will be able to send private messages to the other. They aren’t notified.', confirmLabel: 'Block', danger: true });
   if (!ok) { reopenFrom(from, id); return; }
-  state.blocked = [...new Set([...(state.blocked || []), id])];
+  try { await Cloud.block(id); } catch (e) { toast(cloudError(e), 'info'); reopenFrom(from, id); return; }
   const dm = state.chats.find(c => c.type === 'dm' && c.userId === id);
   if (dm) { delete ui.typing[dm.id]; if (ui.openChatId === dm.id && ui.compose.mode) cancelCompose(); }
   refresh(); renderProfile(); reopenFrom(from, id);
   toast(`${u.name} blocked`, 'block');
 }
-function unblockUser(id, from) {
+async function unblockUser(id, from) {
   const u = getUser(id); if (!u) return;
-  state.blocked = (state.blocked || []).filter(x => x !== id);
+  try { await Cloud.unblock(id); } catch (e) { toast(cloudError(e), 'info'); return; }
   refresh(); renderProfile(); reopenFrom(from, id);
   toast(`${u.name} unblocked`, 'check');
 }
@@ -3020,48 +2974,43 @@ function reopenFrom(from, id) {
 /* Sheet: account */
 function accountSheet() {
   const p = state.profile;
-  let kb = 0; try { kb = Math.max(1, Math.round(new Blob([JSON.stringify(state)]).size / 1024)); } catch (e) {}
   openSheet(`
     <div class="sheet-head"><h3>Account</h3><button class="icon-btn" data-action="close-overlay" aria-label="Close">${I('x')}</button></div>
     <div class="peek">${myAvatar(56)}<div><b>${esc(p.name)}</b><span>@${esc(p.username)}</span></div></div>
     <div class="act-list" style="margin-bottom:12px">
       <button class="act" data-action="edit-profile">${I('pen')}Edit profile</button>
+      <button class="act" data-action="change-password">${I('lock')}Change password</button>
       <button class="act" data-action="blocked">${I('block')}Blocked users</button>
     </div>
     <div class="kv-list">
-      <div class="kv"><span>Account type</span><b>Local prototype</b></div>
-      <div class="kv"><span>Saved in</span><b>${Store.ok ? 'This browser' : 'Memory only'}</b></div>
-      <div class="kv"><span>Storage used</span><b class="tag">${kb} KB</b></div>
-      <div class="kv"><span>Phone number</span><b style="color:var(--muted)">Not connected</b></div>
-      <div class="kv"><span>Signed in</span><b>${state.session?.since ? fmtStamp(state.session.since) : '—'}</b></div>
+      <div class="kv"><span>Email</span><b>${esc(p.email || '—')}</b></div>
+      <div class="kv"><span>Member since</span><b>${p.since ? esc(new Date(p.since).toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' })) : '—'}</b></div>
+      <div class="kv"><span>Server</span><b>${Cloud.connected ? 'Connected' : 'Reconnecting…'}</b></div>
     </div>
     <div class="act-list" style="margin-top:12px">
-      <button class="act" data-action="backup-export">${I('down')}<span class="t">Back up data<small>Save chats, contacts, stickers, and settings as a file</small></span></button>
-      <label class="act" for="backup-in" style="cursor:pointer">${I('refresh')}<span class="t">Restore from backup<small>Replace this device’s data with a backup file</small></span></label>
+      <button class="act" data-action="backup-export">${I('down')}<span class="t">Back up settings<small>Theme, bubble design, your stickers, and saved messages</small></span></button>
+      <label class="act" for="backup-in" style="cursor:pointer">${I('refresh')}<span class="t">Restore settings<small>From a ZYVEN backup file</small></span></label>
     </div>
     <input type="file" id="backup-in" accept=".json,application/json" hidden>
-    <p class="sim-tag">${I('info')}<span>Accounts, phone verification, and syncing across devices need a server. This prototype keeps a single local profile. Use a backup file to move your data to the ZYVEN Android app or another phone.</span></p>
+    <p class="sim-tag">${I('info')}<span>Your chats, contacts, and profile are stored on the ZYVEN server, so they follow you to any phone you sign in on. Backups cover the settings kept on this phone.</span></p>
     <button class="btn danger block" style="margin-top:16px" data-action="logout">${I('logout')}Log out</button>`);
+}
+function passwordSheet() {
+  openSheet(`
+    <div class="sheet-head"><h3>Change password</h3><button class="icon-btn" data-action="close-overlay" aria-label="Close">${I('x')}</button></div>
+    <form class="form" data-form="password" novalidate>
+      <div class="fld"><label for="pw-new">New password</label><input id="pw-new" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters"></div>
+      <div class="fld"><label for="pw-again">Type it again</label><input id="pw-again" type="password" autocomplete="new-password"><span class="err" id="pw-err"></span></div>
+      <button class="btn block" type="submit">${I('lock')}Save password</button>
+    </form>`, { onMount: () => setTimeout(() => $('#pw-new')?.focus(), 350) });
 }
 
 /* Logout */
 function logoutDialog() {
   openSheet(`<h3>Log out of ${esc(CONFIG.appName)}?</h3>
-    <p>You’ll go back to the welcome screen. This is a local prototype, so there’s no server session to end and nobody else is affected.</p>
-    <label class="check-row" for="logout-erase"><input type="checkbox" id="logout-erase"><span>Also erase chats, contacts, and settings on this device</span></label>
+    <p>Your chats stay safe on the server. Sign in again any time to get them back.</p>
+    <label class="check-row" for="logout-erase"><input type="checkbox" id="logout-erase"><span>Also remove the offline copy from this phone</span></label>
     <div class="acts"><button class="btn secondary" data-action="close-overlay">Cancel</button><button class="btn danger" data-action="logout-confirm">Log out</button></div>`, { kind: 'dialog' });
-}
-function showGate(erased) {
-  let g = $('#gate');
-  if (!g) { g = document.createElement('div'); g.id = 'gate'; g.className = 'gate'; g.setAttribute('role', 'dialog'); g.setAttribute('aria-label', 'Logged out'); $('#app').appendChild(g); }
-  const p = state.profile;
-  g.innerHTML = `${LOGO(64)}
-    <h2>You’re logged out</h2>
-    <p>${erased ? 'This device was cleared and the demo data restored.' : 'Your chats and settings are still saved on this device.'}</p>
-    <div class="gate-card">${myAvatar(48)}<span class="row-main"><span class="row-name">${esc(p.name)}</span><span class="row-sub">@${esc(p.username)}</span></span></div>
-    <button class="btn" data-action="login">Continue as ${esc(p.name)}</button>
-    <p class="note" style="justify-content:center;margin-top:4px">${I('info')}Sign-in is simulated. Real accounts need a server.</p>`;
-  g.hidden = false;
 }
 
 /* Sheet: about */
@@ -3069,17 +3018,15 @@ function aboutSheet() {
   openSheet(`
     <div class="about-mark">${LOGO(64)}<h3>${esc(CONFIG.appName)}</h3><span>${esc(CONFIG.tagline)} · ${esc(CONFIG.version)}</span></div>
     <div class="capab">
-      <div><h4><i></i>Works on this device</h4><ul>
-        <li>Browsing chats, contacts, and groups</li><li>Sending messages, drafts, pins, mutes</li><li>Voice messages with real audio, where the browser allows the microphone</li>
-        <li>Creating groups and adding contacts</li><li>Profile, privacy, and appearance settings</li>
-        <li>${Store.ok ? 'Saving everything in this browser' : 'Storage is blocked here, so data resets on reload'}</li></ul></div>
-      <div class="sim"><h4><i></i>Simulated for now</h4><ul>
-        <li>Replies and typing indicators</li><li>Online status and last seen</li>
-        <li>Voice and video calls</li><li>Read receipts from other people</li>
-        <li>Finding real users. Accounts, sync, and delivery need a server</li>
-        <li>Privacy, blocking, and notification choices only change this device</li>
-        <li>Banners are in-app only; push notifications need the Android app</li>
-        <li>Sign-in and logout</li></ul></div>
+      <div><h4><i></i>Works today</h4><ul>
+        <li>Accounts with email and password, password reset</li><li>Finding real people by username or name</li>
+        <li>Private and group chats between phones, live</li><li>Photos, videos, files, voice messages, stickers, locations</li>
+        <li>Replies, edits, deletes, reactions, pins, forwarding</li><li>Delivery and read receipts, typing, online status</li>
+        <li>Group admins, blocking, reports, disappearing messages</li></ul></div>
+      <div class="sim"><h4><i></i>Not yet</h4><ul>
+        <li>Voice and video calls</li><li>Notifications while the app is closed (push)</li>
+        <li>End-to-end encryption: messages are protected by the server’s access rules, not encrypted on your phone</li>
+        <li>Reports are stored, but there’s no moderation team reviewing them yet</li></ul></div>
     </div>
     <button class="btn secondary block" style="margin-top:16px" data-action="close-overlay">Done</button>`);
 }
@@ -3089,6 +3036,8 @@ function msgActionsSheet(id) {
   const c = getChat(ui.openChatId), m = findMsg(id); if (!c || !m || m.system) return;
   stopRecording(false, true);
   if (m.deleted) { deleteMsgSheet(id); return; }
+  if (m.pending) { toast('Still sending…', 'clock'); return; }
+  if (m.status === 'failed') { failedSheet(id); return; }
   const mine = m.from === 'me';
   const type = m.type || 'text';
   const copyable = type === 'text' ? m.text : m.caption;
@@ -3120,9 +3069,18 @@ function msgActionsSheet(id) {
 
 /* Sheet: delivery timeline for one of your messages */
 function receiptTimes(m) {
-  const delivered = m.deliveredAt || (m.status === 'delivered' || m.status === 'read' ? m.t + 1400 : null);
-  const read = m.readAt || (m.status === 'read' ? Math.min(now(), m.t + 3 * MIN) : null);
-  return { sent: m.t, delivered, read };
+  return { sent: m.t, delivered: m.deliveredAt || null, read: m.readAt || null };
+}
+function failedSheet(id) {
+  const m = findMsg(id); if (!m) return;
+  openSheet(`
+    <div class="sheet-head"><h3>Message not sent</h3><button class="icon-btn" data-action="close-overlay" aria-label="Close">${I('x')}</button></div>
+    <div class="msg-peek">${esc(msgPreview(m))}</div>
+    <p class="sheet-sub">${esc(m.error || 'It couldn’t reach the server.')}</p>
+    <div class="act-list">
+      <button class="act" data-action="msg-retry" data-msg="${id}" data-close="1">${I('refresh')}Try again</button>
+      <button class="act danger" data-action="msg-discard" data-msg="${id}">${I('trash')}Delete</button>
+    </div>`);
 }
 function fmtStamp(t) {
   return t >= startOfDay(now()) ? fmtTime(t) : `${fmtListTime(t)}, ${fmtTime(t)}`;
@@ -3135,23 +3093,24 @@ function msgInfoSheet(id) {
     <div class="tl-row"><span class="tl-ic ${done ? 'done' : ''}">${I(icon)}</span>
       <span class="set-txt"><b>${label}</b><span>${note}</span></span>
       <time class="row-time">${time ? fmtStamp(time) : '—'}</time></div>`;
-  const people = c.type === 'group' ? c.members.map(getUser).filter(Boolean) : [];
+  const people = c.type === 'group' ? (m.receipts || []).map(r => ({ u: getUser(r.id), r })).filter(x => x.u) : [];
+  const readN = people.filter(x => x.r.read).length;
   openSheet(`
     <div class="sheet-head"><h3>Message info</h3><button class="icon-btn" data-action="close-overlay" aria-label="Close">${I('x')}</button></div>
     <div class="info-prev">${msgBubble(c, m, { peek: true })}</div>
     <div class="tl">
       ${row('check', 'Sent', t.sent, true, 'Left your device')}
-      ${row('checks', 'Delivered', t.delivered, !!t.delivered, t.delivered ? (c.type === 'group' ? 'Reached every member' : 'Reached their phone') : 'Waiting for their phone')}
+      ${row('checks', 'Delivered', t.delivered, !!t.delivered, t.delivered ? (c.type === 'group' ? 'Reached every member' : 'Reached their phone') : m.pending ? 'Sending…' : 'Waiting for their phone')}
       ${rrOff
         ? row('eye', 'Read', null, false, 'Hidden while your read receipts are off')
-        : row('eye', 'Read', t.read, !!t.read, t.read ? (c.type === 'group' ? `Seen by ${people.length} of ${people.length}` : 'Opened the conversation') : 'Not read yet')}
+        : row('eye', 'Read', t.read, !!t.read, t.read ? (c.type === 'group' ? `Seen by ${readN} of ${people.length}` : 'Opened the conversation') : (c.type === 'group' && readN ? `Seen by ${readN} of ${people.length}` : 'Not read yet'))}
     </div>
     ${people.length && !rrOff ? `<span class="sub-label" style="display:block">Members</span>
-      <div class="list">${people.map((u, i) => `
+      <div class="list">${people.map(({ u, r }) => `
         <div class="row" style="cursor:default">${userAvatar(u.id, 40, false)}
           <span class="row-main"><span class="row-name">${esc(u.name)}</span>
-          <span class="row-sub">${t.read ? `Read ${fmtStamp(t.read + i * 41000)}` : t.delivered ? `Delivered ${fmtStamp(t.delivered)}` : 'Not delivered yet'}</span></span></div>`).join('')}</div>` : ''}
-    <p class="sim-tag">${I('info')}<span>Delivery and read times are simulated on this device. Real receipts need a server that tracks each phone.</span></p>`);
+          <span class="row-sub">${r.read ? `Read ${fmtStamp(r.read)}` : r.delivered ? `Delivered ${fmtStamp(r.delivered)}` : 'Not delivered yet'}</span></span></div>`).join('')}</div>` : ''}
+    <p class="sim-tag">${I('info')}<span>People who turned off read receipts show as delivered.</span></p>`);
 }
 
 /* Sheet: share something */
@@ -3172,16 +3131,14 @@ function attachSheet() {
     <div class="attach-sec">Share</div>
     <div class="attach-grid three">
       ${opt('button', 'data-action="attach-location"', 'mapPin', '#FF8E7F', 'Location', 'Asks first')}
-      ${opt('button', 'data-action="attach-sample" data-kind="image"', 'camera', '#9D90FF', 'Sample photo', 'Demo image')}
-      ${opt('button', 'data-action="attach-sample" data-kind="video"', 'film', '#9D90FF', 'Sample video', 'Demo clip')}
     </div>
-    <p class="sim-tag">${I('info')}<span>Nothing is uploaded: files are added to this chat on this device. Anything typed in the message box becomes the caption. Files up to 1 MB and photos are kept after reload; larger files and videos last until you reload.</span></p>`);
+    <p class="sim-tag">${I('info')}<span>Files up to 25 MB are uploaded to the ZYVEN server. Only people in this chat can open them. Anything typed in the message box becomes the caption.</span></p>`);
 }
 
 /* =========================================================
    7c. MESSAGING EXTRAS — pins, forward, saved, deletion modes,
    admin roles, disappearing messages, location, files, chat
-   appearance, reports, and search. Everything runs on this device.
+   appearance, reports, and search.
    ---------------------------------------------------------
    Data added for the Android app:
    chat.pins: [msgId]          chat.ttl: null | '1m' | '24h' | '7d' | '30d'
@@ -3205,6 +3162,8 @@ Object.assign(ICONS, {
   target: '<circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3"/>',
   brush: '<path d="M4 20c2.5 0 4-1.5 4-3.5a2.5 2.5 0 0 0-5 0"/><path d="m7.8 14 9.7-9.7a2.1 2.1 0 0 1 3 3L10.8 17"/>',
   folder: '<path d="M3.5 7a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2V17a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/>',
+  clock: '<circle cx="12" cy="12" r="8"/><path d="M12 7.5V12l3 2"/>',
+  alert: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v5.5M12 16.2v.1"/>',
 });
 Object.assign(ICON_TINT, { bookmark: '#FFC15E', flag: '#FF6B63', brush: '#FF7AB6', timer: '#5CB0FF', chat: '#4ADE9F', crown: '#FFC15E', mapPin: '#FF8E7F', folder: '#5CB0FF', forward: '#9D90FF' });
 
@@ -3228,23 +3187,20 @@ function snippet(s, q) {
   const st = Math.max(0, i - 24);
   return (st ? '…' : '') + s.slice(st, i + q.length + 70);
 }
-const markDelivered = msg => setTimeout(() => { if (msg.status === 'sent') { msg.status = 'delivered'; msg.deliveredAt = now(); refresh(); } }, 600 + Math.random() * 500);
 
 /* ---------- Pins ---------- */
 const validPins = c => (c.pins || []).filter(id => c.messages.some(m => m.id === id && !m.deleted));
-function togglePin(id) {
-  const c = getChat(ui.openChatId), m = findMsg(id); if (!c || !m) return;
-  if (c.type === 'group' && !canEditInfo(c)) { toast('Only admins can pin messages in this group. This check is simulated on this device.', 'crown'); return; }
-  c.pins = validPins(c);
-  if (c.pins.includes(id)) { c.pins = c.pins.filter(x => x !== id); toast('Message unpinned', 'pin'); }
-  else {
-    c.pins.push(id);
-    if (c.pins.length > 5) { c.pins.shift(); toast('Pinned. The oldest pin was removed (5 max).', 'pin'); }
-    else toast('Message pinned', 'pin');
-    sysMsg(c, 'You pinned a message');
-  }
-  ui.pinIdx = c.pins.length - 1;
-  refresh();
+async function togglePin(id) {
+  const c = getChat(ui.openChatId), m = findMsg(id); if (!c || !m || m.pending) return;
+  if (c.type === 'group' && !canEditInfo(c)) { toast('Only admins can pin messages in this group.', 'crown'); return; }
+  const was = validPins(c).includes(id);
+  try {
+    const pins = await Cloud.rpc('toggle_pin', { conv: c.id, msg: id });
+    c.pins = (pins || []).filter(x => UUID_RE.test(x));
+    toast(was ? 'Message unpinned' : c.pins.length >= 5 && !was ? 'Pinned. Up to 5 messages stay pinned.' : 'Message pinned', 'pin');
+    ui.pinIdx = c.pins.length - 1;
+    refresh();
+  } catch (e) { toast(cloudError(e), 'info'); }
 }
 function renderPinBar(c) {
   const bar = $('#pin-bar'); if (!bar) return;
@@ -3329,7 +3285,7 @@ function renderSavedList() {
 function openSavedItem(sid) {
   const s = SAVED().find(x => x.id === sid); if (!s) return;
   const c = getChat(s.chatId);
-  if (!c) { toast('That conversation is no longer on this device', 'info'); return; }
+  if (!c) { toast('That conversation is no longer available', 'info'); return; }
   closeSaved();
   openChat(c.id);
   if (c.messages.some(m => m.id === s.msgId)) setTimeout(() => jumpTo(s.msgId), 460);
@@ -3354,24 +3310,25 @@ function forwardSheet(msgId) {
 }
 function forwardMessage() {
   const f = ui.fwd; if (!f || !f.set.size) return;
-  const src = getChat(f.from)?.messages.find(m => m.id === f.msgId); if (!src) return;
+  const src = getChat(f.from)?.messages.find(m => m.id === f.msgId); if (!src || src.pending) return;
   const names = [];
+  const copy = src.meta?.path ? { path: src.meta.path, poster_path: src.meta.poster_path } : null;
   f.set.forEach(cid => {
     const c = getChat(cid); if (!c) return;
-    const msg = { id: uid(), from: 'me', t: now(), status: 'sent', forwarded: true };
+    const msg = { id: uid(), from: 'me', t: now(), forwarded: true };
     FWD_KEYS.forEach(k => { if (src[k] !== undefined) msg[k] = src[k]; });
     msg.type = msg.type || 'text';
+    delete msg.local;
     if (ui.audioUrls.has(src.id)) ui.audioUrls.set(msg.id, ui.audioUrls.get(src.id));
     if (ui.fileUrls.has(src.id)) ui.fileUrls.set(msg.id, ui.fileUrls.get(src.id));
     if (ui.blobs.has(src.id)) ui.blobs.add(msg.id);
-    applyTtl(c, msg);
     c.messages.push(msg);
-    markDelivered(msg);
-    if (cid !== ui.openChatId) simulateReply(cid);
+    const files = copy ? { copy } : (src.type === 'sticker' && src.stickerPath ? { copy: { path: src.stickerPath } } : (ui.outbox?.get(src.id) || {}));
+    Cloud.send(c, msg, files);
     names.push(chatTitle(c));
   });
   closeOverlay(); refresh();
-  toast(names.length === 1 ? `Forwarded to ${names[0]}` : `Forwarded to ${names.length} chats`, 'forward');
+  toast(names.length === 1 ? `Forwarding to ${names[0]}` : `Forwarding to ${names.length} chats`, 'forward');
 }
 
 /* ---------- Deleting ---------- */
@@ -3383,47 +3340,52 @@ function deleteMsgSheet(id) {
     <div class="sheet-head"><h3>Delete message?</h3><button class="icon-btn" data-action="close-overlay" aria-label="Close">${I('x')}</button></div>
     <div class="msg-peek"><b>${esc(senderName(m))}</b> · ${fmtTime(m.t)}<br>${esc(msgPreview(m))}</div>
     <div class="act-list">
-      ${mine && !m.deleted ? `<button class="act danger" data-action="msg-del-all" data-msg="${id}">${I('trash')}<span class="t">Delete for everyone<small>Replaced with “You deleted this message”. Simulated: other people’s copies aren’t changed until a server is connected.</small></span></button>` : ''}
-      ${adminDel ? `<button class="act danger" data-action="msg-del-all" data-msg="${id}">${I('crown')}<span class="t">Delete for everyone, as admin<small>Shows “Removed by an admin”. The admin check and removal happen on this device only.</small></span></button>` : ''}
-      <button class="act danger" data-action="msg-del-me" data-msg="${id}">${I('eraser')}<span class="t">Delete for me<small>Removes it from this device. Nobody else is affected.</small></span></button>
+      ${mine && !m.deleted && !m.pending && m.status !== 'failed' ? `<button class="act danger" data-action="msg-del-all" data-msg="${id}">${I('trash')}<span class="t">Delete for everyone<small>Replaced with “This message was deleted” on every phone, and its file is removed from the server.</small></span></button>` : ''}
+      ${adminDel ? `<button class="act danger" data-action="msg-del-all" data-msg="${id}">${I('crown')}<span class="t">Delete for everyone, as admin<small>Shows “Removed by an admin” to everyone in the group.</small></span></button>` : ''}
+      <button class="act danger" data-action="msg-del-me" data-msg="${id}">${I('eraser')}<span class="t">Delete for me<small>Hides it on your phones. Nobody else is affected.</small></span></button>
     </div>
     <button class="btn secondary block" style="margin-top:12px" data-action="close-overlay">Cancel</button>`);
 }
-function deleteForEveryone(id) {
+async function deleteForEveryone(id) {
   const c = getChat(ui.openChatId), m = findMsg(id); if (!c || !m) return;
+  closeOverlay();
+  try { await Cloud.deleteForEveryone(m); }
+  catch (e) { toast(cloudError(e), 'info'); return; }
   if (ui.compose.id === id) cancelCompose();
   if (ui.playing?.id === id) stopVoice();
-  m.deletedBy = m.from === 'me' ? 'me' : 'admin';
-  m.deleted = true; m.reactions = {};
+  const by = m.from === 'me' ? 'me' : 'admin';
   FWD_KEYS.filter(k => k !== 'type').forEach(k => delete m[k]);
+  Object.assign(m, { deleted: true, deletedBy: by, reactions: {} });
   ['audioUrls', 'fileUrls'].forEach(k => { const u = ui[k].get(id); if (u) { URL.revokeObjectURL(u); ui[k].delete(id); } });
   c.pins = (c.pins || []).filter(x => x !== id);
-  closeOverlay(); refresh();
-  toast(m.deletedBy === 'admin' ? 'Removed as admin on this device' : 'Deleted for everyone in this prototype', 'trash');
+  refresh();
+  toast(by === 'admin' ? 'Removed for everyone, as admin' : 'Deleted for everyone', 'trash');
 }
 function deleteForMe(id) {
   const c = getChat(ui.openChatId); if (!c) return;
   if (ui.compose.id === id) cancelCompose();
   if (ui.playing?.id === id) stopVoice();
   c.messages = c.messages.filter(m => m.id !== id);
-  c.pins = (c.pins || []).filter(x => x !== id);
+  state.hiddenMsgs = state.hiddenMsgs || {};
+  state.hiddenMsgs[c.id] = [...new Set([...(state.hiddenMsgs[c.id] || []), id])].slice(-500);
+  ui.outbox?.delete(id);
   ['audioUrls', 'fileUrls'].forEach(k => { const u = ui[k].get(id); if (u) { URL.revokeObjectURL(u); ui[k].delete(id); } });
-  closeOverlay(); refresh(); toast('Deleted from this device', 'eraser');
+  closeOverlay(); refresh(); toast('Deleted for you', 'eraser');
 }
 
 /* ---------- Disappearing messages ---------- */
 function ttlSheet(chatId) {
   const c = getChat(chatId); if (!c) return;
   const cur = c.ttl || 'off';
-  const opts = [['off', 'Off', 'Messages stay until you delete them'], ['24h', '24 hours'], ['7d', '7 days'], ['30d', '30 days'], ['1m', '1 minute', 'For trying the feature out in the prototype']];
+  const opts = [['off', 'Off', 'Messages stay until you delete them'], ['24h', '24 hours'], ['7d', '7 days'], ['30d', '30 days'], ['1m', '1 minute', 'Good for a quick test']];
   openSheet(`
     <div class="sheet-head"><h3>Disappearing messages</h3><button class="icon-btn" data-action="close-overlay" aria-label="Close">${I('x')}</button></div>
-    <p class="sheet-sub">New messages in ${esc(chatTitle(c))} disappear from this device after the time you choose. Messages already sent aren’t affected.</p>
+    <p class="sheet-sub">New messages in ${esc(chatTitle(c))} disappear for everyone after the time you choose. Messages already sent aren’t affected.</p>
     <div class="act-list" role="radiogroup" aria-label="Disappearing messages">
       ${opts.map(([v, l, sub]) => `<button class="act radio ${cur === v ? 'on' : ''}" data-action="ttl-set" data-id="${chatId}" data-value="${v}" role="radio" aria-checked="${cur === v}">
         <span class="t">${l}<small>${sub || `A message sent now would disappear ${fmtFuture(now() + TTL[v][0])}`}</small></span><span class="radio-dot"></span></button>`).join('')}
     </div>
-    <p class="sim-tag">${I('info')}<span>Simulated. Expired messages are removed from this device when the chat checks, about every 30 seconds. Other people’s copies aren’t deleted and nothing is securely erased until a server is connected.</span></p>`);
+    <p class="sim-tag">${I('info')}<span>The server stops showing expired messages to everyone. Someone could still have taken a screenshot before then.</span></p>`);
 }
 function sweepExpired() {
   let any = false;
@@ -3435,9 +3397,7 @@ function sweepExpired() {
     c.messages = c.messages.filter(m => !(m.expiresAt && m.expiresAt <= t));
     gone.forEach(m => ['audioUrls', 'fileUrls'].forEach(k => { const u = ui[k].get(m.id); if (u) { URL.revokeObjectURL(u); ui[k].delete(m.id); } }));
     c.pins = (c.pins || []).filter(id => c.messages.some(m => m.id === id));
-    const n = before - c.messages.length;
-    sysMsg(c, `${n} message${n > 1 ? 's' : ''} disappeared from this device`);
-    any = true;
+    any = before !== c.messages.length;
   });
   if (any) refresh();
 }
@@ -3462,7 +3422,7 @@ function renderLocBody() {
         <div class="kv"><span>Accuracy</span><b>±${Math.round(L.acc)} m</b></div>
       </div>
       <div class="fld" style="margin-top:12px"><label for="loc-name">Name this place <span class="faint">optional</span></label><input id="loc-name" maxlength="40" placeholder="Home, Office, Café…" autocomplete="off"></div>
-      <p class="sim-tag">${I('info')}<span>These are your real coordinates from the browser. They’re added to this chat on this device only.</span></p>
+      <p class="sim-tag">${I('info')}<span>These are your real coordinates. Only the people in this chat will see them.</span></p>
       <div class="acts2" style="margin-top:12px"><button class="btn secondary" data-action="close-overlay">Cancel</button><button class="btn" data-action="loc-send">${I('mapPin')}Share location</button></div>`;
     return;
   }
@@ -3470,7 +3430,7 @@ function renderLocBody() {
     ${L.state === 'locating' ? `<div class="ctl"><div class="progress"><i style="width:60%;animation:shimmer 1.2s linear infinite"></i></div><p class="bg-status">Waiting for your browser to share your location…</p></div>` : ''}
     ${L.state === 'error' ? `<div class="cr-err">${I('info')}<span>${L.error}</span></div>` : ''}
     <button class="btn block" style="margin-top:14px" data-action="loc-locate" ${L.state === 'locating' ? 'disabled' : ''}>${I('target')}Use my current location</button>
-    <p class="bg-status" style="margin-top:8px">Your browser will ask for permission first. Nothing is sent anywhere except into this chat on this device.</p>
+    <p class="bg-status" style="margin-top:8px">Your phone asks for permission first. Your location goes only to this chat.</p>
     <div class="fld" style="margin-top:16px"><label for="loc-place">Or share a place by name</label>
       <input id="loc-place" maxlength="40" placeholder="e.g. Rooftop bar, old port" autocomplete="off"></div>
     <button class="btn secondary block" style="margin-top:10px" data-action="loc-place-send">${I('mapPin')}Share place name</button>
@@ -3523,7 +3483,7 @@ function fileBlock(m) {
   return `<div class="file-card" style="--fc:${k.color}">
       <span class="file-ic">${I('file')}<b>${esc(k.label)}</b></span>
       <span class="file-main"><span class="file-name">${esc(m.name)}</span>
-        <span class="file-meta">${fmtBytes(m.size || 0)} · ${src ? 'On this device · not uploaded' : 'Too large to keep after reload'}</span></span>
+        <span class="file-meta">${fmtBytes(m.size || 0)} · ${m.pending ? 'Uploading…' : m.status === 'failed' ? 'Not sent' : src ? 'Tap the arrow to save' : 'Not available right now'}</span></span>
       ${src ? `<button type="button" class="file-save" data-action="file-save" data-msg="${m.id}" aria-label="Save ${esc(m.name)} to your device">${I('down')}</button>` : ''}
     </div>${m.preview ? `<pre class="file-prev">${esc(m.preview)}</pre>` : ''}`;
 }
@@ -3532,38 +3492,18 @@ async function handleAnyFile(file) {
   if (file.type.startsWith('image/') || file.type.startsWith('video/')) { handleFile(file); return; }
   if (file.type.startsWith('audio/')) { handleAudioFile(file); return; }
   if (!file.size) { toast('This file is empty, so there’s nothing to send.', 'file'); return; }
-  if (file.size > FILE_MAX) { toast(`Files can be up to 25 MB in the prototype. This one is ${fmtBytes(file.size)}.`, 'file'); return; }
+  if (file.size > FILE_MAX) { toast(`Files can be up to 25 MB. This one is ${fmtBytes(file.size)}.`, 'file'); return; }
   const name = file.name || 'file';
-  const ext = (name.includes('.') ? name.split('.').pop() : '').toLowerCase().slice(0, 8);
-  const keep = file.size <= FILE_KEEP;
-  openSheet(`
-    <div class="sheet-head"><h3>Preparing file</h3></div>
-    ${fileBlock({ id: '_', name, size: file.size, ext })}
-    <div class="ctl"><span class="lbl">Reading from your device <b id="fp-pct">0%</b></span><div class="progress"><i id="fp-bar"></i></div>
-    <p class="bg-status">Nothing is uploaded. The file is added to this chat on this device.</p></div>`);
-  let data = null;
-  try {
-    if (keep) {
-      data = await new Promise((res, rej) => {
-        const r = new FileReader();
-        r.onprogress = e => { if (e.lengthComputable) { const p = Math.round(e.loaded / e.total * 100); const b = $('#fp-bar'), t = $('#fp-pct'); if (b) b.style.width = p + '%'; if (t) t.textContent = p + '%'; } };
-        r.onload = () => res(r.result); r.onerror = () => rej(r.error);
-        r.readAsDataURL(file);
-      });
-    } else { const b = $('#fp-bar'), t = $('#fp-pct'); if (b) b.style.width = '100%'; if (t) t.textContent = '100%'; }
-  } catch (e) { closeOverlay(); toast('The file couldn’t be read. It may have moved or been deleted.', 'file'); return; }
+  const ext = (name.includes('.') ? name.split('.').pop() : '').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 8);
   let preview = '';
   if (['txt', 'md', 'csv', 'json', 'log', 'xml'].includes(ext) || file.type.startsWith('text/')) {
     try { preview = (await file.slice(0, 2000).text()).split('\n').slice(0, 6).join('\n').slice(0, 320); } catch (e) {}
   }
-  await new Promise(r => setTimeout(r, 250));
-  closeOverlay();
   if (!ui.openChatId) return;
   const id = uid();
   ui.fileUrls.set(id, URL.createObjectURL(file));
   const caption = takeCaption();
-  postMine({ id, type: 'file', name, size: file.size, mime: file.type || '', ext, data, preview: preview || undefined, ...(caption ? { caption } : {}) });
-  if (!keep) toast('Large file: it’s available until you reload. Files up to 1 MB are kept.', 'file');
+  postMine({ id, type: 'file', name, size: file.size, mime: file.type || '', ext, preview: preview || undefined, ...(caption ? { caption } : {}), _files: { main: file } });
 }
 /* ---------- Saving files to the device ----------
    In the Artifact viewer: the platform's downloads capability.
@@ -3615,7 +3555,7 @@ async function saveBlobToDevice(filename, blob) {
 }
 async function saveFile(id) {
   const m = findMsg(id), src = fileSrc(m);
-  if (!src) { toast('This file is no longer on this device.', 'file'); return; }
+  if (!src) { toast('This file isn’t available right now. Check your connection.', 'file'); return; }
   let blob;
   try { blob = await (await fetch(src)).blob(); } catch (e) { toast('The file couldn’t be prepared for saving.', 'info'); return; }
   const r = await saveBlobToDevice(m.name, blob);
@@ -3623,30 +3563,41 @@ async function saveFile(id) {
 }
 
 /* ---------- Backup and restore ----------
-   The only way to carry data between the Artifact and the Android app (or
-   between phones): each keeps its own local storage. */
+   Chats, contacts, and the profile live on the server. A backup file holds
+   what only this phone keeps: theme, bubble design, notification choices,
+   your stickers, and saved messages. Older backups (from the prototype)
+   restore the same parts; their sample people and chats are ignored. */
 async function exportBackup() {
-  const data = JSON.stringify({ app: CONFIG.appName, exportedAt: new Date().toISOString(), state }, null, 0);
+  const prefs = { appearance: S().appearance, notify: S().notify, typing: S().privacy.typing, chatStyle: state.chatStyle, stickers: state.stickers, recentEmoji: state.recentEmoji, saved: state.saved };
+  const data = JSON.stringify({ app: CONFIG.appName, kind: 'settings', exportedAt: new Date().toISOString(), prefs });
   const d = new Date(), stamp = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-  const r = await saveBlobToDevice(`zyven-backup-${stamp}.json`, new Blob([data], { type: 'application/json' }));
+  const r = await saveBlobToDevice(`zyven-settings-${stamp}.json`, new Blob([data], { type: 'application/json' }));
   toast(r.ok ? `Backup ready (${fmtBytes(data.length)}). ${r.msg}.` : r.msg, r.ok ? 'down' : 'info');
 }
 async function importBackup(file) {
   if (!file) return;
   let obj;
   try { obj = JSON.parse(await file.text()); } catch (e) { toast('That file isn’t a ZYVEN backup (it isn’t valid JSON).', 'info'); return; }
-  const s2 = obj && obj.state ? obj.state : obj;
-  if (!s2 || typeof s2.v !== 'number' || !Array.isArray(s2.chats) || !Array.isArray(s2.users) || !s2.profile) { toast('That file isn’t a ZYVEN backup.', 'info'); return; }
-  const n = s2.chats.reduce((k, c) => k + (c.messages?.length || 0), 0);
-  const ok = await confirmDialog({ title: 'Restore this backup?', body: `It has ${s2.chats.length} chats, ${n} messages, and ${s2.users.length} contacts${obj.exportedAt ? `, saved ${esc(new Date(obj.exportedAt).toLocaleString())}` : ''}. Everything currently on this device is replaced.`, confirmLabel: 'Restore', danger: true });
+  const old = obj?.state || (obj?.v ? obj : null);
+  const prefs = obj?.prefs || (old ? { appearance: old.settings?.appearance, notify: old.settings?.notify, chatStyle: old.chatStyle, stickers: old.stickers, recentEmoji: old.recentEmoji } : null);
+  if (!prefs || typeof prefs !== 'object') { toast('That file isn’t a ZYVEN backup.', 'info'); return; }
+  const n = Array.isArray(prefs.stickers?.mine) ? prefs.stickers.mine.length : 0;
+  const ok = await confirmDialog({ title: 'Restore these settings?', body: `Theme, bubble design${n ? `, and ${n} sticker${n > 1 ? 's' : ''}` : ''} from this backup replace the ones on this phone. Your chats and contacts aren’t changed.`, confirmLabel: 'Restore' });
   if (!ok) return;
   closeOverlay();
-  if (ui.openChatId) closeChat();
-  state = migrate(s2);
-  ui.typing = {}; ui.pending = {};
-  const stored = Store.save(state);
-  applyAppearance(); applyChatStyle(); renderProfile(); refresh();
-  toast(stored ? 'Backup restored' : 'Backup restored for this session. Storage is full, so it may not survive a restart.', 'refresh');
+  if (prefs.appearance) S().appearance = { ...S().appearance, ...prefs.appearance };
+  if (prefs.notify) S().notify = { ...S().notify, ...prefs.notify };
+  if (typeof prefs.typing === 'boolean') S().privacy.typing = prefs.typing;
+  if (prefs.chatStyle) state.chatStyle = { ...CHAT_STYLE_DEFAULT, ...prefs.chatStyle };
+  if (prefs.stickers?.mine) {
+    const have = new Set(STK().mine.map(x => x.id));
+    STK().mine.push(...prefs.stickers.mine.filter(x => x && x.id && !have.has(x.id)));
+    STK().favorites = [...new Set([...(STK().favorites || []), ...(prefs.stickers.favorites || [])])];
+  }
+  if (Array.isArray(prefs.recentEmoji)) state.recentEmoji = prefs.recentEmoji;
+  if (Array.isArray(prefs.saved)) state.saved = prefs.saved;
+  save(); applyAppearance(); applyChatStyle(); renderProfile(); refresh();
+  toast('Settings restored', 'refresh');
 }
 
 /* ---------- Reports ---------- */
@@ -3656,14 +3607,14 @@ function reportSheet(userId) {
   ui.reportReason = REPORT_REASONS[0];
   openSheet(`
     <div class="sheet-head"><h3>Report ${esc(u.name.split(' ')[0])}</h3><button class="icon-btn" data-action="close-overlay" aria-label="Close">${I('x')}</button></div>
-    <p class="sheet-sub">The report is saved on this device only. It isn’t sent to anyone, because the prototype has no moderation service.</p>
+    <p class="sheet-sub">Your report is sent to the ZYVEN server. ${esc(u.name.split(' ')[0])} isn’t told who reported them.</p>
     <form class="form" data-form="report" data-user="${userId}">
       <div class="act-list" role="radiogroup" aria-label="Reason" id="rp-reasons">
         ${REPORT_REASONS.map((r, i) => `<button type="button" class="act radio ${i === 0 ? 'on' : ''}" data-action="report-reason" data-value="${esc(r)}" role="radio" aria-checked="${i === 0}"><span class="t">${r}</span><span class="radio-dot"></span></button>`).join('')}
       </div>
       <div class="fld"><label for="rp-det">Details <span class="faint">optional</span></label><textarea id="rp-det" maxlength="300" placeholder="What happened?"></textarea></div>
       <label class="check-row" for="rp-block"><input type="checkbox" id="rp-block" ${isBlocked(userId) ? 'checked disabled' : 'checked'}><span>${isBlocked(userId) ? 'Already blocked' : `Also block ${esc(u.name.split(' ')[0])}`}</span></label>
-      <button class="btn danger block" type="submit">${I('flag')}Save report</button>
+      <button class="btn danger block" type="submit">${I('flag')}Send report</button>
     </form>`);
 }
 function reportsSheet() {
@@ -3672,11 +3623,11 @@ function reportsSheet() {
     <div class="sheet-head"><h3>Your reports</h3><button class="icon-btn" data-action="close-overlay" aria-label="Close">${I('x')}</button></div>
     ${list.length ? `<div class="list">${list.map(r => { const u = getUser(r.userId); return `
       <div class="saved-item"><div class="row" style="cursor:default">${u ? userAvatar(u.id, 40, false) : avatar('?', 0, 40)}
-        <span class="row-main"><span class="row-top"><span class="row-name">${esc(u?.name || 'Removed contact')}</span><span class="tag">Not sent</span><time class="row-time">${fmtListTime(r.at)}</time></span>
+        <span class="row-main"><span class="row-top"><span class="row-name">${esc(u?.name || 'Removed contact')}</span><span class="tag">${r.sent ? 'Sent' : 'Not sent'}</span><time class="row-time">${fmtListTime(r.at)}</time></span>
         <span class="row-sub">${esc(r.reason)}${r.details ? ` · ${esc(r.details)}` : ''}</span></span></div>
         <button class="row-x" data-action="report-remove" data-rid="${r.id}" aria-label="Delete report">${I('x')}</button></div>`; }).join('')}</div>`
       : emptyState({ icon: 'flag', title: 'No reports', body: 'Report someone from their profile or chat menu.' })}
-    <p class="sim-tag">${I('info')}<span>Reports stay on this device. A moderation service is needed to review them.</span></p>`);
+    <p class="sim-tag">${I('info')}<span>Reports are stored on the server. There’s no moderation team reviewing them yet. Deleting one here only removes it from this list.</span></p>`);
 }
 
 /* ---------- Chat design: bubble presets ----------
@@ -4027,7 +3978,7 @@ const packName = id => PACKS.find(p => p.id === id)?.name || 'a sample pack';
 const STK = () => (state.stickers = state.stickers || { mine: [], favorites: [], recent: [] });
 function getSticker(id) {
   if (id === '__draft') return ui.cr?.result || null;
-  return PACK_MAP.get(id) || STK().mine.find(s => s.id === id) || null;
+  return PACK_MAP.get(id) || STK().mine.find(s => s.id === id) || ui.remoteStickers?.get(id) || null;
 }
 const myStickers = () => STK().mine.filter(s => !s.deleted).sort((a, b) => b.createdAt - a.createdAt);
 const isFav = id => STK().favorites.includes(id);
@@ -4147,7 +4098,7 @@ function stickerResultsHtml() {
 function stickerSheet(id) {
   const st = getSticker(id);
   if (!st || st.deleted) { toast('This sticker is no longer in your library', 'info'); return; }
-  const fav = isFav(id), mine = st.owner === 'me';
+  const fav = isFav(id), mine = st.owner === 'me', remote = st.owner === 'remote';
   const chatOk = ui.openChatId && !$('#composer-form').hidden;
   const kindTxt = st.kind === 'animated'
     ? `Animated${st.duration ? ` · ${st.duration.toFixed(1)} s` : ''}${st.frames ? ` · ${st.frames.length} frames` : ''}`
@@ -4157,15 +4108,16 @@ function stickerSheet(id) {
       <div class="prev-box checker">${stickerImg(st)}</div>
       <h3>${esc(st.name || 'Untitled sticker')}</h3>
       <span class="meta">${kindTxt} · ${fmtFormat(st.format)}${mine ? ` · ${fmtKB(stickerBytes(st))}` : ''}</span>
-      <span class="meta">${mine ? `Made by you · ${fmtStamp(st.createdAt)}` : `From ${esc(packName(st.packId))}`}</span>
+      <span class="meta">${mine ? `Made by you · ${fmtStamp(st.createdAt)}` : remote ? 'Sent to you in a chat' : `From ${esc(packName(st.packId))}`}</span>
     </div>
     <div class="act-list" style="margin-top:16px">
       ${chatOk ? `<button class="act" data-action="send-sticker" data-sid="${id}" data-close="1">${I('send')}Send in this chat</button>` : ''}
-      <button class="act" data-action="stk-fav" data-sid="${id}">${I(fav ? 'starOn' : 'star')}${fav ? 'Remove from favorites' : 'Add to favorites'}</button>
+      ${remote ? `<button class="act" data-action="stk-keep" data-sid="${id}">${I('sticker')}Save to my stickers</button>`
+        : `<button class="act" data-action="stk-fav" data-sid="${id}">${I(fav ? 'starOn' : 'star')}${fav ? 'Remove from favorites' : 'Add to favorites'}</button>`}
       ${mine ? `<button class="act" data-action="stk-rename" data-sid="${id}">${I('pen')}Rename</button>` : ''}
     </div>
     ${mine ? `<div class="act-list" style="margin-top:10px"><button class="act danger" data-action="stk-delete" data-sid="${id}">${I('trash')}Delete sticker</button></div>` : ''}
-    <p class="sim-tag">${I('info')}<span>${mine ? 'Saved in this browser only. It isn’t uploaded or synced to other devices.' : 'Sample pack included with the prototype.'}</span></p>`);
+    <p class="sim-tag">${I('info')}<span>${mine ? 'Saved in your library on this phone. When you send it, a copy goes with the message so everyone in the chat sees it.' : remote ? 'Someone made this sticker. Saving it adds a copy to your library on this phone.' : `Comes with ${esc(CONFIG.appName)}.`}</span></p>`);
 }
 function stickerRenameSheet(id) {
   const st = getSticker(id); if (!st) return;
@@ -4305,7 +4257,7 @@ function renderCreator() {
       <input type="file" id="cr-img" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
       <input type="file" id="cr-anim" accept="video/*,image/gif,image/webp" hidden>
       ${cr.error ? `<div class="cr-err">${I('info')}<span>${cr.error}</span></div>` : ''}
-      <p class="sim-tag">${I('info')}<span>Everything happens on this device. Stickers are saved in this browser only, not uploaded or synced.</span></p>`;
+      <p class="sim-tag">${I('info')}<span>Stickers are made and saved on this phone. When you send one, a copy is uploaded with the message.</span></p>`;
     foot.innerHTML = `<button class="btn secondary" data-action="cr-close">Cancel</button>`;
     return;
   }
@@ -4796,7 +4748,7 @@ function renderSaveStep() {
     fmtFormat(r.format), fmtKB(bytes),
   ].filter(Boolean);
   const note = r.format === 'frames'
-    ? 'Converted on this device into an animated frame sequence, the prototype’s animation format. The Android app can encode the same frames as animated WebP.'
+    ? 'Converted on this phone into an animated frame sequence.'
     : r.format === 'gif' || cr.mode === 'gif-raw' ? cr.rawNote || 'Kept in its original animated format.'
     : r.format === 'webp' ? 'Saved as a WebP image with transparency.' : 'Saved as a PNG with transparency.';
   $('#cr-body').innerHTML = `
@@ -4828,7 +4780,947 @@ function saveCreatedSticker() {
 }
 
 /* =========================================================
-   8. CONTROLLER — navigation, state changes, simulation
+   4b. CLOUD — real accounts and messaging (Supabase)
+   Auth (email + password), the database (profiles, contacts,
+   conversations, messages), Storage (photos, videos, voice, files,
+   custom stickers), and Realtime (new messages, edits, reactions,
+   receipts, typing). The server enforces who may read or change what
+   (see supabase/migrations); this code only asks.
+   ========================================================= */
+const CLOUD_CFG = window.ZYVEN_CONFIG || {};
+const sb = (() => {
+  try {
+    const url = String(CLOUD_CFG.supabaseUrl || ''), key = String(CLOUD_CFG.supabaseAnonKey || '');
+    if (!window.supabase?.createClient || !/^https?:\/\/[^\s/]+/.test(url) || key.length < 20) return null;
+    return window.supabase.createClient(url, key, {
+      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false, storageKey: 'zyven.auth' },
+      realtime: { params: { eventsPerSecond: 20 } },
+    });
+  } catch (e) { console.error('ZYVEN: could not start the server client', e); return null; }
+})();
+const PROFILE_OWN_COLS = 'id,username,display_name,bio,hue,avatar_path,privacy_online,privacy_last_seen,privacy_photo,read_receipts,created_at';
+const MSG_COLS = 'id,conversation_id,sender_id,kind,body,meta,reactions,created_at,edited_at,deleted_at,deleted_by,expires_at';
+const PAGE = 50;
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const IMG_DATA_RE = /^data:image\/(png|webp|gif|jpeg|svg\+xml);base64,[A-Za-z0-9+/=]+$/;
+const EMOJI_RE = /^(?:\p{Extended_Pictographic}|\p{Emoji_Modifier}|\p{Emoji_Component}|‍|️|⃣){1,16}$/u;
+const num = (v, lo, hi, d) => { const n = Number(v); return Number.isFinite(n) ? Math.min(hi, Math.max(lo, n)) : d; };
+const str = (v, max) => typeof v === 'string' ? v.slice(0, max) : '';
+
+/* Friendly wording for server errors. */
+function cloudError(e, fallback = 'Something went wrong. Try again.') {
+  const msg = String(e?.message || e?.error_description || e?.error || e || '');
+  const code = String(e?.code || '');
+  if ((typeof navigator !== 'undefined' && navigator.onLine === false) || /Failed to fetch|NetworkError|Load failed|network request failed|fetch failed/i.test(msg)) return 'Can’t reach the ZYVEN server. Check your internet connection.';
+  if (/ADMINS_ONLY/.test(msg)) return 'Only group admins can do that.';
+  if (/CANNOT_CHAT_WITH_SELF/.test(msg)) return 'You can’t start a chat with yourself.';
+  if (/USER_NOT_FOUND/.test(msg)) return 'That account no longer exists.';
+  if (/USERNAME_TAKEN/.test(msg) || (code === '23505' && /username/.test(msg))) return 'That username is already taken.';
+  if (/USERNAME_INVALID|profiles_username_check/.test(msg)) return 'Usernames use 3–24 lowercase letters, numbers, dots, or underscores.';
+  if (/GROUP_NEEDS_MEMBERS/.test(msg)) return 'Pick at least one person to add.';
+  if (/GROUP_NAME_REQUIRED/.test(msg)) return 'Give the group a name.';
+  if (/CANNOT_EDIT/.test(msg)) return 'This message can’t be edited.';
+  if (/CANNOT_DELETE/.test(msg)) return 'You can’t delete this message.';
+  if (/CANNOT_REACT/.test(msg)) return 'You can’t react in this chat.';
+  if (/MESSAGE_NOT_FOUND/.test(msg)) return 'That message is no longer available.';
+  if (/contacts_pkey/.test(msg)) return 'They’re already in your contacts.';
+  if (/JWT|not signed in|refresh token/i.test(msg)) return 'Your session expired. Sign in again.';
+  if (/too large|exceeded the maximum|Payload too large|413/i.test(msg)) return 'That file is too large. Files can be up to 25 MB.';
+  if (/rate limit|429|too many/i.test(msg)) return 'Too many attempts. Wait a minute and try again.';
+  if (code === '42501' || /row-level security|permission denied/i.test(msg)) return 'You can’t do that in this chat. You may have left it, or one of you has blocked the other.';
+  return fallback;
+}
+function authError(e) {
+  const msg = String(e?.message || e || '');
+  if (/Invalid login credentials/i.test(msg)) return 'Wrong email or password.';
+  if (/Email not confirmed/i.test(msg)) return 'Confirm your email first: open the link we sent you, then sign in.';
+  if (/already registered|already been registered|user_already_exists/i.test(msg)) return 'An account with this email already exists. Sign in instead.';
+  if (/Password should|weak password|weak_password/i.test(msg)) return 'Choose a stronger password: at least 8 characters, mixing letters and numbers.';
+  if (/Database error saving new user|USERNAME_TAKEN/i.test(msg)) return 'That username was just taken. Pick another one.';
+  if (/Signups not allowed|signup is disabled/i.test(msg)) return 'New sign-ups are turned off on this server.';
+  if (/expired|invalid.*(otp|token)|Token has expired/i.test(msg)) return 'That code is wrong or has expired. Request a new one.';
+  if (/invalid.*email|Unable to validate email/i.test(msg)) return 'Enter a valid email address.';
+  if (/rate limit|security purposes|too many/i.test(msg)) return 'Too many attempts. Wait a minute, then try again.';
+  if (/Failed to fetch|NetworkError|Load failed/i.test(msg) || navigator.onLine === false) return 'Can’t reach the ZYVEN server. Check your internet connection.';
+  return msg || 'Something went wrong. Try again.';
+}
+
+/* ---------- Storage: private files with short-lived signed links ---------- */
+const Media = {
+  cache: new Map(),
+  key: (bucket, path) => `${bucket}:${path}`,
+  url(path, bucket = 'chat-media') { return path ? this.cache.get(this.key(bucket, path))?.url || null : null; },
+  async sign(paths, bucket = 'chat-media') {
+    if (!sb) return;
+    const soon = Date.now() + 6 * 3600e3;
+    const need = [...new Set((paths || []).filter(p => typeof p === 'string' && p))].filter(p => !(this.cache.get(this.key(bucket, p))?.exp > soon));
+    for (let i = 0; i < need.length; i += 100) {
+      const { data, error } = await sb.storage.from(bucket).createSignedUrls(need.slice(i, i + 100), 7 * 86400);
+      if (error) { console.warn('ZYVEN: signing media failed', error); continue; }
+      (data || []).forEach(d => { if (d?.signedUrl && d.path && /^https?:\/\/[^\s'"()<>\\]+$/.test(d.signedUrl)) this.cache.set(this.key(bucket, d.path), { url: d.signedUrl, exp: Date.now() + 7 * 86400e3 }); });
+    }
+  },
+  async upload(path, blob, type, bucket = 'chat-media') {
+    const { error } = await sb.storage.from(bucket).upload(path, blob, { contentType: type || blob.type || 'application/octet-stream', upsert: false, cacheControl: '31536000' });
+    if (error) throw error;
+    return path;
+  },
+  async copy(from, to) {
+    const { error } = await sb.storage.from('chat-media').copy(from, to);
+    if (error) throw error;
+    return to;
+  },
+};
+const dataUrlToBlob = async u => (await fetch(u)).blob();
+const metaPaths = meta => [meta?.path, meta?.poster_path].filter(p => typeof p === 'string');
+const safeFileName = n => (String(n || 'file').replace(/[^\w.\- ]+/g, '_').replace(/\s+/g, ' ').trim().slice(-80) || 'file');
+const audioExt = mime => (/mp4|aac|m4a/.test(mime || '') ? 'm4a' : /ogg|opus/.test(mime || '') ? 'ogg' : /mpeg|mp3/.test(mime || '') ? 'mp3' : /wav/.test(mime || '') ? 'wav' : 'webm');
+
+/* ---------- Mapping server rows to the app's shapes ---------- */
+function mapReactions(r) {
+  const out = {};
+  if (!r || typeof r !== 'object') return out;
+  for (const [e, ids] of Object.entries(r)) {
+    if (!EMOJI_RE.test(e) || !Array.isArray(ids)) continue;
+    const who = ids.filter(x => typeof x === 'string' && UUID_RE.test(x)).map(x => x === Cloud.me ? 'me' : x);
+    if (who.length) out[e] = who;
+  }
+  return out;
+}
+function cleanPic(p) {
+  if (!p || typeof p !== 'object') return null;
+  if (p.kind === 'hue') return { kind: 'hue', hue: num(p.hue, 0, 360, 250) };
+  if (p.kind === 'emoji') { const hit = PIC_EMOJI.find(([e]) => e === p.e); return hit ? { kind: 'emoji', e: hit[0], hue: num(p.hue, 0, 360, hit[1]) } : null; }
+  if (p.kind === 'scene') return Object.prototype.hasOwnProperty.call(SCENES, p.scene) ? { kind: 'scene', scene: p.scene } : null;
+  if (p.kind === 'photo' && typeof p.path === 'string') return { kind: 'photo', path: p.path, src: Media.url(p.path) };
+  return null;
+}
+function setMediaUrls(m) {
+  const meta = m.meta || {};
+  if (m.type === 'image') m.src = Media.url(meta.path) || (m.src && m.src.startsWith('data:') ? m.src : m.src || null);
+  else if (m.type === 'video') { m.url = Media.url(meta.path) || m.url || null; m.poster = Media.url(meta.poster_path) || m.poster || null; }
+  else if (m.type === 'voice') m.audio = Media.url(meta.path) || m.audio || null;
+  else if (m.type === 'file') m.data = Media.url(meta.path) || m.data || null;
+}
+function rowToMsg(row) {
+  const me = Cloud.me, meta = row.meta && typeof row.meta === 'object' ? row.meta : {};
+  const m = { id: row.id, at: row.created_at, t: Date.parse(row.created_at), from: row.sender_id === me ? 'me' : (row.sender_id || 'gone'), type: row.kind, meta };
+  if (row.kind === 'system') {
+    Object.assign(m, {
+      from: 'system', system: true, actor: row.sender_id, sys: str(meta.sys, 20),
+      targets: Array.isArray(meta.targets) ? meta.targets.filter(x => typeof x === 'string' && UUID_RE.test(x)) : [],
+      value: str(meta.value, 60), body: str(row.body, 400),
+    });
+    m.text = sysText(m);
+    return m;
+  }
+  if (row.expires_at) m.expiresAt = Date.parse(row.expires_at);
+  if (row.deleted_at) {
+    m.deleted = true; m.reactions = {};
+    m.deletedBy = row.deleted_by === 'admin' ? 'admin' : 'me';
+    return m;
+  }
+  if (row.edited_at) { m.edited = true; m.editedAt = Date.parse(row.edited_at); }
+  if (typeof meta.reply_to === 'string' && UUID_RE.test(meta.reply_to)) m.replyTo = meta.reply_to;
+  if (meta.forwarded) m.forwarded = true;
+  m.reactions = mapReactions(row.reactions);
+  const body = str(row.body, 4000);
+  switch (row.kind) {
+    case 'text': m.text = body; break;
+    case 'image': Object.assign(m, { caption: body, ratio: num(meta.ratio, 0.2, 5, 4 / 3) }); break;
+    case 'video': Object.assign(m, { caption: body, ratio: num(meta.ratio, 0.2, 5, 16 / 9), duration: Math.round(num(meta.duration, 0, 36000, 0)) }); break;
+    case 'voice': Object.assign(m, {
+      duration: Math.round(num(meta.duration, 1, 3600, 1)), durationExact: num(meta.durationExact, 0, 3600, undefined),
+      wave: Array.isArray(meta.wave) ? meta.wave.slice(0, 64).map(x => num(x, 0, 1, 0.3)) : makeWave(1), audioMime: str(meta.mime, 60),
+    }); break;
+    case 'file': Object.assign(m, {
+      caption: body, name: str(meta.name, 120) || 'file', size: Math.round(num(meta.size, 0, 1e10, 0)), mime: str(meta.mime, 100),
+      ext: str(meta.ext, 8).toLowerCase().replace(/[^a-z0-9]/g, ''), preview: str(meta.preview, 400) || undefined,
+    }); break;
+    case 'sticker': {
+      const sid = str(meta.stickerId, 64);
+      m.stickerId = /^[\w:.-]{1,64}$/.test(sid) ? sid : 'missing';
+      if (typeof meta.path === 'string') m.stickerPath = meta.path;
+      break;
+    }
+    case 'location': {
+      const lat = Number(meta.lat), lng = Number(meta.lng);
+      if (Number.isFinite(lat) && Number.isFinite(lng) && Math.abs(lat) <= 90 && Math.abs(lng) <= 180) { m.lat = lat; m.lng = lng; m.acc = num(meta.acc, 0, 1e6, undefined); }
+      if (meta.label) m.label = str(meta.label, 40);
+      break;
+    }
+    default: m.type = 'text'; m.text = body || 'Unsupported message';
+  }
+  setMediaUrls(m);
+  return m;
+}
+function sysText(m) {
+  const me = Cloud.me;
+  const who = id => id === me ? 'you' : (getUser(id)?.name || 'someone');
+  const actor = m.actor === me ? 'You' : (getUser(m.actor)?.name || 'Someone');
+  const list = (m.targets || []).map(who);
+  const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : 'Someone';
+  switch (m.sys) {
+    case 'created': return `${actor} created the group`;
+    case 'added': return `${actor} added ${joinNames(list) || 'people'}`;
+    case 'removed': return `${actor} removed ${joinNames(list) || 'someone'}`;
+    case 'left': return `${actor} left`;
+    case 'renamed': return `${actor} renamed the group to “${m.value}”`;
+    case 'desc': return `${actor} updated the group description`;
+    case 'pic': return `${actor} changed the group picture`;
+    case 'admin': return list[0] === 'you' ? 'You are now an admin' : `${cap(list[0])} is now an admin`;
+    case 'unadmin': return list[0] === 'you' ? 'You are no longer an admin' : `${cap(list[0])} is no longer an admin`;
+    case 'editinfo': return m.value === 'admins' ? `${actor} allowed only admins to edit group info` : `${actor} allowed all members to edit group info`;
+    case 'ttl': return TTL[m.value] ? `${actor} turned on disappearing messages · ${TTL[m.value][1]}` : `${actor} turned off disappearing messages`;
+    case 'pinned': return `${actor} pinned a message`;
+    default: return m.body || '';
+  }
+}
+function profileToUser(p, prev) {
+  return {
+    id: p.id, name: str(p.display_name, 32) || p.username, username: str(p.username, 24), bio: str(p.bio, 140),
+    hue: num(p.hue, 0, 360, 250), photoPath: p.avatar_path || null, photo: Media.url(p.avatar_path, 'avatars'),
+    online: !!p.online, lastSeen: p.last_seen_at ? Date.parse(p.last_seen_at) : null, readReceipts: p.read_receipts !== false,
+    contact: prev?.contact || false,
+  };
+}
+const hashHue = id => CONFIG.avatarHues[[...String(id)].reduce((h, ch) => (h * 31 + ch.charCodeAt(0)) >>> 0, 7) % CONFIG.avatarHues.length];
+function convToChat(c, ms, prev) {
+  const me = Cloud.me;
+  const rows = (c.conversation_members || []).filter(r => UUID_RE.test(r.user_id));
+  const mine = rows.find(r => r.user_id === me);
+  const others = rows.filter(r => r.user_id !== me);
+  const chat = {
+    id: c.id, type: c.kind === 'direct' ? 'dm' : 'group',
+    pinned: prev?.pinned || false, muted: prev?.muted || false, draft: prev?.draft || '',
+    unread: 0, messages: prev?.messages || [], hasMore: prev?.hasMore || false,
+    pins: Array.isArray(c.pins) ? c.pins.filter(x => UUID_RE.test(x)) : [], ttl: TTL[c.ttl] ? c.ttl : null,
+    createdAt: Date.parse(c.created_at), lastAt: Date.parse(c.last_message_at),
+    memberRows: rows, clearedAt: ms?.cleared_at ? Date.parse(ms.cleared_at) : 0,
+  };
+  if (chat.type === 'dm') chat.userId = others[0]?.user_id || null;
+  else {
+    const pic = cleanPic(c.pic);
+    Object.assign(chat, {
+      name: str(c.title, 40) || 'Group', desc: str(c.description, 120), pic, hue: pic?.hue ?? hashHue(c.id),
+      members: others.filter(r => !r.left_at).map(r => r.user_id),
+      admins: rows.filter(r => !r.left_at && r.role === 'admin').map(r => r.user_id === me ? 'me' : r.user_id),
+      editInfo: c.edit_info === 'admins' ? 'admins' : 'all', left: !!mine?.left_at,
+    });
+  }
+  return chat;
+}
+function computeReceipts(c) {
+  const me = Cloud.me;
+  const others = (c.memberRows || []).filter(r => r.user_id !== me);
+  const ts = (r, k) => r[k] ? Date.parse(r[k]) : 0;
+  c.messages.forEach(m => {
+    if (m.from !== 'me' || m.system || m.pending || m.status === 'failed' || m.deleted) return;
+    const rel = others.filter(r => ts(r, 'joined_at') <= m.t + 2000 && (!r.left_at || ts(r, 'left_at') >= m.t));
+    const readBy = rel.filter(r => ts(r, 'read_at') >= m.t && getUser(r.user_id)?.readReceipts !== false);
+    const delivBy = rel.filter(r => Math.max(ts(r, 'delivered_at'), ts(r, 'read_at')) >= m.t);
+    m.receipts = rel.map(r => ({ id: r.user_id, delivered: Math.max(ts(r, 'delivered_at'), ts(r, 'read_at')) >= m.t ? Math.max(ts(r, 'delivered_at'), ts(r, 'read_at')) : null, read: readBy.includes(r) ? ts(r, 'read_at') : null }));
+    if (!rel.length) { m.status = 'sent'; return; }
+    m.status = readBy.length === rel.length ? 'read' : delivBy.length === rel.length ? 'delivered' : 'sent';
+    m.deliveredAt = delivBy.length === rel.length ? Math.max(...m.receipts.map(x => x.delivered || 0)) : null;
+    m.readAt = m.status === 'read' ? Math.max(...m.receipts.map(x => x.read || 0)) : null;
+  });
+}
+const sortMsgs = list => list.sort((a, b) => (a.t - b.t) || String(a.at || '').localeCompare(String(b.at || '')));
+
+/* Custom stickers travel as a small JSON file next to the message. */
+ui.remoteStickers = new Map();
+function cleanSticker(id, o) {
+  if (!o || typeof o !== 'object') return null;
+  const base = { id, owner: 'remote', name: str(o.name, 30) || 'Sticker', tags: '', kind: o.kind === 'animated' ? 'animated' : 'static', w: num(o.w, 16, 1024, 320), h: num(o.h, 16, 1024, 320), duration: num(o.duration, 0, 60, 0) };
+  if (Array.isArray(o.frames)) {
+    const frames = o.frames.slice(0, 300).filter(f => f && IMG_DATA_RE.test(f.src || '')).map(f => ({ src: f.src, ms: num(f.ms, 16, 2000, 100) }));
+    return frames.length ? { ...base, format: 'frames', frames } : null;
+  }
+  return IMG_DATA_RE.test(o.src || '') ? { ...base, format: ['png', 'webp', 'gif', 'svg'].includes(o.format) ? o.format : 'png', src: o.src } : null;
+}
+function stickerPayload(st) {
+  const o = { name: st.name, kind: st.kind, format: st.format, w: st.w, h: st.h, duration: st.duration };
+  if (st.format === 'frames') o.frames = st.frames.map(f => ({ src: f.src, ms: f.ms }));
+  else o.src = st.src;
+  return o;
+}
+async function loadRemoteStickers(msgs) {
+  const need = msgs.filter(m => m.type === 'sticker' && m.stickerPath && !getSticker(m.stickerId) && !ui.remoteStickers.has(m.stickerId));
+  if (!need.length) return false;
+  await Media.sign(need.map(m => m.stickerPath));
+  let any = false;
+  await Promise.all(need.map(async m => {
+    try {
+      const url = Media.url(m.stickerPath); if (!url) return;
+      const st = cleanSticker(m.stickerId, await (await fetch(url)).json());
+      if (st) { ui.remoteStickers.set(m.stickerId, st); any = true; }
+    } catch (e) { /* stays "Sticker unavailable" */ }
+  }));
+  return any;
+}
+
+/* ---------- The session ---------- */
+const Cloud = {
+  me: null, email: '', channel: null, typing: null, typingTimers: {}, timers: [], syncing: null, lastSync: 0,
+  readTimers: {}, resyncTimer: null, connected: false, started: false,
+
+  async start(user) {
+    if (this.me === user.id && this.started) return;
+    this.me = user.id; this.email = user.email || ''; this.started = true;
+    const cached = migrate(Store.load(user.id));
+    state = cached.profile?.id === user.id ? cached : blankState();
+    if (!state.profile.id) {
+      state.profile.id = user.id;
+      const old = Store.legacyPrefs();
+      if (old) {
+        if (old.stickers?.mine) state.stickers = { mine: old.stickers.mine || [], favorites: old.stickers.favorites || [], recent: old.stickers.recent || [] };
+        if (old.chatStyle) state.chatStyle = { ...state.chatStyle, ...old.chatStyle };
+        if (Array.isArray(old.recentEmoji)) state.recentEmoji = old.recentEmoji;
+        if (old.appearance) state.settings.appearance = { ...state.settings.appearance, ...old.appearance };
+        if (old.notify) state.settings.notify = { ...state.settings.notify, ...old.notify };
+      }
+    }
+    state.profile.email = this.email;
+    state.chats.forEach(c => c.messages.forEach(m => { if (m.pending) { m.pending = false; m.status = 'failed'; } }));
+    hideAuth(); applyAppearance(); applyChatStyle(); ui.visited = new Set(['chats']);
+    switchTab('chats'); renderProfile(); refresh();
+    try {
+      await this.loadProfile();
+      await this.sync();
+    } catch (e) {
+      console.error(e);
+      toast(cloudError(e, 'Couldn’t load your chats. Showing what’s saved on this phone.'), 'info');
+    }
+    this.subscribe();
+    this.startTimers();
+  },
+
+  stop() {
+    this.leaveTyping();
+    try { sb?.removeAllChannels(); } catch (e) {}
+    this.channel = null; this.connected = false;
+    this.timers.forEach(clearInterval); this.timers = [];
+    Object.values(this.readTimers).forEach(clearTimeout); this.readTimers = {};
+    clearTimeout(this.resyncTimer);
+    this.me = null; this.started = false; this.lastSync = 0;
+    ui.remoteStickers.clear(); Media.cache.clear(); ui.typing = {};
+  },
+
+  async loadProfile() {
+    const { data, error } = await sb.from('profiles').select(PROFILE_OWN_COLS).eq('id', this.me).maybeSingle();
+    if (error) throw error;
+    if (!data) throw new Error('Your profile is missing on the server.');
+    await Media.sign([data.avatar_path], 'avatars');
+    Object.assign(state.profile, {
+      id: data.id, name: data.display_name, username: data.username, bio: data.bio || '', hue: num(data.hue, 0, 360, 250),
+      photoPath: data.avatar_path || null, photo: Media.url(data.avatar_path, 'avatars'), since: Date.parse(data.created_at),
+    });
+    Object.assign(S().privacy, { onlineStatus: data.privacy_online, lastSeen: data.privacy_last_seen, photo: data.privacy_photo, readReceipts: data.read_receipts });
+    renderProfile();
+  },
+
+  /* Full refresh from the server. Safe to call any time; calls overlap into one. */
+  sync() {
+    if (this.syncing) return this.syncing;
+    this.syncing = this._sync().finally(() => { this.syncing = null; });
+    return this.syncing;
+  },
+  resync(delay = 400) {
+    clearTimeout(this.resyncTimer);
+    this.resyncTimer = setTimeout(() => this.sync().catch(e => console.warn('ZYVEN: sync failed', e)), delay);
+  },
+  async _sync() {
+    if (!this.me) return;
+    const me = this.me;
+    const res = await Promise.all([
+      sb.from('contacts').select('contact_id'),
+      sb.from('blocks').select('blocked_id'),
+      sb.from('conversations').select('*, conversation_members(*)'),
+      sb.from('member_state').select('*'),
+      sb.rpc('recent_messages', { per_conversation: PAGE }),
+      sb.rpc('my_unread_counts'),
+    ]);
+    const err = res.find(r => r.error); if (err) throw err.error;
+    if (this.me !== me) return;
+    const [contacts, blocks, convs, states, recent, unread] = res.map(r => r.data || []);
+    const contactIds = new Set(contacts.map(r => r.contact_id));
+    const stateBy = new Map(states.map(r => [r.conversation_id, r]));
+    const unreadBy = new Map(unread.map(r => [r.conversation_id, Number(r.unread) || 0]));
+    const rowsBy = new Map();
+    recent.forEach(r => { if (!rowsBy.has(r.conversation_id)) rowsBy.set(r.conversation_id, []); rowsBy.get(r.conversation_id).push(r); });
+
+    const ids = new Set(contactIds);
+    convs.forEach(c => (c.conversation_members || []).forEach(m => ids.add(m.user_id)));
+    recent.forEach(r => { if (r.sender_id) ids.add(r.sender_id); (r.meta?.targets || []).forEach(t => ids.add(t)); });
+    ids.delete(me);
+    await this.loadPeople([...ids], contactIds);
+    state.blocked = blocks.map(r => r.blocked_id);
+
+    await Media.sign([...recent.flatMap(r => metaPaths(r.meta)), ...convs.map(c => c.pic?.kind === 'photo' ? c.pic.path : null)]);
+    const prevBy = new Map(state.chats.map(c => [c.id, c]));
+    const chats = [];
+    for (const c of convs) {
+      const ms = stateBy.get(c.id);
+      if (!ms || ms.hidden) continue;
+      const prev = prevBy.get(c.id);
+      const chat = convToChat(c, ms, prev);
+      const rows = rowsBy.get(c.id) || [];
+      const hidden = new Set(state.hiddenMsgs?.[c.id] || []);
+      const server = rows.map(rowToMsg).filter(m => !hidden.has(m.id));
+      const serverIds = new Set(server.map(m => m.id));
+      const localPending = (prev?.messages || []).filter(m => (m.pending || m.status === 'failed') && !serverIds.has(m.id));
+      // keep older pages the person already loaded
+      const oldest = server[server.length - 1]?.t ?? Infinity;
+      const older = (prev?.messages || []).filter(m => !m.pending && m.status !== 'failed' && !m.localOnly && !serverIds.has(m.id) && m.t < oldest && rows.length >= PAGE);
+      chat.messages = sortMsgs([...older, ...server, ...localPending]);
+      chat.hasMore = prev?.hasMore && older.length ? prev.hasMore : rows.length >= PAGE;
+      chat.unread = ui.openChatId === c.id ? 0 : (unreadBy.get(c.id) || 0);
+      computeReceipts(chat);
+      chats.push(chat);
+    }
+    state.chats = chats;
+    const all = chats.flatMap(c => c.messages);
+    loadRemoteStickers(all).then(any => { if (any) refresh(); });
+    this.lastSync = Date.now();
+    if (ui.openChatId && !getChat(ui.openChatId)) closeChat();
+    refresh(); renderProfile();
+    const toDeliver = chats.filter(c => !c.left && c.unread).map(c => c.id);
+    if (toDeliver.length) sb.rpc('mark_delivered', { convs: toDeliver }).then(() => {}, () => {});
+    if (ui.openChatId) this.markRead(getChat(ui.openChatId));
+  },
+
+  async loadPeople(ids, contactIds) {
+    const prev = new Map(state.users.map(u => [u.id, u]));
+    const list = [];
+    for (let i = 0; i < ids.length; i += 400) {
+      const { data, error } = await sb.rpc('get_profiles', { ids: ids.slice(i, i + 400) });
+      if (error) throw error;
+      list.push(...(data || []));
+    }
+    await Media.sign(list.map(p => p.avatar_path), 'avatars');
+    const next = list.map(p => {
+      const u = profileToUser(p, prev.get(p.id));
+      if (contactIds) u.contact = contactIds.has(p.id);
+      return u;
+    });
+    if (contactIds) state.users = next;
+    else {
+      const byId = new Map(state.users.map(u => [u.id, u]));
+      next.forEach(u => byId.set(u.id, u));
+      state.users = [...byId.values()];
+    }
+    state.chats?.forEach(c => c.messages.forEach(m => { if (m.system) m.text = sysText(m); }));
+  },
+  async ensureUsers(ids) {
+    const missing = [...new Set(ids.filter(id => id && UUID_RE.test(id) && id !== this.me && !getUser(id)))];
+    if (missing.length) await this.loadPeople(missing);
+  },
+  /* Profiles change (names, photos, presence): refresh everyone we show. */
+  async refreshPeople() {
+    if (!this.me || !state.users.length || document.visibilityState !== 'visible') return;
+    const before = JSON.stringify(state.users.map(u => [u.name, u.username, u.photoPath, u.online, u.bio, u.hue, u.lastSeen]));
+    await this.loadPeople(state.users.map(u => u.id));
+    const after = JSON.stringify(state.users.map(u => [u.name, u.username, u.photoPath, u.online, u.bio, u.hue, u.lastSeen]));
+    if (before !== after) refresh();
+  },
+
+  /* ---------- Realtime ---------- */
+  subscribe() {
+    if (!this.me || this.channel) return;
+    this.channel = sb.channel(`zyven-${this.me}`)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, e => this.onMessage(e).catch(err => console.warn(err)))
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'conversation_members' }, e => this.onMember(e))
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'conversations' }, e => this.onConversation(e))
+      .subscribe(status => {
+        const was = this.connected;
+        this.connected = status === 'SUBSCRIBED';
+        if (this.connected && !was && this.lastSync && Date.now() - this.lastSync > 3000) this.resync(100);
+      });
+  },
+  async onMessage(evt) {
+    const row = evt.new;
+    if (!row?.id || !this.me) return;
+    const c = getChat(row.conversation_id);
+    if (!c) { this.resync(); return; }
+    const existing = c.messages.find(m => m.id === row.id);
+    if (evt.eventType === 'INSERT') {
+      if (existing?.pending) return;
+      await this.ensureUsers([row.sender_id, ...(row.meta?.targets || [])]);
+      await Media.sign(metaPaths(row.meta));
+      const m = rowToMsg(row);
+      if ((state.hiddenMsgs?.[c.id] || []).includes(m.id)) return;
+      if (existing) Object.assign(existing, m);
+      else {
+        c.messages.push(m); sortMsgs(c.messages);
+        if (m.type === 'sticker') loadRemoteStickers([m]).then(any => { if (any) refresh(); });
+        if (m.from !== 'me' && !m.system) this.incoming(c, m);
+        if (m.system) this.resync(600);
+      }
+      if (m.from !== 'me' && ui.typing[c.id] === m.from) delete ui.typing[c.id];
+    } else if (evt.eventType === 'UPDATE' && existing) {
+      await Media.sign(metaPaths(row.meta));
+      const m = rowToMsg(row);
+      if (m.deleted && ui.playing?.id === m.id) stopVoice();
+      const keepLocal = ['status', 'receipts', 'deliveredAt', 'readAt'];
+      const saved = Object.fromEntries(keepLocal.map(k => [k, existing[k]]));
+      for (const k of Object.keys(existing)) if (!keepLocal.includes(k)) delete existing[k];
+      Object.assign(existing, m, saved);
+      if (m.deleted) c.pins = (c.pins || []).filter(x => x !== m.id);
+    } else return;
+    computeReceipts(c);
+    refresh();
+  },
+  incoming(c, m) {
+    const visible = document.visibilityState === 'visible';
+    sb.rpc('mark_delivered', { convs: [c.id] }).then(() => {}, () => {});
+    if (ui.openChatId === c.id && visible) { this.markRead(c); if (S().notify.sounds && !c.muted && !inQuietHours()) playTick(660); return; }
+    c.unread = (c.unread || 0) + 1;
+    const n = S().notify;
+    const allowed = c.type === 'group' ? n.groups : n.messages;
+    if (allowed && !c.muted && !inQuietHours() && visible) {
+      const who = c.type === 'group' ? `${firstName(m.from)} · ${c.name}` : firstName(m.from);
+      toast(n.previews ? `${who}: ${msgPreview(m)}` : `New message from ${who}`, m.type === 'sticker' ? 'sticker' : 'chat');
+      if (n.vibrate) { try { navigator.vibrate && navigator.vibrate([15, 40, 15]); } catch (e) {} }
+      if (n.sounds) playTick(660);
+    }
+  },
+  onMember(evt) {
+    const row = evt.new;
+    if (!row?.conversation_id || !this.me) return;
+    const c = getChat(row.conversation_id);
+    if (!c || evt.eventType === 'INSERT') { this.resync(); return; }
+    const i = (c.memberRows || []).findIndex(r => r.user_id === row.user_id);
+    const prev = i >= 0 ? c.memberRows[i] : null;
+    if (i >= 0) c.memberRows[i] = row; else (c.memberRows = c.memberRows || []).push(row);
+    if (!prev || prev.role !== row.role || prev.left_at !== row.left_at) { this.resync(); return; }
+    computeReceipts(c);
+    if (ui.openChatId === c.id) renderMessages();
+    renderChatsList(); renderGroupsList();
+  },
+  async onConversation(evt) {
+    const row = evt.new, c = row && getChat(row.id);
+    if (!c) return;
+    if (row.pic?.kind === 'photo') await Media.sign([row.pic.path]);
+    c.pins = Array.isArray(row.pins) ? row.pins.filter(x => UUID_RE.test(x)) : [];
+    c.ttl = TTL[row.ttl] ? row.ttl : null;
+    if (c.type === 'group') {
+      c.name = str(row.title, 40) || c.name; c.desc = str(row.description, 120);
+      c.pic = cleanPic(row.pic); c.hue = c.pic?.hue ?? c.hue; c.editInfo = row.edit_info === 'admins' ? 'admins' : 'all';
+    }
+    refresh();
+  },
+
+  /* ---------- Typing (private broadcast channel per conversation) ---------- */
+  joinTyping(c) {
+    this.leaveTyping();
+    if (!sb || !c || c.left || !this.me) return;
+    const id = c.id;
+    const ch = sb.channel(`typing:${id}`, { config: { private: true, broadcast: { self: false } } });
+    ch.on('broadcast', { event: 'typing' }, ({ payload }) => {
+      const u = payload?.u;
+      if (!u || u === this.me || !UUID_RE.test(u) || S().privacy.typing === false) return;
+      ui.typing[id] = u;
+      clearTimeout(this.typingTimers[id]);
+      this.typingTimers[id] = setTimeout(() => { if (ui.typing[id] === u) delete ui.typing[id]; if (ui.openChatId === id) { renderConvoHeader(); renderMessages(); } renderChatsList(); }, 4500);
+      if (ui.openChatId === id) { renderConvoHeader(); renderMessages(); }
+      renderChatsList();
+    }).subscribe();
+    this.typing = { ch, id, last: 0 };
+  },
+  sendTyping() {
+    const t = this.typing;
+    if (!t || S().privacy.typing === false) return;
+    const n = Date.now(); if (n - t.last < 2500) return;
+    t.last = n;
+    t.ch.send({ type: 'broadcast', event: 'typing', payload: { u: this.me } }).catch(() => {});
+  },
+  leaveTyping() { if (this.typing) { try { sb.removeChannel(this.typing.ch); } catch (e) {} this.typing = null; } },
+
+  /* ---------- Presence and periodic refresh ---------- */
+  startTimers() {
+    this.timers.forEach(clearInterval);
+    const beat = () => {
+      if (!this.me || document.visibilityState !== 'visible') return;
+      const p = S().privacy;
+      sb.rpc('touch_presence', { visible: !(p.onlineStatus === 'nobody' && p.lastSeen === 'nobody') }).then(() => {}, () => {});
+    };
+    beat();
+    this.timers = [setInterval(beat, 60000), setInterval(() => this.refreshPeople().catch(() => {}), 90000)];
+  },
+  markRead(c) {
+    if (!c || c.left || !this.me) return;
+    c.unread = 0;
+    clearTimeout(this.readTimers[c.id]);
+    this.readTimers[c.id] = setTimeout(() => sb.rpc('mark_read', { conv: c.id }).then(() => {}, () => {}), 300);
+  },
+
+  /* ---------- Sending ---------- */
+  async send(c, msg, files = {}) {
+    if (files && Object.keys(files).length) (ui.outbox = ui.outbox || new Map()).set(msg.id, files);
+    msg.pending = true; msg.status = 'sending'; delete msg.error;
+    refresh();
+    try {
+      const meta = {}, uploads = [], copies = [];
+      let body = null;
+      if (msg.replyTo) meta.reply_to = msg.replyTo;
+      if (msg.forwarded) meta.forwarded = true;
+      const f = files || {};
+      switch (msg.type) {
+        case 'text': body = msg.text; break;
+        case 'image':
+          body = msg.caption || null; meta.ratio = msg.ratio;
+          if (f.copy?.path) copies.push(['path', f.copy.path]);
+          else uploads.push(['path', f.main || (msg.src?.startsWith('data:') ? await dataUrlToBlob(msg.src) : null), 'photo.jpg']);
+          break;
+        case 'video':
+          body = msg.caption || null; Object.assign(meta, { ratio: msg.ratio, duration: msg.duration });
+          if (f.copy?.path) { copies.push(['path', f.copy.path]); if (f.copy.poster_path) copies.push(['poster_path', f.copy.poster_path]); }
+          else {
+            uploads.push(['path', f.main, safeFileName(f.main?.name || 'video.mp4')]);
+            if (msg.poster?.startsWith('data:')) uploads.push(['poster_path', await dataUrlToBlob(msg.poster), 'poster.jpg']);
+          }
+          break;
+        case 'voice':
+          Object.assign(meta, { duration: msg.duration, durationExact: msg.durationExact, wave: msg.wave, mime: msg.audioMime });
+          if (f.copy?.path) copies.push(['path', f.copy.path]); else uploads.push(['path', f.main, `voice.${audioExt(msg.audioMime)}`]);
+          break;
+        case 'file':
+          body = msg.caption || null;
+          Object.assign(meta, { name: msg.name, size: msg.size, mime: msg.mime, ext: msg.ext, ...(msg.preview ? { preview: msg.preview } : {}) });
+          if (f.copy?.path) copies.push(['path', f.copy.path]); else uploads.push(['path', f.main, safeFileName(msg.name)]);
+          break;
+        case 'sticker': {
+          meta.stickerId = msg.stickerId;
+          if (f.copy?.path) copies.push(['path', f.copy.path]);
+          else if (!PACK_MAP.has(msg.stickerId)) {
+            const st = getSticker(msg.stickerId);
+            if (!st) throw new Error('This sticker is no longer available.');
+            uploads.push(['path', new Blob([JSON.stringify(stickerPayload(st))], { type: 'application/json' }), 'sticker.json']);
+          }
+          break;
+        }
+        case 'location': ['lat', 'lng', 'acc', 'label'].forEach(k => { if (msg[k] !== undefined) meta[k] = msg[k]; }); break;
+        default: throw new Error('Unsupported message');
+      }
+      for (const [key, blob, name] of uploads) {
+        if (!blob) throw new Error('The file for this message is no longer on this phone. Delete it and send it again.');
+        if (blob.size > 25 * 1024 * 1024) throw new Error('too large');
+        meta[key] = await Media.upload(`${c.id}/${msg.id}/${name}`, blob, blob.type);
+      }
+      for (const [key, from] of copies) meta[key] = await Media.copy(from, `${c.id}/${msg.id}/${from.split('/').pop()}`);
+      const { data, error } = await sb.from('messages').insert({ id: msg.id, conversation_id: c.id, kind: msg.type, body, meta }).select(MSG_COLS).single();
+      if (error) throw error;
+      await Media.sign(metaPaths(data.meta));
+      Object.assign(msg, { pending: false, status: 'sent', t: Date.parse(data.created_at), at: data.created_at, meta: data.meta });
+      if (data.expires_at) msg.expiresAt = Date.parse(data.expires_at);
+      setMediaUrls(msg);
+      ui.outbox?.delete(msg.id);
+      sortMsgs(c.messages);
+      computeReceipts(c);
+    } catch (e) {
+      console.warn('ZYVEN: send failed', e);
+      msg.pending = false; msg.status = 'failed';
+      msg.error = /no longer/.test(e?.message || '') ? e.message : cloudError(e, 'Not sent. Tap the message to try again.');
+      toast(msg.error, 'info');
+    }
+    refresh();
+  },
+};
+
+/* ---------- Actions that change things on the server ---------- */
+Object.assign(Cloud, {
+  async rpc(name, args) { const { data, error } = await sb.rpc(name, args); if (error) throw error; return data; },
+  async openDirect(userId) {
+    const existing = state.chats.find(c => c.type === 'dm' && c.userId === userId);
+    if (existing) { closeOverlay(); openChat(existing.id); return; }
+    if (!this.me || !UUID_RE.test(userId || '')) return;
+    try {
+      const id = await this.rpc('get_or_create_direct', { other: userId });
+      await this.sync();
+      closeOverlay();
+      if (getChat(id)) openChat(id); else toast('Couldn’t open that chat. Try again.', 'info');
+    } catch (e) { toast(cloudError(e), 'info'); }
+  },
+  async search(q) {
+    const data = await this.rpc('search_profiles', { q }) || [];
+    await Media.sign(data.map(p => p.avatar_path), 'avatars');
+    return data.map(p => profileToUser(p, getUser(p.id)));
+  },
+  remember(u) {
+    const i = state.users.findIndex(x => x.id === u.id);
+    if (i >= 0) state.users[i] = { ...state.users[i], ...u, contact: !!(state.users[i].contact || u.contact) };
+    else state.users.push(u);
+  },
+  async addContact(u) {
+    const { error } = await sb.from('contacts').insert({ contact_id: u.id });
+    if (error && error.code !== '23505') throw error;
+    this.remember({ ...u, contact: true });
+    ui.visited.add('contacts'); refresh();
+  },
+  async removeContact(id) {
+    const { error } = await sb.from('contacts').delete().eq('contact_id', id);
+    if (error) throw error;
+    const u = getUser(id); if (u) u.contact = false;
+    refresh();
+  },
+  async block(id) {
+    const { error } = await sb.from('blocks').insert({ blocked_id: id });
+    if (error && error.code !== '23505') throw error;
+    state.blocked = [...new Set([...(state.blocked || []), id])];
+  },
+  async unblock(id) {
+    const { error } = await sb.from('blocks').delete().eq('blocked_id', id);
+    if (error) throw error;
+    state.blocked = (state.blocked || []).filter(x => x !== id);
+  },
+  async report(userId, reason, details) {
+    const { error } = await sb.from('reports').insert({ reported_id: userId, reason, details });
+    if (error) throw error;
+  },
+  async uploadGroupPhoto(convId, dataUrl) {
+    const path = `${convId}/group/${uid()}.jpg`;
+    await Media.upload(path, await dataUrlToBlob(dataUrl), 'image/jpeg');
+    await Media.sign([path]);
+    return path;
+  },
+  async createGroup(name, desc, pic, ids) {
+    const first = pic?.kind === 'photo' ? { kind: 'hue', hue: pick(PIC_HUES) } : pic;
+    const id = await this.rpc('create_group', { group_title: name, group_description: desc, group_pic: first, member_ids: ids });
+    if (pic?.kind === 'photo' && pic.src) {
+      try {
+        const path = await this.uploadGroupPhoto(id, pic.src);
+        await this.rpc('update_group', { conv: id, group_title: name, group_description: desc, group_pic: { kind: 'photo', path } });
+      } catch (e) { toast('The group was created, but its photo couldn’t be uploaded.', 'image'); }
+    }
+    await this.sync();
+    return id;
+  },
+  async updateGroup(g, { name = g.name, desc = g.desc || '', pic = null } = {}) {
+    let p = null;
+    if (pic?.kind === 'photo' && pic.src?.startsWith('data:')) p = { kind: 'photo', path: await this.uploadGroupPhoto(g.id, pic.src) };
+    else if (pic) { p = { ...pic }; delete p.src; }
+    await this.rpc('update_group', { conv: g.id, group_title: name, group_description: desc, group_pic: p });
+    await this.sync();
+  },
+  async loadOlder(c) {
+    if (!c || c.loadingOlder) return 0;
+    c.loadingOlder = true;
+    try {
+      const first = c.messages.find(m => m.at);
+      let q = sb.from('messages').select(MSG_COLS).eq('conversation_id', c.id).order('created_at', { ascending: false }).limit(PAGE);
+      if (first) q = q.lt('created_at', first.at);
+      if (c.clearedAt) q = q.gt('created_at', new Date(c.clearedAt).toISOString());
+      const { data, error } = await q;
+      if (error) throw error;
+      await this.ensureUsers(data.flatMap(r => [r.sender_id, ...(r.meta?.targets || [])]));
+      await Media.sign(data.flatMap(r => metaPaths(r.meta)));
+      const have = new Set(c.messages.map(m => m.id)), hidden = new Set(state.hiddenMsgs?.[c.id] || []);
+      const add = data.map(rowToMsg).filter(m => !have.has(m.id) && !hidden.has(m.id));
+      c.messages = sortMsgs([...add, ...c.messages]);
+      c.hasMore = data.length >= PAGE;
+      computeReceipts(c);
+      loadRemoteStickers(add).then(any => { if (any) refresh(); });
+      return add.length;
+    } finally { c.loadingOlder = false; }
+  },
+  async deleteForEveryone(m) {
+    const meta = await this.rpc('delete_message', { msg: m.id });
+    if (m.from === 'me') {
+      const paths = metaPaths(meta || {});
+      if (paths.length) sb.storage.from('chat-media').remove(paths).then(() => {}, () => {});
+    }
+  },
+  async saveProfile({ name, username, bio, hue, photo }) {
+    const p = state.profile;
+    const upd = { display_name: name, username, bio, hue };
+    let oldPath = null;
+    if (photo !== p.photo) {
+      if (photo && photo.startsWith('data:')) {
+        const path = `${this.me}/${uid()}.jpg`;
+        await Media.upload(path, await dataUrlToBlob(photo), 'image/jpeg', 'avatars');
+        upd.avatar_path = path; oldPath = p.photoPath;
+      } else if (!photo) { upd.avatar_path = null; oldPath = p.photoPath; }
+    }
+    const { error } = await sb.from('profiles').update(upd).eq('id', this.me);
+    if (error) {
+      if (upd.avatar_path) sb.storage.from('avatars').remove([upd.avatar_path]).then(() => {}, () => {});
+      throw error;
+    }
+    if (oldPath) sb.storage.from('avatars').remove([oldPath]).then(() => {}, () => {});
+    await this.loadProfile();
+  },
+  async savePrivacy() {
+    const pr = S().privacy;
+    const { error } = await sb.from('profiles').update({
+      privacy_online: pr.onlineStatus, privacy_last_seen: pr.lastSeen, privacy_photo: pr.photo, read_receipts: !!pr.readReceipts,
+    }).eq('id', this.me);
+    if (error) throw error;
+  },
+});
+
+/* ---------- Auth screens ---------- */
+const Auth = {
+  screen: null, email: '', busy: false,
+  show(screen, opts = {}) {
+    this.screen = screen;
+    if (opts.email !== undefined) this.email = opts.email;
+    let g = $('#gate');
+    if (!g) { g = document.createElement('div'); g.id = 'gate'; g.className = 'gate auth'; g.setAttribute('role', 'dialog'); $('#app').appendChild(g); }
+    g.setAttribute('aria-label', { signin: 'Sign in', signup: 'Create an account', forgot: 'Reset password', reset: 'Reset password', confirm: 'Confirm your email', setup: 'Server not connected' }[screen] || 'Account');
+    g.innerHTML = authHtml(screen);
+    g.hidden = false;
+    closeOverlay();
+    const first = g.querySelector('input:not([type=hidden])');
+    if (first && !matchMedia('(pointer:coarse)').matches) setTimeout(() => first.focus(), 60);
+  },
+  setBusy(on, label) {
+    this.busy = on;
+    const b = $('#au-go'); if (!b) return;
+    b.disabled = on;
+    if (on) { b.dataset.label = b.textContent; b.textContent = label || 'Please wait…'; } else if (b.dataset.label) b.textContent = b.dataset.label;
+  },
+  err(text) { const e = $('#au-err'); if (e) e.textContent = text || ''; },
+};
+function hideAuth() { const g = $('#gate'); if (g) { g.hidden = true; g.innerHTML = ''; } Auth.screen = null; }
+function authHtml(screen) {
+  const head = `<div class="auth-brand">${LOGO(56)}<span class="wordmark">${esc(CONFIG.appName)}</span></div>`;
+  const email = `<div class="fld"><label for="au-email">Email</label><input id="au-email" type="email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" maxlength="254" value="${esc(Auth.email)}"></div>`;
+  const errLine = '<span class="err" id="au-err" role="alert"></span>';
+  if (screen === 'setup') return `${head}<h2>Server not connected</h2>
+    <p>This copy of ZYVEN was built without the address of its server, so accounts and messaging can’t work yet.</p>
+    <div class="auth-card"><p class="note">${I('info')}<span>Add the two GitHub secrets <b>SUPABASE_URL</b> and <b>SUPABASE_ANON_KEY</b>, then build the app again. The project README explains each step.</span></p></div>`;
+  if (screen === 'confirm') return `${head}<h2>Check your email</h2>
+    <p>We sent a confirmation link to <b>${esc(Auth.email)}</b>. Open it, then come back and sign in.</p>
+    <div class="auth-card"><button class="btn block" data-action="auth" data-screen="signin">Back to sign in</button></div>`;
+  if (screen === 'signup') return `${head}<h2>Create your account</h2><p>Pick a username people can find you by.</p>
+    <form class="form auth-card" data-form="signup" novalidate>
+      <div class="fld"><label for="au-name">Your name</label><input id="au-name" maxlength="32" autocomplete="name" placeholder="How people see you"></div>
+      <div class="fld"><label for="au-user">Username</label><div class="prefix"><span>@</span><input id="au-user" data-input="au-user" maxlength="24" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="letters, numbers, . or _"></div><span class="ok" id="au-user-ok"></span></div>
+      ${email}
+      <div class="fld"><label for="au-pass">Password</label><input id="au-pass" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters"></div>
+      ${errLine}
+      <button class="btn block" type="submit" id="au-go">Create account</button>
+    </form>
+    <p class="auth-alt">Already have an account? <button type="button" class="linkish" data-action="auth" data-screen="signin">Sign in</button></p>`;
+  if (screen === 'forgot') return `${head}<h2>Reset your password</h2><p>Enter your account’s email. We’ll send you a reset code.</p>
+    <form class="form auth-card" data-form="forgot" novalidate>${email}${errLine}
+      <button class="btn block" type="submit" id="au-go">Send reset code</button>
+      <button type="button" class="linkish" data-action="auth" data-screen="reset">I already have a code</button>
+    </form>
+    <p class="auth-alt"><button type="button" class="linkish" data-action="auth" data-screen="signin">Back to sign in</button></p>`;
+  if (screen === 'reset') return `${head}<h2>Choose a new password</h2><p>Enter the code from the email we sent${Auth.email ? ` to <b>${esc(Auth.email)}</b>` : ''}.</p>
+    <form class="form auth-card" data-form="reset" novalidate>${email}
+      <div class="fld"><label for="au-code">Reset code</label><input id="au-code" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="6-digit code"></div>
+      <div class="fld"><label for="au-pass">New password</label><input id="au-pass" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters"></div>
+      ${errLine}
+      <button class="btn block" type="submit" id="au-go">Save new password</button>
+    </form>
+    <p class="auth-alt"><button type="button" class="linkish" data-action="auth" data-screen="forgot">Send a new code</button> · <button type="button" class="linkish" data-action="auth" data-screen="signin">Sign in</button></p>`;
+  return `${head}<h2>Welcome back</h2><p>Sign in to your ZYVEN account.</p>
+    <form class="form auth-card" data-form="signin" novalidate>${email}
+      <div class="fld"><label for="au-pass">Password</label><input id="au-pass" type="password" autocomplete="current-password"></div>
+      ${errLine}
+      <button class="btn block" type="submit" id="au-go">Sign in</button>
+      <button type="button" class="linkish" data-action="auth" data-screen="forgot">Forgot password?</button>
+    </form>
+    <p class="auth-alt">New to ZYVEN? <button type="button" class="linkish" data-action="auth" data-screen="signup">Create an account</button></p>`;
+}
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const authForms = {
+  async signin() {
+    const email = $('#au-email').value.trim(), password = $('#au-pass').value;
+    Auth.email = email;
+    if (!EMAIL_RE.test(email)) return Auth.err('Enter your email address.');
+    if (!password) return Auth.err('Enter your password.');
+    Auth.err(''); Auth.setBusy(true, 'Signing in…');
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
+    Auth.setBusy(false);
+    if (error) return Auth.err(authError(error));
+    await Cloud.start(data.user);
+  },
+  async signup() {
+    const name = $('#au-name').value.trim(), username = $('#au-user').value.trim().replace(/^@/, '').toLowerCase();
+    const email = $('#au-email').value.trim(), password = $('#au-pass').value;
+    Auth.email = email;
+    if (!name) return Auth.err('Enter your name.');
+    if (!/^[a-z0-9._]{3,24}$/.test(username)) return Auth.err('Usernames use 3–24 lowercase letters, numbers, dots, or underscores.');
+    if (!EMAIL_RE.test(email)) return Auth.err('Enter a valid email address.');
+    if (password.length < 8) return Auth.err('Use a password with at least 8 characters.');
+    Auth.err(''); Auth.setBusy(true, 'Creating account…');
+    try {
+      const { data: free, error: e1 } = await sb.rpc('username_available', { name: username });
+      if (e1) throw e1;
+      if (!free) { Auth.setBusy(false); return Auth.err(`@${username} is already taken. Try another username.`); }
+      const { data, error } = await sb.auth.signUp({ email, password, options: { data: { username, display_name: name, hue: pick(CONFIG.avatarHues) } } });
+      if (error) throw error;
+      Auth.setBusy(false);
+      if (data.session && data.user) await Cloud.start(data.user);
+      else Auth.show('confirm');
+    } catch (e) { Auth.setBusy(false); Auth.err(authError(e)); }
+  },
+  async forgot() {
+    const email = $('#au-email').value.trim();
+    Auth.email = email;
+    if (!EMAIL_RE.test(email)) return Auth.err('Enter your account’s email address.');
+    Auth.err(''); Auth.setBusy(true, 'Sending…');
+    const { error } = await sb.auth.resetPasswordForEmail(email);
+    Auth.setBusy(false);
+    if (error) return Auth.err(authError(error));
+    Auth.show('reset');
+    toast('If that email has an account, a reset code is on its way', 'info');
+  },
+  async reset() {
+    const email = $('#au-email').value.trim(), token = $('#au-code').value.replace(/\s+/g, ''), password = $('#au-pass').value;
+    Auth.email = email;
+    if (!EMAIL_RE.test(email)) return Auth.err('Enter your account’s email address.');
+    if (!/^\d{6,10}$/.test(token)) return Auth.err('Enter the code from the email.');
+    if (password.length < 8) return Auth.err('Use a password with at least 8 characters.');
+    Auth.err(''); Auth.setBusy(true, 'Saving…');
+    const { data, error } = await sb.auth.verifyOtp({ email, token, type: 'recovery' });
+    if (error) { Auth.setBusy(false); return Auth.err(authError(error)); }
+    const { error: e2 } = await sb.auth.updateUser({ password });
+    Auth.setBusy(false);
+    if (e2) return Auth.err(authError(e2));
+    toast('Password changed. You’re signed in.', 'check');
+    await Cloud.start(data.user);
+  },
+};
+
+async function signOut(erase) {
+  const id = Cloud.me;
+  closeOverlay();
+  if (ui.openChatId) closeChat();
+  Cloud.stop();
+  try { await sb.auth.signOut({ scope: 'local' }); } catch (e) { /* signed out on this phone either way */ }
+  if (erase && id) Store.forget(id);
+  state = blankState();
+  { const dev = Store.device.get(); if (dev.appearance) state.settings.appearance = { ...state.settings.appearance, ...dev.appearance }; }
+  applyAppearance(); renderProfile(); refresh();
+  Auth.show('signin');
+}
+
+async function bootCloud() {
+  if (!sb) { Auth.show('setup'); return; }
+  sb.auth.onAuthStateChange(event => {
+    if (event === 'SIGNED_OUT' && Cloud.me) {
+      setTimeout(() => { if (Cloud.me) { toast('You were signed out', 'logout'); signOut(false); } }, 0);
+    }
+  });
+  let session = null;
+  try { ({ data: { session } } = await sb.auth.getSession()); } catch (e) { session = null; }
+  if (session?.user) Cloud.start(session.user).catch(e => toast(cloudError(e), 'info'));
+  else Auth.show('signin');
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible' || !Cloud.me) return;
+    if (Date.now() - Cloud.lastSync > 20000) Cloud.resync(50);
+    if (ui.openChatId) Cloud.markRead(getChat(ui.openChatId));
+  });
+  window.addEventListener('online', () => { if (Cloud.me) Cloud.resync(50); });
+}
+
+/* =========================================================
+   8. CONTROLLER — navigation and state changes
    ========================================================= */
 function refresh() {
   save();
@@ -4854,7 +5746,7 @@ function switchTab(tab) {
 function openChat(id) {
   const c = getChat(id); if (!c) return;
   ui.openChatId = id;
-  c.unread = 0;
+  Cloud.markRead(c); Cloud.joinTyping(c);
   stopVoice(); stopRecording(false, true); toggleEmoji(false);
   ui.compose = { mode: null, id: null, prevDraft: '' }; renderCtx();
   sweepExpired(); applyChatStyle(); ui.pinIdx = null;
@@ -4872,6 +5764,7 @@ function openChat(id) {
 function closeChat() {
   if (ui.compose.mode) cancelCompose();
   stopVoice(); stopRecording(false, true); toggleEmoji(false); closeViewer();
+  Cloud.leaveTyping();
   ui.openChatId = null;
   $('#convo').classList.remove('open');
   $('#convo').setAttribute('aria-hidden', 'true');
@@ -4879,13 +5772,8 @@ function closeChat() {
   refresh();
 }
 function openDM(userId) {
-  let c = state.chats.find(x => x.type === 'dm' && x.userId === userId);
-  if (!c) {
-    c = { id: 'c_' + userId + '_' + uid(), type: 'dm', userId, pinned: false, muted: false, unread: 0, draft: '', messages: [] };
-    state.chats.push(c);
-  }
-  closeOverlay();
-  openChat(c.id);
+  if (userId === Cloud.me) { toast('That’s you. Pick someone else to message.', 'info'); return; }
+  Cloud.openDirect(userId);
 }
 
 function sendMessage() {
@@ -4896,7 +5784,12 @@ function sendMessage() {
   if (ui.compose.mode === 'edit') {
     const m = findMsg(ui.compose.id);
     if (!text) { toast('A message can’t be empty. Use Delete to remove it.', 'info'); return; }
-    if (m && m.text !== text) { m.text = text; m.edited = true; m.editedAt = now(); toast('Message edited', 'pen'); }
+    if (m && m.text !== text && !m.pending) {
+      const old = { text: m.text, edited: m.edited, editedAt: m.editedAt };
+      m.text = text; m.edited = true; m.editedAt = now();
+      Cloud.rpc('edit_message', { msg: m.id, new_body: text }).then(() => toast('Message edited', 'pen'),
+        e => { Object.assign(m, old); refresh(); toast(cloudError(e), 'info'); });
+    }
     const prev = ui.compose.prevDraft || '';
     clearCompose();
     ta.value = prev; c.draft = prev; autoGrow(ta); updateComposerBtn();
@@ -4908,21 +5801,23 @@ function sendMessage() {
   postMine({ type: 'text', text });
 }
 
-/* Every outgoing message goes through here: reply link, delivery, simulated answer. */
+/* Every outgoing message goes through here. It shows at once with a clock,
+   then the server confirms it (one tick) or it's marked "Not sent". */
 function postMine(fields) {
   const c = getChat(ui.openChatId); if (!c) return;
-  const msg = { id: uid(), from: 'me', t: now(), status: 'sent', ...fields };
-  applyTtl(c, msg);
-  if (ui.compose.mode === 'reply') msg.replyTo = ui.compose.id;
+  const files = fields._files || {};
+  delete fields._files;
+  const msg = { id: uid(), from: 'me', t: now(), ...fields };
+  if (!UUID_RE.test(msg.id)) msg.id = uid();
+  if (ui.compose.mode === 'reply') {
+    const r = findMsg(ui.compose.id);
+    if (r && !r.pending && r.status !== 'failed') msg.replyTo = ui.compose.id;
+  }
   clearCompose();
   c.messages.push(msg);
   if (S().notify.sounds) playTick();
   $('#msgs').dataset.fresh = '1';
-  refresh();
-  setTimeout(() => {
-    if (msg.status === 'sent') { msg.status = 'delivered'; msg.deliveredAt = now(); refresh(); }
-  }, 600 + Math.random() * 500);
-  simulateReply(c.id);
+  Cloud.send(c, msg, files);
 }
 
 function takeCaption() {
@@ -4935,12 +5830,6 @@ function takeCaption() {
   }
   return '';
 }
-function sendSample(kind) {
-  const scene = pick(kind === 'image' ? PHOTO_SCENES : VIDEO_SCENES);
-  postMine(kind === 'image'
-    ? { type: 'image', scene, caption: takeCaption() }
-    : { type: 'video', scene, duration: 8 + Math.floor(Math.random() * 40), caption: takeCaption() });
-}
 function handleFile(file) {
   if (!file || !ui.openChatId) return;
   if (file.type.startsWith('image/')) {
@@ -4948,11 +5837,11 @@ function handleFile(file) {
     reader.onload = () => {
       const img = new Image();
       img.onload = () => {
-        const s = Math.min(1, 720 / Math.max(img.width, img.height));
+        const s = Math.min(1, 1600 / Math.max(img.width, img.height));
         const cv = document.createElement('canvas');
         cv.width = Math.max(1, Math.round(img.width * s)); cv.height = Math.max(1, Math.round(img.height * s));
         cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
-        let src; try { src = cv.toDataURL('image/jpeg', 0.72); } catch (e) { src = reader.result; }
+        let src; try { src = cv.toDataURL('image/jpeg', 0.82); } catch (e) { src = reader.result; }
         postMine({ type: 'image', src, ratio: +(cv.width / cv.height).toFixed(3), caption: takeCaption() });
       };
       img.onerror = () => toast('That image couldn’t be opened. Try a JPG or PNG.', 'image');
@@ -4960,6 +5849,7 @@ function handleFile(file) {
     };
     reader.readAsDataURL(file);
   } else if (file.type.startsWith('video/')) {
+    if (file.size > FILE_MAX) { toast(`Videos can be up to 25 MB. This one is ${fmtBytes(file.size)}.`, 'film'); return; }
     const url = URL.createObjectURL(file);
     const v = document.createElement('video');
     v.preload = 'auto'; v.muted = true; v.playsInline = true; v.src = url;
@@ -4968,7 +5858,7 @@ function handleFile(file) {
       if (done) return; done = true;
       const ratio = v.videoWidth && v.videoHeight ? +(v.videoWidth / v.videoHeight).toFixed(3) : 16 / 9;
       const id = uid(); ui.blobs.add(id);
-      postMine({ id, type: 'video', blob: url, local: true, poster, ratio, duration: Math.round(v.duration) || 0, caption: takeCaption() });
+      postMine({ id, type: 'video', blob: url, poster, ratio, duration: Math.round(v.duration) || 0, caption: takeCaption(), _files: { main: file } });
     };
     v.onloadeddata = () => { try { v.currentTime = Math.min(0.5, (v.duration || 1) / 2); } catch (e) { finish(null); } };
     v.onseeked = () => {
@@ -4985,7 +5875,7 @@ function handleFile(file) {
     v.onerror = () => { if (!done) { done = true; URL.revokeObjectURL(url); toast('This video format can’t be previewed here', 'film'); } };
     setTimeout(() => finish(null), 4000);
   } else {
-    toast('Only photos and videos can be shared in the prototype', 'clip');
+    handleAnyFile(file);
   }
 }
 
@@ -5002,64 +5892,6 @@ function copyText(text) {
     if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text).then(() => toast('Copied to clipboard', 'copy'), fallback);
     else fallback();
   } catch (e) { fallback(); }
-}
-
-const REPLIES = [
-  'Sounds good to me', 'Ha, fair point', 'Let me check and get back to you', 'Yes! Let’s do it',
-  'On my way', 'That works', 'I was just thinking the same thing', 'Can we talk about this later today?',
-  'Love that', 'Noted, thanks', 'Give me five minutes', 'Perfect timing',
-];
-function replyFor(m) {
-  if (m?.type === 'image') return pick(['Wow, great shot', 'That light is unreal', 'Send me the full-size one?']);
-  if (m?.type === 'video') return pick(['Watching now', 'Ha, play that again', 'Love this clip']);
-  if (m?.type === 'voice') return pick(['Just listened. Agreed', 'Got your voice note, makes sense', 'Ha, you sound tired']);
-  return pick(REPLIES);
-}
-function simulateReply(chatId) {
-  const c = getChat(chatId);
-  if (!c || ui.pending[chatId] || c.left) return;
-  if (c.type === 'dm' && isBlocked(c.userId)) return;
-  const pool = c.type === 'group' ? c.members.filter(id => !isBlocked(id)) : [];
-  const responder = c.type === 'dm' ? c.userId : pick(pool);
-  if (!getUser(responder)) return;
-  ui.pending[chatId] = true;
-  setTimeout(() => { if (!getChat(chatId)) { delete ui.pending[chatId]; return; } ui.typing[chatId] = responder; refresh(); }, 1100);
-  setTimeout(() => {
-    delete ui.typing[chatId]; delete ui.pending[chatId];
-    const ch = getChat(chatId); if (!ch) { refresh(); return; }
-    const t = now();
-    ch.messages.forEach(m => {
-      if (m.from === 'me' && !m.deleted && m.status !== 'read') {
-        m.status = 'read'; m.deliveredAt = m.deliveredAt || t - 900; m.readAt = t - 300;
-      }
-    });
-    const mineLast = [...ch.messages].reverse().find(m => m.from === 'me' && !m.deleted);
-    if (mineLast && Math.random() < 0.35) {
-      mineLast.reactions = mineLast.reactions || {};
-      if (!Object.values(mineLast.reactions).some(u => u.includes(responder))) {
-        const e = pick(['❤️', '😂', '👍', '🔥']);
-        (mineLast.reactions[e] = mineLast.reactions[e] || []).push(responder);
-      }
-    }
-    const text = replyFor(mineLast);
-    const reply = { id: uid(), from: responder, type: 'text', text, t };
-    if (Math.random() < (mineLast?.type === 'sticker' ? 0.55 : 0.12)) {
-      reply.type = 'sticker'; reply.stickerId = pick(PACK_STICKERS).id; delete reply.text;
-    } else if (mineLast && Math.random() < 0.25) reply.replyTo = mineLast.id;
-    applyTtl(ch, reply);
-    ch.messages.push(reply);
-    if (ui.openChatId !== chatId) {
-      ch.unread += 1;
-      const n = S().notify;
-      const allowed = ch.type === 'group' ? n.groups : n.messages;
-      if (allowed && !ch.muted && !inQuietHours()) {
-        toast(n.previews ? `${firstName(responder)}: ${msgPreview(reply)}` : `New message from ${firstName(responder)}`, reply.type === 'sticker' ? 'sticker' : 'chat');
-        if (n.vibrate) { try { navigator.vibrate && navigator.vibrate([15, 40, 15]); } catch (e) {} }
-      }
-    }
-    if (S().notify.sounds && !ch.muted && !inQuietHours()) playTick(660);
-    refresh();
-  }, 2400 + Math.random() * 1400);
 }
 
 let audioCtx = null;
@@ -5109,8 +5941,10 @@ const actions = {
     closeOverlay(); refresh(); toast(c.pinned ? 'Pinned to top' : 'Unpinned', 'pin');
   },
   'read-chat': el => {
-    const c = getChat(el.dataset.id); const was = c.unread;
-    c.unread = was ? 0 : 1; closeOverlay(); refresh(); toast(was ? 'Marked as read' : 'Marked as unread', 'checks');
+    const c = getChat(el.dataset.id); if (!c) return;
+    const was = c.unread;
+    if (was) Cloud.markRead(c); else { c.unread = 1; Cloud.rpc('mark_unread', { conv: c.id }).catch(() => {}); }
+    closeOverlay(); refresh(); toast(was ? 'Marked as read' : 'Marked as unread', 'checks');
   },
   'mute-chat': el => {
     const c = getChat(el.dataset.id); c.muted = !c.muted;
@@ -5118,53 +5952,48 @@ const actions = {
   },
   'clear-chat': async el => {
     const c = getChat(el.dataset.id);
-    const ok = await confirmDialog({ title: 'Clear message history?', body: `All messages with ${esc(chatTitle(c))} will be removed from this device.`, confirmLabel: 'Clear', danger: true });
+    const ok = await confirmDialog({ title: 'Clear message history?', body: `Messages in ${esc(chatTitle(c))} will be removed for you, on all your phones. Others still have their copy.`, confirmLabel: 'Clear', danger: true });
     if (!ok) return;
-    closeOverlay(); c.messages = []; c.unread = 0; refresh(); toast('History cleared', 'eraser');
+    closeOverlay();
+    try { await Cloud.rpc('clear_chat', { conv: c.id, hide: false }); } catch (e) { toast(cloudError(e), 'info'); return; }
+    c.messages = []; c.unread = 0; c.hasMore = false; c.clearedAt = now(); refresh(); toast('History cleared', 'eraser');
   },
   'delete-chat': async el => {
     const c = getChat(el.dataset.id);
-    const ok = await confirmDialog({ title: 'Delete conversation?', body: `Your conversation with ${esc(chatTitle(c))} will be deleted from this device. The contact stays.`, confirmLabel: 'Delete', danger: true });
+    const ok = await confirmDialog({ title: 'Delete conversation?', body: `Your conversation with ${esc(chatTitle(c))} is removed for you. It comes back if either of you sends a new message. The contact stays.`, confirmLabel: 'Delete', danger: true });
     if (!ok) return;
     closeOverlay();
+    try { await Cloud.rpc('clear_chat', { conv: c.id, hide: true }); } catch (e) { toast(cloudError(e), 'info'); return; }
     if (ui.openChatId === c.id) closeChat();
     state.chats = state.chats.filter(x => x.id !== c.id); refresh(); toast('Conversation deleted', 'trash');
   },
   'leave-group': async el => {
     const c = getChat(el.dataset.id);
     if (!c) return;
-    const ok = await confirmDialog({ title: `Leave ${esc(c.name)}?`, body: 'You’ll stop getting new messages. The history stays on this device, and in the prototype other members aren’t notified.', confirmLabel: 'Leave', danger: true });
+    const ok = await confirmDialog({ title: `Leave ${esc(c.name)}?`, body: 'You’ll stop getting new messages and members will see that you left. You keep the history from before.', confirmLabel: 'Leave', danger: true });
     if (!ok) return;
     closeOverlay();
     if (ui.compose.mode && ui.openChatId === c.id) cancelCompose();
     stopRecording(false, true);
-    if (isAdmin(c) && (c.admins || ['me']).filter(a => a !== 'me').length === 0 && c.members.length) {
-      c.admins = [c.members[0]];
-      sysMsg(c, `${firstName(c.members[0])} is now an admin`);
-    } else c.admins = (c.admins || []).filter(a => a !== 'me');
-    c.left = true; c.unread = 0; delete ui.typing[c.id];
-    sysMsg(c, 'You left the group');
-    refresh(); toast(`You left ${c.name}`, 'logout');
+    try { await Cloud.rpc('leave_group', { conv: c.id }); } catch (e) { toast(cloudError(e), 'info'); return; }
+    delete ui.typing[c.id];
+    if (ui.openChatId === c.id) Cloud.leaveTyping();
+    await Cloud.sync().catch(() => {});
+    toast(`You left ${c.name}`, 'logout');
   },
   'remove-contact': async el => {
     const u = getUser(el.dataset.user);
-    const ok = await confirmDialog({ title: `Remove ${esc(u.name)}?`, body: 'They’ll be removed from your contacts and your direct conversation will be deleted.', confirmLabel: 'Remove', danger: true });
+    const ok = await confirmDialog({ title: `Remove ${esc(u.name)}?`, body: 'They’ll be removed from your contacts. Your conversation with them stays.', confirmLabel: 'Remove', danger: true });
     if (!ok) return;
     closeOverlay();
-    const dm = state.chats.find(c => c.type === 'dm' && c.userId === u.id);
-    if (dm && ui.openChatId === dm.id) closeChat();
-    state.chats = state.chats.filter(c => !(c.type === 'dm' && c.userId === u.id));
-    state.users = state.users.filter(x => x.id !== u.id);
-    state.blocked = (state.blocked || []).filter(x => x !== u.id);
-    state.chats.forEach(c => { if (c.type === 'group') c.members = c.members.filter(m => m !== u.id); });
-    refresh(); toast(`${u.name} removed`, 'trash');
+    try { await Cloud.removeContact(u.id); } catch (e) { toast(cloudError(e), 'info'); return; }
+    toast(`${u.name} removed from contacts`, 'trash');
   },
   'call': el => {
     const kind = el.dataset.kind === 'video' ? 'Video calls' : 'Voice calls';
-    toast(`${kind} need a real server. Simulated in this prototype.`, el.dataset.kind === 'video' ? 'video' : 'phone');
+    toast(`${kind} aren’t available in ZYVEN yet.`, el.dataset.kind === 'video' ? 'video' : 'phone');
   },
   'attach': () => { toggleEmoji(false); attachSheet(); },
-  'attach-sample': el => { closeOverlay(); sendSample(el.dataset.kind); },
   'attach-voice': () => { closeOverlay(); setTimeout(startRecording, 200); },
   'voice-retry': () => { closeOverlay(); setTimeout(startRecording, 250); },
   'rec-cancel': () => stopRecording(false),
@@ -5188,7 +6017,7 @@ const actions = {
   },
   'pins-list': () => pinsSheet(),
   'chat-pins': el => { if (ui.openChatId !== el.dataset.id) { closeOverlay(); openChat(el.dataset.id); setTimeout(pinsSheet, 450); } else pinsSheet(); },
-  'pin-remove': el => { const c = getChat(ui.openChatId); if (c && c.type === 'group' && !canEditInfo(c)) { toast('Only admins can unpin in this group. This check is simulated on this device.', 'crown'); return; } c.pins = (c.pins || []).filter(x => x !== el.dataset.msg); refresh(); pinsSheet(); toast('Message unpinned', 'pin'); },
+  'pin-remove': async el => { const c = getChat(ui.openChatId); if (c && c.type === 'group' && !canEditInfo(c)) { toast('Only admins can unpin in this group.', 'crown'); return; } await togglePin(el.dataset.msg); pinsSheet(); },
   'msg-save': el => { closeOverlay(); toggleSave(el.dataset.msg); },
   'open-saved': () => openSaved(),
   'saved-close': () => closeSaved(),
@@ -5198,13 +6027,12 @@ const actions = {
   'msg-del-all': el => deleteForEveryone(el.dataset.msg),
   'msg-del-me': el => deleteForMe(el.dataset.msg),
   'ttl-open': el => ttlSheet(el.dataset.id || ui.openChatId),
-  'ttl-set': el => {
+  'ttl-set': async el => {
     const c = getChat(el.dataset.id); if (!c) return;
     const v = el.dataset.value === 'off' ? null : el.dataset.value;
     if ((c.ttl || null) === v) { ttlSheet(c.id); return; }
-    c.ttl = v;
-    sysMsg(c, v ? `You turned on disappearing messages. New messages disappear from this device after ${TTL[v][1]}.` : 'You turned off disappearing messages');
-    refresh(); ttlSheet(c.id);
+    try { await Cloud.rpc('set_ttl', { conv: c.id, value: v }); } catch (e) { toast(cloudError(e), 'info'); return; }
+    c.ttl = v; refresh(); ttlSheet(c.id);
     toast(v ? `Disappearing messages: ${TTL[v][1]}` : 'Disappearing messages off', 'timer');
   },
   'attach-location': () => locationSheet(),
@@ -5245,19 +6073,19 @@ const actions = {
   'reports': () => reportsSheet(),
   'report-remove': el => { state.reports = (state.reports || []).filter(r => r.id !== el.dataset.rid); save(); renderProfile(); reportsSheet(); toast('Report deleted', 'trash'); },
   'member-menu': el => memberMenuSheet(el.dataset.id, el.dataset.user),
-  'member-admin': el => {
+  'member-admin': async el => {
     const g = getChat(el.dataset.id), u = getUser(el.dataset.user); if (!g || !u || !isAdmin(g)) return;
-    g.admins = g.admins || ['me'];
-    const was = g.admins.includes(u.id);
-    g.admins = was ? g.admins.filter(a => a !== u.id) : [...g.admins, u.id];
-    sysMsg(g, was ? `${u.name.split(' ')[0]} is no longer an admin` : `You made ${u.name.split(' ')[0]} an admin`);
-    refresh(); groupInfoSheet(g.id); toast(was ? 'Admin role removed' : `${u.name.split(' ')[0]} is now an admin`, 'crown');
+    const was = (g.admins || []).includes(u.id);
+    try { await Cloud.rpc('set_admin', { conv: g.id, member: u.id, make_admin: !was }); await Cloud.sync(); }
+    catch (e) { toast(cloudError(e), 'info'); return; }
+    if (getChat(g.id)) groupInfoSheet(g.id);
+    toast(was ? 'Admin role removed' : `${u.name.split(' ')[0]} is now an admin`, 'crown');
   },
-  'group-editinfo': el => {
+  'group-editinfo': async el => {
     const g = getChat(el.dataset.id); if (!g || !isAdmin(g)) return;
-    g.editInfo = g.editInfo === 'admins' ? 'all' : 'admins';
-    sysMsg(g, g.editInfo === 'admins' ? 'You allowed only admins to edit group info' : 'You allowed all members to edit group info');
-    refresh(); groupInfoSheet(g.id);
+    try { await Cloud.rpc('set_edit_info', { conv: g.id, who: g.editInfo === 'admins' ? 'all' : 'admins' }); await Cloud.sync(); }
+    catch (e) { toast(cloudError(e), 'info'); return; }
+    if (getChat(g.id)) groupInfoSheet(g.id);
   },
   'open-result': el => {
     const id = el.dataset.id, msg = el.dataset.msg;
@@ -5270,6 +6098,13 @@ const actions = {
   'sticker-open': el => stickerSheet(el.dataset.sid),
   'stk-fav': el => { const inSheet = !!el.closest('.overlay'); toggleFav(el.dataset.sid); if (inSheet) stickerSheet(el.dataset.sid); },
   'stk-rename': el => stickerRenameSheet(el.dataset.sid),
+  'stk-keep': el => {
+    const st = getSticker(el.dataset.sid); if (!st) return;
+    const copy = JSON.parse(JSON.stringify(st));
+    Object.assign(copy, { id: 'st_' + uid(), owner: 'me', createdAt: now(), meta: { source: 'chat' } });
+    STK().mine.push(copy); save(); closeOverlay(); rerenderStickerViews();
+    toast('Saved to your stickers', 'sticker');
+  },
   'stk-delete': el => deleteSticker(el.dataset.sid),
   'open-library': el => openLibrary(el.dataset.tab || 'mine'),
   'lib-close': () => closeLibrary(),
@@ -5346,18 +6181,21 @@ const actions = {
   },
   'msg-edit': el => { closeOverlay(); startEdit(el.dataset.msg); },
   'msg-info': el => msgInfoSheet(el.dataset.msg),
-  'msg-delete': async el => {
-    const id = el.dataset.msg;
-    const ok = await confirmDialog({ title: 'Delete this message?', body: 'It will show as “You deleted this message”. The prototype removes it from this device only; deleting for everyone needs a server.', confirmLabel: 'Delete', danger: true });
-    if (!ok) return;
-    closeOverlay();
-    const m = findMsg(id); if (!m) return;
-    if (ui.compose.id === id) cancelCompose();
-    if (ui.playing?.id === id) stopVoice();
-    m.deleted = true; m.reactions = {};
-    ['text', 'caption', 'src', 'poster', 'wave', 'blob', 'audio'].forEach(k => delete m[k]);
-    const au = ui.audioUrls.get(id); if (au) { URL.revokeObjectURL(au); ui.audioUrls.delete(id); }
-    refresh(); toast('Message deleted', 'trash');
+  'msg-delete': el => deleteMsgSheet(el.dataset.msg),
+  'msg-retry': el => {
+    if (el.dataset.close) closeOverlay();
+    const c = getChat(ui.openChatId), m = findMsg(el.dataset.msg); if (!c || !m || m.pending) return;
+    Cloud.send(c, m, ui.outbox?.get(m.id) || {});
+  },
+  'msg-discard': el => deleteForMe(el.dataset.msg),
+  'load-older': async () => {
+    const c = getChat(ui.openChatId); if (!c) return;
+    const box = $('#msgs'), b = $('#load-older');
+    if (b) { b.disabled = true; b.textContent = 'Loading…'; }
+    const h = box.scrollHeight, top = box.scrollTop;
+    try { await Cloud.loadOlder(c); } catch (e) { toast(cloudError(e), 'info'); }
+    renderMessages();
+    box.scrollTop = top + (box.scrollHeight - h);
   },
   'view-media': el => openViewer(el.dataset.msg),
   'viewer-close': () => closeViewer(),
@@ -5397,9 +6235,9 @@ const actions = {
   'pick-gpic': el => applyGroupPic(el.dataset.target, JSON.parse(el.dataset.pic)),
   'group-info-back': el => groupInfoSheet(el.dataset.id),
   'group-message': el => { closeOverlay(); if (ui.openChatId !== el.dataset.id) openChat(el.dataset.id); },
-  'group-pic': el => canEditInfo(getChat(el.dataset.id)) ? groupPicSheet(el.dataset.id) : toast('Only admins can change the group picture. This check is simulated on this device.', 'crown'),
-  'group-rename': el => canEditInfo(getChat(el.dataset.id)) ? groupRenameSheet(el.dataset.id) : toast('Only admins can edit the group info. This check is simulated on this device.', 'crown'),
-  'group-add': el => isAdmin(getChat(el.dataset.id)) ? groupAddSheet(el.dataset.id) : toast('Only admins can add members. This check is simulated on this device.', 'crown'),
+  'group-pic': el => canEditInfo(getChat(el.dataset.id)) ? groupPicSheet(el.dataset.id) : toast('Only admins can change the group picture.', 'crown'),
+  'group-rename': el => canEditInfo(getChat(el.dataset.id)) ? groupRenameSheet(el.dataset.id) : toast('Only admins can edit the group info.', 'crown'),
+  'group-add': el => isAdmin(getChat(el.dataset.id)) ? groupAddSheet(el.dataset.id) : toast('Only admins can add members.', 'crown'),
   'gadd-toggle': el => {
     const id = el.dataset.user, set = ui.addDraft;
     set.has(id) ? set.delete(id) : set.add(id);
@@ -5408,34 +6246,44 @@ const actions = {
     b.disabled = !n;
     b.innerHTML = n ? `${I('userPlus')}Add ${n === 1 ? firstName([...set][0]) : `${n} people`}` : 'Select people to add';
   },
-  'group-add-confirm': el => {
+  'group-add-confirm': async el => {
     const g = getChat(el.dataset.id); if (!g || !ui.addDraft.size) return;
     const ids = [...ui.addDraft].filter(id => !g.members.includes(id));
-    g.members.push(...ids);
-    sysMsg(g, `You added ${joinNames(ids.map(firstName))}`);
-    refresh(); groupInfoSheet(g.id);
+    try { await Cloud.rpc('add_members', { conv: g.id, member_ids: ids }); await Cloud.sync(); }
+    catch (e) { toast(cloudError(e), 'info'); return; }
+    if (getChat(g.id)) groupInfoSheet(g.id);
     toast(`${ids.length === 1 ? firstName(ids[0]) : ids.length + ' people'} added to ${g.name}`, 'userPlus');
   },
   'group-remove-member': async el => {
     const g = getChat(el.dataset.id), u = getUser(el.dataset.user); if (!g || !u) return;
-    const ok = await confirmDialog({ title: `Remove ${esc(u.name)}?`, body: `They’ll be removed from ${esc(g.name)} on this device. In the prototype nobody is notified.`, confirmLabel: 'Remove', danger: true });
+    const ok = await confirmDialog({ title: `Remove ${esc(u.name)}?`, body: `They’ll be removed from ${esc(g.name)} and stop getting its messages. Members see who removed them.`, confirmLabel: 'Remove', danger: true });
     if (!ok) { groupInfoSheet(g.id); return; }
-    g.members = g.members.filter(m => m !== u.id);
-    g.admins = (g.admins || ['me']).filter(m => m !== u.id);
-    if (ui.typing[g.id] === u.id) delete ui.typing[g.id];
-    sysMsg(g, `You removed ${u.name.split(' ')[0]}`);
-    refresh(); groupInfoSheet(g.id); toast(`${u.name} removed`, 'trash');
+    try { await Cloud.rpc('remove_member', { conv: g.id, member: u.id }); await Cloud.sync(); }
+    catch (e) { toast(cloudError(e), 'info'); return; }
+    if (getChat(g.id)) groupInfoSheet(g.id);
+    toast(`${u.name} removed`, 'trash');
   },
   'delete-group-chat': async el => {
     const id = el.dataset.id || ui.openChatId;
     const c = getChat(id); if (!c) return;
-    const ok = await confirmDialog({ title: 'Delete this chat?', body: `The history of ${esc(c.name)} will be removed from this device.`, confirmLabel: 'Delete', danger: true });
+    const ok = await confirmDialog({ title: 'Delete this chat?', body: `The history of ${esc(c.name)} is removed for you, on all your phones.`, confirmLabel: 'Delete', danger: true });
     if (!ok) return;
     closeOverlay();
+    try { await Cloud.rpc('clear_chat', { conv: id, hide: true }); } catch (e) { toast(cloudError(e), 'info'); return; }
     if (ui.openChatId === id) closeChat();
     state.chats = state.chats.filter(x => x.id !== id); refresh(); toast('Chat deleted', 'trash');
   },
   'add-contact': () => addContactSheet(),
+  'contact-add': async el => {
+    const u = getUser(el.dataset.user) || ui.peopleResults?.list.find(x => x.id === el.dataset.user);
+    if (!u) return;
+    el.disabled = true;
+    try { await Cloud.addContact(u); toast(`${u.name} added to contacts`, 'userPlus'); }
+    catch (e) { el.disabled = false; toast(cloudError(e), 'info'); return; }
+    if (el.dataset.from === 'profile') userProfileSheet(u.id); else renderFindList();
+  },
+  'auth': el => { Auth.err(''); Auth.show(el.dataset.screen); },
+  'change-password': () => passwordSheet(),
   'edit-profile': () => editProfileSheet(),
   'pick-hue': el => {
     ui.pdraft.hue = ui.draftHue = +el.dataset.value;
@@ -5444,10 +6292,14 @@ const actions = {
   },
   'pf-remove-photo': () => { ui.pdraft.photo = null; renderPfControls(); renderPfPreview(); toast('Photo removed. Save to apply.', 'trash'); },
   'privacy-open': el => privacySheet(el.dataset.key),
-  'set-privacy': el => {
+  'set-privacy': async el => {
     const { key, value } = el.dataset;
+    const before = S().privacy[key];
     S().privacy[key] = value;
-    renderProfile(); refresh(); privacySheet(key);
+    renderProfile(); privacySheet(key);
+    try { await Cloud.savePrivacy(); }
+    catch (e) { S().privacy[key] = before; renderProfile(); privacySheet(key); toast(cloudError(e), 'info'); return; }
+    refresh(); Cloud.refreshPeople().catch(() => {});
     toast(`${PRIVACY_META[key].title}: ${privLabel(value)}`, PRIVACY_META[key].icon);
   },
   'block-pick': () => blockPickSheet(),
@@ -5457,52 +6309,27 @@ const actions = {
   'account': () => accountSheet(),
   'backup-export': () => exportBackup(),
   'logout': () => logoutDialog(),
-  'logout-confirm': () => {
-    const erase = !!$('#logout-erase')?.checked;
-    closeOverlay();
-    if (ui.openChatId) closeChat();
-    if (erase) { state = migrate(seed()); ui.typing = {}; ui.pending = {}; applyAppearance(); }
-    state.session = { loggedIn: false };
-    renderProfile(); refresh();
-    showGate(erase);
-  },
-  'login': () => {
-    state.session = { loggedIn: true, since: now() };
-    save();
-    const g = $('#gate'); if (g) g.hidden = true;
-    switchTab('chats');
-    toast(`Welcome back, ${state.profile.name}`, 'sparkles');
-  },
+  'logout-confirm': () => signOut(!!$('#logout-erase')?.checked),
   'test-notification': () => {
     const n = S().notify;
     if (inQuietHours()) { toast('Quiet hours are on, so this banner would stay silent', 'moon'); return; }
     if (!n.messages) { toast('Message alerts are off, so no banner would appear', 'bellOff'); return; }
-    toast(n.previews ? 'Layla: This is how a message banner looks' : 'New message from Layla', 'chat');
+    toast(n.previews ? `${CONFIG.appName}: This is how a message banner looks` : `New message from ${CONFIG.appName}`, 'chat');
     if (n.sounds) playTick(660);
     if (n.vibrate) { try { navigator.vibrate && navigator.vibrate([15, 40, 15]); } catch (e) {} }
   },
-  'toggle-setting': el => {
+  'toggle-setting': async el => {
     const [g, k] = el.dataset.key.split('.');
     S()[g][k] = !S()[g][k];
     renderProfile(); refresh();
+    if (el.dataset.key === 'privacy.readReceipts') {
+      try { await Cloud.savePrivacy(); } catch (e) { S()[g][k] = !S()[g][k]; renderProfile(); toast(cloudError(e), 'info'); }
+    }
   },
   'set-mode': el => { S().appearance.mode = el.dataset.value; applyAppearance(); renderProfile(); save(); },
   'set-accent': el => { S().appearance.accent = el.dataset.value; applyAppearance(); renderProfile(); save(); toast(`Accent set to ${CONFIG.accents[el.dataset.value].label}`, 'sparkles'); },
   'blocked': () => blockedSheet(),
   'about': () => aboutSheet(),
-  'clear-chats': async () => {
-    const ok = await confirmDialog({ title: 'Clear all conversations?', body: 'Every chat and group is removed from this device. You can restore the demo data any time.', confirmLabel: 'Clear all', danger: true });
-    if (!ok) return;
-    closeOverlay(); state.chats = []; refresh(); renderProfile(); toast('All conversations cleared', 'eraser');
-  },
-  'reset-demo': async () => {
-    const ok = await confirmDialog({ title: 'Restore demo data?', body: 'Your profile, settings, chats, and contacts go back to the original sample set.', confirmLabel: 'Restore' });
-    if (!ok) return;
-    closeOverlay();
-    if (ui.openChatId) closeChat();
-    state = migrate(seed()); ui.typing = {}; ui.pending = {};
-    applyAppearance(); renderProfile(); refresh(); toast('Demo data restored', 'refresh');
-  },
   'close-overlay': () => closeOverlay(),
   'dlg-yes': () => { const r = ui.dlgResolve; ui.dlgResolve = null; r && r(true); },
   'dlg-no': () => { closeOverlay(); },
@@ -5510,68 +6337,70 @@ const actions = {
 
 /* ---------- Form handlers ---------- */
 const forms = {
-  group() {
+  async group(form) {
     const name = $('#group-name').value.trim();
     const err = $('#group-err');
     if (!name) { err.textContent = 'Give the group a name.'; $('#group-name').focus(); return; }
     if (!ui.gdraft.members.size) { err.textContent = 'Pick at least one person to add.'; $('#group-name').scrollIntoView({ block: 'nearest' }); return; }
-    const ids = [...ui.gdraft.members];
-    const pic = ui.gdraft.pic;
-    const g = {
-      id: 'g_' + uid(), type: 'group', name, hue: pic.hue ?? pick(CONFIG.avatarHues), pic, members: ids,
-      desc: $('#gd-desc').value.trim(), pinned: false, muted: false, unread: 0, draft: '', createdAt: now(), messages: [],
-      admins: ['me'], editInfo: 'all', pins: [], ttl: null,
-    };
-    sysMsg(g, `You created “${name}”`);
-    sysMsg(g, `You added ${joinNames(ids.map(firstName))}`);
-    state.chats.push(g);
-    ui.visited.add('groups');
-    ui.gdraft = null;
-    closeOverlay(); refresh(); toast(`${name} created on this device`, 'groups'); openChat(g.id);
+    const btn = $('#gd-submit'); if (btn) { if (btn.disabled) return; btn.disabled = true; btn.textContent = 'Creating…'; }
+    try {
+      const id = await Cloud.createGroup(name, $('#gd-desc').value.trim(), ui.gdraft.pic, [...ui.gdraft.members]);
+      ui.visited.add('groups'); ui.gdraft = null;
+      closeOverlay(); toast(`${name} created`, 'groups');
+      if (getChat(id)) openChat(id);
+    } catch (e) {
+      if (btn) { btn.disabled = false; renderDraftMembers(); }
+      err.textContent = cloudError(e);
+    }
   },
-  report(form) {
+  async report(form) {
     const uid2 = form.dataset.user, u = getUser(uid2); if (!u) return;
-    state.reports = state.reports || [];
-    state.reports.push({ id: 'rp_' + uid(), userId: uid2, reason: ui.reportReason || REPORT_REASONS[0], details: $('#rp-det').value.trim(), at: now(), sent: false });
+    const reason = ui.reportReason || REPORT_REASONS[0], details = $('#rp-det').value.trim();
     const blockToo = $('#rp-block').checked && !isBlocked(uid2);
-    if (blockToo) state.blocked = [...new Set([...(state.blocked || []), uid2])];
+    try { await Cloud.report(uid2, reason, details); if (blockToo) await Cloud.block(uid2); }
+    catch (e) { toast(cloudError(e), 'info'); return; }
+    state.reports = state.reports || [];
+    state.reports.push({ id: 'rp_' + uid(), userId: uid2, reason, details, at: now(), sent: true });
     closeOverlay(); refresh(); renderProfile();
-    toast(`Report saved on this device · not sent${blockToo ? ` · ${u.name.split(' ')[0]} blocked` : ''}`, 'flag');
+    toast(`Report sent${blockToo ? ` · ${u.name.split(' ')[0]} blocked` : ''}`, 'flag');
+  },
+  async password() {
+    const a = $('#pw-new').value, b = $('#pw-again').value, err = $('#pw-err');
+    if (a.length < 8) { err.textContent = 'Use at least 8 characters.'; return; }
+    if (a !== b) { err.textContent = 'The two passwords don’t match.'; return; }
+    const { error } = await sb.auth.updateUser({ password: a });
+    if (error) { err.textContent = authError(error); return; }
+    closeOverlay(); toast('Password changed', 'lock');
   },
   'stk-rename'(form) {
     const st = getSticker(form.dataset.sid); if (!st) return;
     st.name = $('#stk-name').value.trim() || 'Untitled sticker';
     save(); rerenderStickerViews(); stickerSheet(st.id); toast('Sticker renamed', 'pen');
   },
-  'group-rename'(form) {
+  async 'group-rename'(form) {
     const g = getChat(form.dataset.id); if (!g) return;
     const name = $('#gr-name').value.trim(), desc = $('#gr-desc').value.trim();
     if (!name) { $('#gr-err').textContent = 'The group needs a name.'; $('#gr-name').focus(); return; }
-    let changed = false;
-    if (name !== g.name) { sysMsg(g, `You renamed the group to “${name}”`); g.name = name; changed = true; }
-    if (desc !== (g.desc || '')) { g.desc = desc; sysMsg(g, desc ? 'You updated the group description' : 'You removed the group description'); changed = true; }
-    refresh(); groupInfoSheet(g.id);
-    if (changed) toast('Group updated', 'pen');
+    if (name === g.name && desc === (g.desc || '')) { groupInfoSheet(g.id); return; }
+    try { await Cloud.updateGroup(g, { name, desc }); }
+    catch (e) { $('#gr-err').textContent = cloudError(e); return; }
+    if (getChat(g.id)) groupInfoSheet(g.id);
+    toast('Group updated', 'pen');
   },
-  contact() {
-    const name = $('#c-name').value.trim();
-    const username = $('#c-user').value.trim().replace(/^@/, '').toLowerCase();
-    const err = $('#c-err');
-    if (!name) { err.textContent = 'Enter a name.'; $('#c-name').focus(); return; }
-    if (!/^[a-z0-9._]{3,24}$/.test(username)) { err.textContent = 'Use 3–24 letters, numbers, dots, or underscores.'; return; }
-    if (state.users.some(u => u.username === username)) { err.textContent = `@${username} is already in your contacts.`; return; }
-    const u = { id: 'u_' + uid(), name, username, hue: pick(CONFIG.avatarHues), online: false, lastSeen: now() - 3 * 60 * MIN, bio: '' };
-    state.users.push(u);
-    ui.visited.add('contacts');
-    closeOverlay(); refresh(); toast(`${name} added to contacts`, 'userPlus');
-  },
-  profile() {
+  async profile(form) {
     const name = $('#p-name').value.trim();
     const [username, issue] = usernameIssue($('#p-user').value);
     if (!name) { $('#n-err').textContent = 'Your display name can’t be empty.'; $('#p-name').focus(); return; }
     if (issue) { $('#p-err').textContent = issue; $('#p-ok').textContent = ''; $('#p-user').focus(); return; }
-    Object.assign(state.profile, { name, username, bio: $('#p-bio').value.trim(), hue: ui.pdraft.hue, photo: ui.pdraft.photo });
-    closeOverlay(); renderProfile(); refresh(); save(); toast('Profile saved on this device');
+    const btn = form.querySelector('button[type=submit]'); if (btn) { if (btn.disabled) return; btn.disabled = true; btn.textContent = 'Saving…'; }
+    try { await Cloud.saveProfile({ name, username, bio: $('#p-bio').value.trim(), hue: ui.pdraft.hue, photo: ui.pdraft.photo }); }
+    catch (e) {
+      if (btn) { btn.disabled = false; btn.textContent = 'Save changes'; }
+      const t = cloudError(e);
+      if (/username/i.test(t)) { $('#p-err').textContent = t; $('#p-ok').textContent = ''; } else toast(t, 'info');
+      return;
+    }
+    closeOverlay(); renderProfile(); refresh(); toast('Profile saved');
   },
 };
 
@@ -5671,7 +6500,16 @@ document.addEventListener('input', e => {
   if (key === 'chat-search') { ui.chatQuery = e.target.value; renderChatsList(); }
   else if (key === 'contact-search') { ui.contactQuery = e.target.value; renderContactsList(); }
   else if (key === 'group-search') { ui.groupQuery = e.target.value; renderGroupsList(); }
-  else if (key === 'newchat-search') { ui.newChatQuery = e.target.value; renderNewChatList(); }
+  else if (key === 'newchat-search') { ui.newChatQuery = e.target.value; searchPeople(e.target.value, renderNewChatList); }
+  else if (key === 'find-search') { ui.findQuery = e.target.value; searchPeople(e.target.value, renderFindList); }
+  else if (key === 'au-user') {
+    const u = e.target.value.trim().replace(/^@/, '').toLowerCase(), ok = $('#au-user-ok');
+    clearTimeout(ui.unameTimer); if (ok) ok.textContent = '';
+    if (/^[a-z0-9._]{3,24}$/.test(u)) ui.unameTimer = setTimeout(async () => {
+      const { data } = await sb.rpc('username_available', { name: u });
+      const o = $('#au-user-ok'); if (o && $('#au-user')?.value.trim().replace(/^@/, '').toLowerCase() === u) { o.textContent = data ? `@${u} is available` : `@${u} is taken`; o.classList.toggle('taken', !data); }
+    }, 350);
+  }
   else if (key === 'gd-search') filterPicks('#gd-list', e.target.value, e.target.value);
   else if (key === 'gadd-search') filterPicks('#gadd-list', e.target.value, e.target.value);
   else if (key === 'gd-name') { const p = $('#gd-preview'); if (p) p.innerHTML = draftAvatar(72); }
@@ -5680,6 +6518,15 @@ document.addEventListener('input', e => {
     autoGrow(e.target); updateComposerBtn();
     const c = getChat(ui.openChatId);
     if (c && ui.compose.mode !== 'edit') { c.draft = e.target.value; save(); }
+    if (e.target.value.trim()) Cloud.sendTyping();
+  }
+  if (key === 'pf-user') {
+    const u = e.target.value.trim().replace(/^@/, '').toLowerCase();
+    clearTimeout(ui.unameTimer);
+    if (/^[a-z0-9._]{3,24}$/.test(u) && u !== state.profile.username) ui.unameTimer = setTimeout(async () => {
+      const { data } = await sb.rpc('username_available', { name: u });
+      ui.unameCheck = { u, free: !!data }; renderPfPreview();
+    }, 350);
   }
   if (key === 'pf-name' || key === 'pf-user' || e.target.id === 'p-bio') {
     if (key === 'pf-name') { $('#name-count').textContent = `${e.target.value.length}/32`; $('#n-err').textContent = ''; }
@@ -5722,8 +6569,10 @@ document.addEventListener('input', e => {
 document.addEventListener('submit', e => {
   e.preventDefault();
   if (e.target.id === 'composer-form') { sendMessage(); return; }
-  const f = forms[e.target.dataset.form];
-  f && f(e.target);
+  const name = e.target.dataset.form;
+  if (authForms[name]) { if (!Auth.busy) authForms[name](e.target).catch(err => { Auth.setBusy(false); Auth.err(authError(err)); }); return; }
+  const f = forms[name];
+  if (f) Promise.resolve(f(e.target)).catch(err => toast(cloudError(err), 'info'));
 });
 
 document.addEventListener('keydown', e => {
@@ -5771,7 +6620,7 @@ renderChatsList();
 renderContactsList();
 renderGroupsList();
 renderProfile();
-if (state.session && state.session.loggedIn === false) showGate(false);
+bootCloud();
 try {
   matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => {
     if (S().appearance.mode === 'system') { applyAppearance(); renderProfile(); }
