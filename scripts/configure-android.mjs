@@ -24,8 +24,33 @@ if (!existsSync(gradlePath)) fail('android/app/build.gradle is missing.');
 let gradle = readFileSync(gradlePath, 'utf8');
 if (!/applicationId\s+"[^"]+"/.test(gradle)) fail('applicationId not found in android/app/build.gradle.');
 gradle = gradle.replace(/applicationId\s+"[^"]+"/, `applicationId "${APP_ID}"`).replace(/namespace\s*=?\s*"[^"]+"/, m => m.replace(/"[^"]+"/, `"${APP_ID}"`));
+// Version: every build gets a higher versionCode so Android installs it as an update.
+const vCode = Math.max(1, parseInt(process.env.ZYVEN_VERSION_CODE || '1', 10) || 1);
+const vName = process.env.ZYVEN_VERSION_NAME || `1.0.${vCode}`;
+if (!/versionCode\s+\d+/.test(gradle) || !/versionName\s+"[^"]*"/.test(gradle)) fail('versionCode/versionName not found in android/app/build.gradle.');
+gradle = gradle.replace(/versionCode\s+\d+/, `versionCode ${vCode}`).replace(/versionName\s+"[^"]*"/, `versionName "${vName}"`);
+// Release signing: the key file and password come from the build's
+// environment (GitHub secrets), never from the repository.
+if (!gradle.includes('ZYVEN_KEYSTORE')) {
+  if (!/\n(\s*)buildTypes\s*\{/.test(gradle)) fail('buildTypes block not found in android/app/build.gradle.');
+  gradle = gradle.replace(/\n(\s*)buildTypes\s*\{/, (m, ind) => `
+${ind}signingConfigs {
+${ind}    zyven {
+${ind}        def ks = System.getenv("ZYVEN_KEYSTORE")
+${ind}        if (ks) {
+${ind}            storeFile file(ks)
+${ind}            storePassword System.getenv("ZYVEN_KEYSTORE_PASSWORD")
+${ind}            keyAlias(System.getenv("ZYVEN_KEY_ALIAS") ?: "zyven")
+${ind}            keyPassword System.getenv("ZYVEN_KEYSTORE_PASSWORD")
+${ind}        }
+${ind}    }
+${ind}}
+${ind}buildTypes {`);
+  if (!/\brelease\s*\{/.test(gradle)) fail('release build type not found in android/app/build.gradle.');
+  gradle = gradle.replace(/\brelease\s*\{/, 'release {\n            if (System.getenv("ZYVEN_KEYSTORE")) { signingConfig signingConfigs.zyven }');
+}
 writeFileSync(gradlePath, gradle);
-done.push(`applicationId ${APP_ID}`);
+done.push(`applicationId ${APP_ID}, version ${vName} (${vCode}), release signing from environment`);
 
 /* 2. Names shown on the home screen and in Android settings. */
 writeFileSync(join(res, 'values', 'strings.xml'), `<?xml version='1.0' encoding='utf-8'?>

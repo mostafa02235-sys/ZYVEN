@@ -10,7 +10,7 @@ and profiles are stored on your own **Supabase** server.
   Android with [Capacitor 7](https://capacitorjs.com)
 - **Server:** [Supabase](https://supabase.com) (accounts, database, file
   storage, realtime). Setup is one SQL file: `supabase/migrations/…_zyven_init.sql`
-- **APK:** built automatically by GitHub Actions
+- **APK:** a signed release build (`ZYVEN.apk`), built automatically by GitHub Actions
 
 ---
 
@@ -18,7 +18,7 @@ and profiles are stored on your own **Supabase** server.
 
 On your Android phone, open:
 
-**https://github.com/mostafa02235-sys/ZYVEN/releases/latest/download/ZYVEN-debug.apk**
+**https://github.com/mostafa02235-sys/ZYVEN/releases/latest/download/ZYVEN.apk**
 
 Tap the downloaded file → **Install** (allow installs from this source if
 asked; if Play Protect warns, tap **More details → Install anyway**).
@@ -117,10 +117,9 @@ The report appears on the run’s summary page and in the `test-results` branch.
 
 ## Updating the app on your phone
 
-Every change pushed to `main` builds a new APK at the same download link.
-Your chats live on the server, so reinstalling loses nothing except the
-settings kept on the phone (theme, bubble design, stickers, saved messages:
-use **Profile → Account → Back up settings** first if you want to keep them).
+Every change pushed to `main` builds a new APK at the same download link,
+with a higher version number. With the permanent signing key set (below),
+just install it over the old one. Your chats live on the server either way.
 
 ---
 
@@ -145,7 +144,7 @@ permissions:
 
 jobs:
   build:
-    name: Build ZYVEN-debug.apk
+    name: Build ZYVEN.apk
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -220,28 +219,28 @@ jobs:
           chmod +x gradlew
           ./gradlew assembleDebug --no-daemon --stacktrace
 
-      - name: Check the APK and name it ZYVEN-debug.apk
+      - name: Check the APK and name it ZYVEN.apk
         run: |
           APK=android/app/build/outputs/apk/debug/app-debug.apk
           if [ ! -f "$APK" ]; then
             echo "::error::The APK was not created at $APK"
             exit 1
           fi
-          cp "$APK" ZYVEN-debug.apk
+          cp "$APK" ZYVEN.apk
           AAPT=$(ls "$ANDROID_HOME"/build-tools/*/aapt 2>/dev/null | sort -V | tail -n 1)
           if [ -n "$AAPT" ]; then
-            "$AAPT" dump badging ZYVEN-debug.apk | tee badging.txt | head -n 5
+            "$AAPT" dump badging ZYVEN.apk | tee badging.txt | head -n 5
             grep -q "package: name='com.zyven.messaging'" badging.txt || { echo "::error::Wrong app ID in the APK"; exit 1; }
             grep -q "application-label:'ZYVEN'" badging.txt || { echo "::error::App name in the APK is not ZYVEN"; exit 1; }
           fi
-          ls -lh ZYVEN-debug.apk
-          echo "### ZYVEN-debug.apk built ($(du -h ZYVEN-debug.apk | cut -f1))" >> "$GITHUB_STEP_SUMMARY"
+          ls -lh ZYVEN.apk
+          echo "### ZYVEN.apk built ($(du -h ZYVEN.apk | cut -f1))" >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Upload ZYVEN-debug.apk
+      - name: Upload ZYVEN.apk
         uses: actions/upload-artifact@v5
         with:
-          name: ZYVEN-debug-apk
-          path: ZYVEN-debug.apk
+          name: ZYVEN-apk
+          path: ZYVEN.apk
           if-no-files-found: error
           retention-days: 30
 
@@ -253,19 +252,19 @@ jobs:
           path: package-lock.json
           retention-days: 30
 
-      - name: Publish ZYVEN-debug.apk as a direct download link
+      - name: Publish ZYVEN.apk as a direct download link
         if: github.ref == 'refs/heads/main'
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         run: |
           gh release delete latest --yes --cleanup-tag || true
-          gh release create latest ZYVEN-debug.apk \
+          gh release create latest ZYVEN.apk \
             --target "${{ github.sha }}" \
             --title "ZYVEN (latest build)" \
-            --notes "Tap ZYVEN-debug.apk below to download, then open it on your Android phone to install." \
+            --notes "Tap ZYVEN.apk below to download, then open it on your Android phone to install." \
             --latest
-          echo "Direct download: https://github.com/${{ github.repository }}/releases/latest/download/ZYVEN-debug.apk" >> "$GITHUB_STEP_SUMMARY"
+          echo "Direct download: https://github.com/${{ github.repository }}/releases/latest/download/ZYVEN.apk" >> "$GITHUB_STEP_SUMMARY"
 ```
 
 ## If a build fails
@@ -276,13 +275,24 @@ jobs → Re-run all jobs** to try again.
 
 ---
 
+## Permanent signing key
+
+`ZYVEN.apk` is a **release** build, signed with a key. With a permanent key,
+every new build installs as an **update** over the old one (no uninstalling).
+
+Add two repository secrets (**Settings → Secrets and variables → Actions →
+New repository secret**): `ZYVEN_KEYSTORE_PASSWORD` and
+`ZYVEN_KEYSTORE_BASE64`, using the values from your private
+`ZYVEN-signing-key.txt` file. Keep that file safe and never upload it to the
+repository: anyone with it could sign apps as ZYVEN.
+
+Without these secrets the build still works, but each APK gets a one-time key,
+so you must uninstall the old app before installing a new one.
+
 ## Limitations
 
-- **Debug build:** `ZYVEN-debug.apk` is for installing yourself. Google Play
-  needs a release build signed with your own private key.
-- **Updates need a reinstall:** each GitHub build signs the APK with a new
-  temporary key, so Android won’t install a new build over an old one.
-  Uninstall the old ZYVEN, then install the new APK and sign in.
+- **Not on Google Play yet:** the APK installs directly on Android. Publishing
+  on the Play Store also needs an `.aab` bundle and a Play Console account.
 - **Push notifications** (alerts while the app is closed) need Firebase Cloud
   Messaging and a server function. Not set up yet.
 - **Email sending** on Supabase’s free built-in service is limited to a few
@@ -302,7 +312,7 @@ jobs → Re-run all jobs** to try again.
 | `scripts/configure-android.mjs` | App name, ID, permissions, black bars, icons, splash |
 | `scripts/make-icons.py` | Redraws icons from the logo |
 | `tests/` | Database rule tests and two-account end-to-end tests |
-| `.github/workflows/build-android.yml` | Builds the APK and publishes the download link |
+| `.github/workflows/build-android.yml` | Builds the signed release APK and publishes the download link |
 | `.github/workflows/test-backend.yml` | Runs the tests on a temporary Supabase server |
 | `zyven.config.json` | The server’s public address and anon key (safe to publish) |
 | `.env.example` | Placeholder values for building on your own computer |
