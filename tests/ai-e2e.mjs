@@ -274,7 +274,7 @@ async function uiTests(users) {
     await sleep(400);
     await page.click('#ai [data-action="ai-tools"]');
     await page.click('.overlay [data-action="ai-checklist"]');
-    await page.waitForSelector('.overlay [data-action="ck-set"]', { timeout: 8000 });
+    await page.waitForSelector('.overlay [data-action="ck-set"]', { state: 'attached', timeout: 8000 });
     ok('a listed developer gets Developer testing', /Developer testing/.test(await page.textContent('.overlay h3')));
     ok('nothing starts as passed', /0\s*Passed/.test(await page.textContent('.ck-sum')));
     await page.click('.overlay .ck-item >> nth=0');
