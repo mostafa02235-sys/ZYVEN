@@ -125,10 +125,10 @@ jobs:
 
     steps:
       - name: Check out the repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 22
 
@@ -154,14 +154,32 @@ jobs:
         run: npx cap sync android
 
       - name: Set up Java 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: 21
           cache: gradle
 
       - name: Set up the Android SDK
-        uses: android-actions/setup-android@v3
+        run: |
+          # GitHub's Ubuntu machines come with the Android SDK; use it if present.
+          SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          SDKM=$(ls "$SDK"/cmdline-tools/latest/bin/sdkmanager "$SDK"/cmdline-tools/*/bin/sdkmanager 2>/dev/null | head -n 1)
+          if [ -z "$SDKM" ]; then
+            echo "Android SDK not found; installing it."
+            SDK="$HOME/android-sdk"
+            mkdir -p "$SDK/cmdline-tools"
+            curl -sSfL -o /tmp/cmdtools.zip https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+            unzip -q /tmp/cmdtools.zip -d "$SDK/cmdline-tools"
+            mv "$SDK/cmdline-tools/cmdline-tools" "$SDK/cmdline-tools/latest"
+            SDKM="$SDK/cmdline-tools/latest/bin/sdkmanager"
+          fi
+          echo "Android SDK: $SDK"
+          echo "ANDROID_HOME=$SDK" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$SDK" >> "$GITHUB_ENV"
+          yes | "$SDKM" --sdk_root="$SDK" --licenses > /dev/null || true
+          "$SDKM" --sdk_root="$SDK" "platform-tools" "platforms;android-35" "build-tools;35.0.0" > /dev/null
+          echo "sdk.dir=$SDK" > android/local.properties
 
       - name: Build the debug APK
         working-directory: android
@@ -187,7 +205,7 @@ jobs:
           echo "### ZYVEN-debug.apk built ($(du -h ZYVEN-debug.apk | cut -f1))" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload ZYVEN-debug.apk
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ZYVEN-debug-apk
           path: ZYVEN-debug.apk
@@ -196,7 +214,7 @@ jobs:
 
       - name: Upload the dependency lockfile
         if: hashFiles('package-lock.json') != ''
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: package-lock
           path: package-lock.json
