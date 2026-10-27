@@ -1,0 +1,11 @@
+{
+  "appId": "com.zyven.messaging",
+  "appName": "ZYVEN",
+  "webDir": "www",
+  "android": {
+    "backgroundColor": "#000000",
+    "allowMixedContent": false,
+    "webContentsDebuggingEnabled": false,
+    "adjustMarginsForEdgeToEdge": "auto"
+  }
+}

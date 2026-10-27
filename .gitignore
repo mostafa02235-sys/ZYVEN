@@ -1,0 +1,25 @@
+# Dependencies and generated web build
+node_modules/
+www/
+
+# Android build output and machine-specific files
+android/.gradle/
+android/build/
+android/app/build/
+android/capacitor-cordova-android-plugins/build/
+android/local.properties
+android/app/src/main/assets/public/
+*.apk
+*.aab
+
+# Signing keys and secrets: never commit these
+*.keystore
+*.jks
+.env
+.env.*
+
+# Editors and OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
