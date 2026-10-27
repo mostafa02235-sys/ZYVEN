@@ -166,8 +166,8 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: |
-          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
-            echo "::warning title=Server not connected::The SUPABASE_URL and SUPABASE_ANON_KEY secrets are not set. The APK will open on a 'Server not connected' screen. See README → Connect your server."
+          if { [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; } && [ ! -f zyven.config.json ]; then
+            echo "::warning title=Server not connected::No server address found (secrets or zyven.config.json). The APK will open on a 'Server not connected' screen. See README → Connect your server."
           fi
           npm run build
 
@@ -179,7 +179,9 @@ jobs:
             npx cap add android
           fi
 
-      - name: Apply ZYVEN settings (name, app ID, permissions, icons, splash)
+      - name: Apply ZYVEN settings (name, app ID, version, permissions, icons, splash)
+        env:
+          ZYVEN_VERSION_CODE: ${{ github.run_number }}
         run: npm run android:configure
 
       - name: Copy the web app into the Android project
@@ -213,28 +215,51 @@ jobs:
           "$SDKM" --sdk_root="$SDK" "platform-tools" "platforms;android-35" "build-tools;35.0.0" > /dev/null
           echo "sdk.dir=$SDK" > android/local.properties
 
-      - name: Build the debug APK
+      - name: Prepare the signing key
+        env:
+          KEYSTORE_B64: ${{ secrets.ZYVEN_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ZYVEN_KEYSTORE_PASSWORD }}
+        run: |
+          KS="$RUNNER_TEMP/zyven-release.jks"
+          if [ -n "$KEYSTORE_B64" ] && [ -n "$KEYSTORE_PASSWORD" ]; then
+            echo "$KEYSTORE_B64" | base64 -d > "$KS"
+            PW="$KEYSTORE_PASSWORD"
+            echo "Using your permanent ZYVEN signing key."
+          else
+            PW=$(openssl rand -hex 24)
+            keytool -genkeypair -keystore "$KS" -storetype PKCS12 -storepass "$PW" -keypass "$PW" -alias zyven \
+              -keyalg RSA -keysize 4096 -validity 10000 -dname "CN=ZYVEN" > /dev/null
+            echo "::warning title=Temporary signing key::The ZYVEN_KEYSTORE_BASE64 / ZYVEN_KEYSTORE_PASSWORD secrets are not set, so this APK is signed with a one-time key. It installs fine, but the next build can't update it in place (uninstall first). See README → Permanent signing key."
+          fi
+          echo "::add-mask::$PW"
+          echo "ZYVEN_KEYSTORE=$KS" >> "$GITHUB_ENV"
+          echo "ZYVEN_KEYSTORE_PASSWORD=$PW" >> "$GITHUB_ENV"
+          echo "ZYVEN_KEY_ALIAS=zyven" >> "$GITHUB_ENV"
+
+      - name: Build the release APK
         working-directory: android
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon --stacktrace
+          ./gradlew assembleRelease --no-daemon --stacktrace
 
       - name: Check the APK and name it ZYVEN.apk
         run: |
-          APK=android/app/build/outputs/apk/debug/app-debug.apk
+          APK=android/app/build/outputs/apk/release/app-release.apk
           if [ ! -f "$APK" ]; then
-            echo "::error::The APK was not created at $APK"
+            echo "::error::The signed release APK was not created at $APK"
+            ls -R android/app/build/outputs/apk || true
             exit 1
           fi
           cp "$APK" ZYVEN.apk
-          AAPT=$(ls "$ANDROID_HOME"/build-tools/*/aapt 2>/dev/null | sort -V | tail -n 1)
-          if [ -n "$AAPT" ]; then
-            "$AAPT" dump badging ZYVEN.apk | tee badging.txt | head -n 5
-            grep -q "package: name='com.zyven.messaging'" badging.txt || { echo "::error::Wrong app ID in the APK"; exit 1; }
-            grep -q "application-label:'ZYVEN'" badging.txt || { echo "::error::App name in the APK is not ZYVEN"; exit 1; }
-          fi
+          BT=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -n 1)
+          "$BT/apksigner" verify --print-certs ZYVEN.apk | head -n 3
+          "$BT/aapt" dump badging ZYVEN.apk | tee badging.txt | head -n 3
+          grep -q "package: name='com.zyven.messaging'" badging.txt || { echo "::error::Wrong app ID in the APK"; exit 1; }
+          grep -q "application-label:'ZYVEN'" badging.txt || { echo "::error::App name in the APK is not ZYVEN"; exit 1; }
+          if grep -q "application-debuggable" badging.txt; then echo "::error::The APK is still a debug build"; exit 1; fi
+          rm -f "$ZYVEN_KEYSTORE"
           ls -lh ZYVEN.apk
-          echo "### ZYVEN.apk built ($(du -h ZYVEN.apk | cut -f1))" >> "$GITHUB_STEP_SUMMARY"
+          echo "### ZYVEN.apk (release, version 1.0.${{ github.run_number }}) built ($(du -h ZYVEN.apk | cut -f1))" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload ZYVEN.apk
         uses: actions/upload-artifact@v5
@@ -242,14 +267,6 @@ jobs:
           name: ZYVEN-apk
           path: ZYVEN.apk
           if-no-files-found: error
-          retention-days: 30
-
-      - name: Upload the dependency lockfile
-        if: hashFiles('package-lock.json') != ''
-        uses: actions/upload-artifact@v5
-        with:
-          name: package-lock
-          path: package-lock.json
           retention-days: 30
 
       - name: Publish ZYVEN.apk as a direct download link
@@ -261,7 +278,7 @@ jobs:
           gh release delete latest --yes --cleanup-tag || true
           gh release create latest ZYVEN.apk \
             --target "${{ github.sha }}" \
-            --title "ZYVEN (latest build)" \
+            --title "ZYVEN 1.0.${{ github.run_number }}" \
             --notes "Tap ZYVEN.apk below to download, then open it on your Android phone to install." \
             --latest
           echo "Direct download: https://github.com/${{ github.repository }}/releases/latest/download/ZYVEN.apk" >> "$GITHUB_STEP_SUMMARY"
