@@ -292,7 +292,7 @@ reset role;
 select pg_temp.act('bbbbbbbb-0000-0000-0000-000000000002'); set role authenticated;
 select _ok('wallpaper: other people cannot see your wallpaper', (select count(*) from chat_wallpapers) = 0);
 select _ok('wallpaper: other people cannot see your wallpaper files', (select count(*) from storage.objects where bucket_id = 'wallpapers') = 0);
-delete from chat_wallpapers; delete from storage.objects where bucket_id = 'wallpapers';
+delete from chat_wallpapers;
 reset role;
 select _ok('wallpaper: other people cannot delete it', (select count(*) from chat_wallpapers) = 1 and (select count(*) from storage.objects where bucket_id = 'wallpapers') = 1);
 select pg_temp.act('aaaaaaaa-0000-0000-0000-000000000001'); set role authenticated;
