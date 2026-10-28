@@ -4965,6 +4965,7 @@ function cloudError(e, fallback = 'Something went wrong. Try again.') {
   const msg = String(e?.message || e?.error_description || e?.error || e || '');
   const code = String(e?.code || '');
   if ((typeof navigator !== 'undefined' && navigator.onLine === false) || /Failed to fetch|NetworkError|Load failed|network request failed|fetch failed/i.test(msg)) return 'Can’t reach the ZYVEN server. Check your internet connection.';
+  if (/chat_wallpapers|column .*frame|frame.*column|Bucket not found/i.test(msg)) return 'Wallpapers and frames need a server update first.';
   if (/ADMINS_ONLY/.test(msg)) return 'Only group admins can do that.';
   if (/CANNOT_CHAT_WITH_SELF/.test(msg)) return 'You can’t start a chat with yourself.';
   if (/USER_NOT_FOUND/.test(msg)) return 'That account no longer exists.';
@@ -5261,7 +5262,12 @@ const Cloud = {
   },
 
   async loadProfile() {
-    const { data, error } = await sb.from('profiles').select(PROFILE_OWN_COLS).eq('id', this.me).maybeSingle();
+    let { data, error } = await sb.from('profiles').select(PROFILE_OWN_COLS).eq('id', this.me).maybeSingle();
+    // A server without the customization update has no "frame" column yet: carry on without frames.
+    if (error && /frame/.test(error.message || '') && (error.code === '42703' || /column/i.test(error.message || ''))) {
+      Cloud.noCustom = true;
+      ({ data, error } = await sb.from('profiles').select(PROFILE_OWN_COLS.replace(',frame', '')).eq('id', this.me).maybeSingle());
+    }
     if (error) throw error;
     if (!data) throw new Error('Your profile is missing on the server.');
     await Media.sign([data.avatar_path], 'avatars');
@@ -7081,7 +7087,7 @@ const Walls = {
   async load() {
     if (!sb || !Cloud.me) return;
     const { data, error } = await sb.from('chat_wallpapers').select('*');
-    if (error) throw error;
+    if (error) { if (/chat_wallpapers|schema cache|42P01|PGRST205/i.test(`${error.message} ${error.code}`)) Cloud.noCustom = true; throw error; }
     const map = {};
     (data || []).forEach(r => { const w = cleanWall(r); if (w) map[r.conversation_id] = w; });
     state.walls = map; save();

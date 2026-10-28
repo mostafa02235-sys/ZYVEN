@@ -419,6 +419,19 @@ async function uiTests() {
     await sleep(1500);
     ok('removing the frame removes it for others too', !(await py.$('#chats-list .row:has(.row-name:text-is("Xena Custom")) .av.framed')));
     ok('the original photo is unchanged by frames', await py.$eval('#chats-list .row:has(.row-name:text-is("Xena Custom")) .av', e => /url\("?https?:/.test(e.style.background)).catch(() => false));
+    // A server that hasn't had the customization update yet: chats must still load.
+    {
+      const ctx = await browser.newContext({ viewport: { width: 393, height: 852 } });
+      const po = await ctx.newPage();
+      po.on('pageerror', e => errors.push(`old-server: ${e.message}`));
+      await po.route(/\/rest\/v1\/profiles\?select=[^&]*frame/, r => r.fulfill({ status: 400, contentType: 'application/json', body: JSON.stringify({ code: '42703', message: 'column profiles.frame does not exist', details: null, hint: null }) }));
+      await po.route(/\/rest\/v1\/chat_wallpapers/, r => r.fulfill({ status: 404, contentType: 'application/json', body: JSON.stringify({ code: 'PGRST205', message: "Could not find the table 'public.chat_wallpapers' in the schema cache" }) }));
+      await po.goto(APP);
+      await signin(po, X);
+      const rows = await po.waitForSelector('#chats-list .row', { timeout: 20000 }).catch(() => null);
+      ok('on a server without the update, chats still load', !!rows);
+      await ctx.close();
+    }
   } catch (e) {
     ok('customization app test run finished without crashing', false, e.message);
   }
