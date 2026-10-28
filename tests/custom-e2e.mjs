@@ -148,7 +148,8 @@ async function uiTests() {
   };
   const openChatWith = async (page, text) => {
     await page.click('[data-action="tab"][data-tab="chats"]').catch(() => {});
-    await page.locator('#chats-list .row', { hasText: text }).first().click();
+    const exact = page.locator(`#chats-list .row:has(.row-name:text-is("${text}"))`);
+    await (await exact.count() ? exact : page.locator('#chats-list .row', { hasText: text })).first().click();
     await page.waitForSelector('#convo.open', { timeout: 10000 });
     await sleep(600);
   };
@@ -399,9 +400,9 @@ async function uiTests() {
     // The other person sees the new photo and frame
     await restart(py, Y);
     await py.click('[data-action="tab"][data-tab="chats"]');
-    await py.waitForSelector('#chats-list .row:has-text("Xena Custom") .av.framed', { timeout: 20000 }).catch(() => null);
-    ok('the other person sees the frame in their chat list', !!(await py.$('#chats-list .row:has-text("Xena Custom") .av.framed')));
-    ok('…around the new profile picture', await py.$eval('#chats-list .row:has-text("Xena Custom") .av', e => /url\("?https?:/.test(e.style.background)).catch(() => false));
+    await py.waitForSelector('#chats-list .row:has(.row-name:text-is("Xena Custom")) .av.framed', { timeout: 20000 }).catch(() => null);
+    ok('the other person sees the frame in their chat list', !!(await py.$('#chats-list .row:has(.row-name:text-is("Xena Custom")) .av.framed')));
+    ok('…around the new profile picture', await py.$eval('#chats-list .row:has(.row-name:text-is("Xena Custom")) .av', e => /url\("?https?:/.test(e.style.background)).catch(() => false));
     await shot(py, '13-y-sees-frame');
     await openChatWith(py, 'Xena Custom');
     ok('the frame shows in the chat header too', !!(await py.$('#convo-who .av.framed')));
@@ -416,8 +417,8 @@ async function uiTests() {
     await restart(py, Y);
     await py.click('[data-action="tab"][data-tab="chats"]');
     await sleep(1500);
-    ok('removing the frame removes it for others too', !(await py.$('#chats-list .row:has-text("Xena Custom") .av.framed')));
-    ok('the original photo is unchanged by frames', await py.$eval('#chats-list .row:has-text("Xena Custom") .av', e => /url\("?https?:/.test(e.style.background)).catch(() => false));
+    ok('removing the frame removes it for others too', !(await py.$('#chats-list .row:has(.row-name:text-is("Xena Custom")) .av.framed')));
+    ok('the original photo is unchanged by frames', await py.$eval('#chats-list .row:has(.row-name:text-is("Xena Custom")) .av', e => /url\("?https?:/.test(e.style.background)).catch(() => false));
   } catch (e) {
     ok('customization app test run finished without crashing', false, e.message);
   }
