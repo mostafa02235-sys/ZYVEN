@@ -48,7 +48,7 @@ jobs:
           supabase status -o env > supabase.env
           sed 's/=.*/=…/' supabase.env
 
-      - name: Database rules (105 privacy and permission checks)
+      - name: Database rules (78 privacy and permission checks)
         run: |
           set -a; . ./supabase.env; set +a
           set +e
@@ -88,48 +88,12 @@ jobs:
             exit 1
           fi
 
-      - name: ZYVEN AI helper unit tests
-        run: node --experimental-strip-types --test tests/ai-helpers.test.mjs
-
-      - name: Start the ZYVEN AI function with a stand-in AI
-        run: |
-          set -a; . ./supabase.env; set +a
-          # tests/mock-ai.mjs pretends to be the Claude API so tests cost nothing.
-          nohup node tests/mock-ai.mjs > mock-ai.log 2>&1 &
-          printf 'ANTHROPIC_API_KEY=test-key-zyven-0123456789abcdef\nAI_API_URL=http://host.docker.internal:8787/v1/messages\n' > /tmp/zyven-ai.env
-          nohup supabase functions serve zyven-ai --env-file /tmp/zyven-ai.env > functions.log 2>&1 &
-          for i in $(seq 1 90); do
-            code=$(curl -s -o /dev/null -w '%{http_code}' -X OPTIONS "$API_URL/functions/v1/zyven-ai" || true)
-            [ "$code" = "200" ] && echo "ZYVEN AI function is up" && exit 0
-            sleep 2
-          done
-          cat functions.log; echo "::error::The zyven-ai function did not start"; exit 1
-
-      - name: ZYVEN AI end-to-end tests (server function and app screen)
-        run: |
-          set -a; . ./supabase.env; set +a
-          curl -s -o /dev/null http://127.0.0.1:8080/index.html || { npx --yes http-server www -p 8080 -a 127.0.0.1 -s & sleep 3; }
-          set +e
-          SUPABASE_URL="$API_URL" SUPABASE_ANON_KEY="${ANON_KEY:-$PUBLISHABLE_KEY}" SERVICE_ROLE_KEY="${SERVICE_ROLE_KEY:-$SECRET_KEY}" \
-          APP_URL="http://127.0.0.1:8080/index.html" MOCK_URL="http://127.0.0.1:8787" \
-          node tests/ai-e2e.mjs > ai-output.txt 2>&1
-          code=$?
-          set -e
-          cat ai-output.txt
-          echo "::notice title=ZYVEN AI::$(tail -1 ai-output.txt)"
-          if [ $code -ne 0 ]; then
-            echo "--- function log ---"; tail -60 functions.log
-            msg=$( (grep -E '^FAIL|Error|error' ai-output.txt; tail -5 ai-output.txt) | head -40 | sed 's/%/%25/g' | sed ':a;N;$!ba;s/\n/%0A/g')
-            echo "::error title=ZYVEN AI tests failed::${msg}"
-            exit 1
-          fi
-
       - name: Publish the test report
         if: always()
         run: |
           mkdir -p tests/results
-          cp db-results.txt e2e-output.txt ai-output.txt functions.log mock-ai.log tests/results/ 2>/dev/null || true
-          { echo "## Database rules"; echo '```'; tail -120 db-results.txt 2>/dev/null; echo '```'; cat tests/results/e2e.md 2>/dev/null; cat tests/results/ai-e2e.md 2>/dev/null; } >> "$GITHUB_STEP_SUMMARY" || true
+          cp db-results.txt e2e-output.txt tests/results/ 2>/dev/null || true
+          { echo "## Database rules"; echo '```'; tail -90 db-results.txt 2>/dev/null; echo '```'; cat tests/results/e2e.md 2>/dev/null; } >> "$GITHUB_STEP_SUMMARY" || true
           cd tests/results
           echo "Run ${{ github.run_id }} for ${{ github.sha }}" > RUN.txt
           git init -q

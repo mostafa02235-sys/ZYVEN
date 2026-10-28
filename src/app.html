@@ -1087,134 +1087,6 @@ input[type=range]:disabled{opacity:.4}
 .stk-prev h3{margin:12px 0 0;font-family:var(--f-display);font-weight:600;font-size:22px;letter-spacing:-.02em}
 .stk-prev .meta{font-size:12.5px;color:var(--muted)}
 
-/* ---------- ZYVEN AI ---------- */
-#ai{z-index:32}
-.ai-head{gap:4px}
-.ai-title{flex:1;display:flex;align-items:center;gap:9px;min-width:0}
-.ai-title h2{flex:none}
-.ai-mark{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;color:var(--tint);background:color-mix(in srgb,var(--tint) 16%,transparent)}
-.ai-mark svg{width:17px;height:17px}
-[dir=rtl] .ai-back svg{transform:scaleX(-1)}
-.ai-modes{display:flex;gap:6px;padding:10px 12px;border-bottom:1px solid var(--line)}
-.ai-modes button{height:34px;padding:0 14px;border-radius:999px;border:1px solid var(--line);color:var(--muted);font-size:13.5px;font-weight:500;display:inline-flex;align-items:center;gap:7px;transition:all .2s var(--ease)}
-.ai-modes button svg{width:15px;height:15px}
-.ai-modes button.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
-.ai-modes .ai-tool{margin-inline-start:auto;width:34px;padding:0;justify-content:center}
-.ai-scroll{flex:1;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}
-.ai-msgs{display:flex;flex-direction:column;gap:14px;padding:16px 12px 20px;min-height:100%}
-.ai-row{display:flex;gap:8px;max-width:100%;animation:pop .32s var(--ease) both}
-.ai-row.me{flex-direction:column;align-items:flex-end}
-.ai-row.bot{align-items:flex-start}
-.ai-av{width:28px;height:28px;border-radius:10px;flex:none;display:grid;place-items:center;color:var(--tint);background:color-mix(in srgb,var(--tint) 14%,transparent);margin-top:2px}
-.ai-av svg{width:15px;height:15px}
-.ai-col{min-width:0;flex:1;display:flex;flex-direction:column;gap:8px}
-.ai-b{font-size:15px;line-height:1.5;word-wrap:break-word;overflow-wrap:anywhere}
-.ai-b.me{max-width:84%;padding:9px 14px;border-radius:20px 20px 6px 20px;background:var(--accent);color:var(--accent-ink);white-space:normal}
-[dir=rtl] .ai-b.me{border-radius:20px 20px 20px 6px}
-.ai-b.bot{padding:2px 2px 0;color:var(--fg)}
-.ai-b.bot.typing-b{padding:12px 14px;background:var(--bubble-in);border-radius:18px;align-self:flex-start;flex:none}
-.ai-b p{margin:0 0 9px}
-.ai-b p:last-child,.ai-b ul:last-child,.ai-b ol:last-child{margin-bottom:0}
-.ai-b h4{margin:12px 0 6px;font-family:var(--f-display);font-weight:600;font-size:16px;letter-spacing:-.01em}
-.ai-b h4:first-child{margin-top:0}
-.ai-b ul,.ai-b ol{margin:0 0 9px;padding-inline-start:22px;display:flex;flex-direction:column;gap:5px}
-.ai-b ol li::marker{color:var(--muted);font-family:var(--f-mono);font-size:13px}
-.ai-b ul.ck{list-style:none;padding-inline-start:2px}
-.ai-b ul.ck li{display:flex;gap:9px;align-items:flex-start}
-.ai-b ul.ck .box{width:17px;height:17px;border-radius:5px;border:1.5px solid var(--muted);flex:none;margin-top:3px}
-.ai-b ul.ck li.on .box{background:var(--online);border-color:var(--online)}
-.ai-b code{font-family:var(--f-mono);font-size:13px;background:var(--surface-2);padding:1px 6px;border-radius:6px}
-.ai-b pre{margin:0 0 9px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;overflow-x:auto;direction:ltr;text-align:left}
-.ai-b pre code{background:none;padding:0;font-size:12.5px;white-space:pre}
-.ai-b b{font-weight:600}
-.ai-acts{display:flex;flex-wrap:wrap;gap:8px}
-.ai-act{height:36px;padding:0 13px;border-radius:12px;background:color-mix(in srgb,var(--tint) 14%,transparent);color:var(--tint);font-size:13.5px;font-weight:600;display:inline-flex;align-items:center;gap:7px}
-.ai-act svg{width:16px;height:16px}
-.ai-act:active{transform:scale(.97)}
-.ai-tools{display:flex;gap:4px;margin-inline-start:-6px}
-.ai-tl{height:30px;padding:0 9px;border-radius:9px;color:var(--faint);font-size:12.5px;display:inline-flex;align-items:center;gap:6px}
-.ai-tl svg{width:14px;height:14px}
-.ai-tl:active,.ai-tl:hover{color:var(--fg);background:var(--surface-2)}
-.ai-meta{font-size:11.5px;color:var(--faint);display:inline-flex;align-items:center;gap:5px}
-.ai-meta svg{width:13px;height:13px}
-.ai-meta.err{color:var(--danger)}
-.ai-err{display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:12px 14px;border-radius:16px;background:color-mix(in srgb,var(--danger) 10%,transparent);color:var(--fg);font-size:14px;line-height:1.45;animation:pop .3s var(--ease) both}
-.ai-err > svg{width:18px;height:18px;color:var(--danger);flex:none}
-.ai-err span{flex:1;min-width:160px}
-.ai-note{display:flex;gap:9px;align-items:flex-start;padding:11px 13px;border-radius:14px;background:var(--surface-2);color:var(--muted);font-size:13px;line-height:1.45}
-.ai-note svg{width:16px;height:16px;flex:none;margin-top:1px;color:var(--tint)}
-.ai-note.warn svg{color:#FFC15E}
-.ai-mode-tag{align-self:center;display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;letter-spacing:.04em;color:#4ADE9F;background:color-mix(in srgb,#4ADE9F 12%,transparent);padding:5px 11px;border-radius:999px}
-.ai-mode-tag svg{width:13px;height:13px}
-.ai-hello{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:28px 10px 6px;margin:auto 0}
-.ai-orb{width:76px;height:76px;border-radius:26px;display:grid;place-items:center;color:var(--tint);background:radial-gradient(circle at 30% 25%,color-mix(in srgb,var(--tint) 36%,transparent),color-mix(in srgb,var(--tint) 8%,transparent) 70%);box-shadow:0 0 0 10px color-mix(in srgb,var(--tint) 5%,transparent);margin-bottom:10px;animation:aiGlow 4s ease-in-out infinite}
-.ai-orb svg{width:32px;height:32px}
-.ai-orb.sm{width:56px;height:56px;border-radius:19px;margin:0 auto 6px;animation:none}
-.ai-orb.sm svg{width:24px;height:24px}
-@keyframes aiGlow{0%,100%{box-shadow:0 0 0 10px color-mix(in srgb,var(--tint) 5%,transparent)}50%{box-shadow:0 0 0 16px color-mix(in srgb,var(--tint) 3%,transparent)}}
-.ai-hello h3{margin:0;font-family:var(--f-display);font-weight:600;font-size:22px;letter-spacing:-.02em}
-.ai-hello > p{margin:0;color:var(--muted);font-size:14px;line-height:1.5;max-width:34ch}
-.ai-sugs{display:flex;flex-direction:column;gap:8px;width:100%;margin-top:14px}
-.ai-sug{text-align:start;padding:12px 14px;border-radius:15px;border:1px solid var(--line);font-size:14px;color:var(--fg);transition:background .2s}
-.ai-sug:active,.ai-sug:hover{background:var(--surface-2)}
-.ai-shortcuts{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:6px}
-.ai-disc{font-size:11.5px!important;color:var(--faint)!important;margin-top:10px!important}
-.ai-dock{border-top:1px solid var(--line);background:var(--bg)}
-.ai-dock .composer{border-top:0;padding-top:4px}
-.ai-diag-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 14px 2px}
-.ai-diag-bar .linkish{margin:0;font-size:12.5px}
-.ai-diag-toggle{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);cursor:pointer;min-width:0}
-.ai-diag-toggle input{position:absolute;opacity:0;pointer-events:none}
-.ai-diag-toggle > svg{width:14px;height:14px;flex:none}
-.ai-diag-toggle span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ai-diag-toggle.on{color:var(--tint)}
-.sw-mini{width:28px;height:17px;border-radius:999px;background:var(--surface-3);position:relative;flex:none;transition:background .2s}
-.sw-mini::after{content:'';position:absolute;top:2px;inset-inline-start:2px;width:13px;height:13px;border-radius:50%;background:var(--fg);transition:transform .2s var(--ease)}
-.ai-diag-toggle.on .sw-mini{background:var(--tint)}
-.ai-diag-toggle.on .sw-mini::after{transform:translateX(11px);background:var(--tint-ink,#000)}
-[dir=rtl] .ai-diag-toggle.on .sw-mini::after{transform:translateX(-11px)}
-.ai-diag-toggle input:focus-visible + .sw-mini{outline:2px solid var(--tint);outline-offset:2px}
-.ai-composer textarea{padding:9px 0}
-.ai-composer .field{padding:4px 14px}
-.ai-composer .send:disabled{opacity:.45}
-.ai-consent{text-align:center}
-.ai-consent p{text-align:start}
-.dg{display:flex;flex-direction:column;background:var(--surface-2);border-radius:18px;overflow:hidden;margin-top:12px}
-.dg-row{display:flex;justify-content:space-between;gap:14px;padding:11px 14px;font-size:13.5px;border-bottom:1px solid var(--line)}
-.dg-row:last-child{border-bottom:0}
-.dg-row span{color:var(--muted)}
-.dg-row b{font-weight:500;text-align:end;font-family:var(--f-mono);font-size:12.5px;word-break:break-word;max-width:62%}
-.dg-row b.bad{color:var(--danger)}
-.chk{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--muted);line-height:1.45}
-.chk input{width:18px;height:18px;margin:1px 0 0;accent-color:var(--tint);flex:none}
-.chk .linkish{margin:0 0 0 4px;font-size:13px}
-.ck-sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px}
-.ck-sum span{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 4px;border-radius:14px;background:var(--surface-2);font-size:12px;color:var(--muted)}
-.ck-sum b{font-family:var(--f-display);font-size:22px;font-weight:600;color:var(--fg)}
-.ck-sum .p b{color:var(--online)}.ck-sum .f b{color:var(--danger)}
-.ck-list{display:flex;flex-direction:column;background:var(--surface-2);border-radius:18px;overflow:hidden}
-.ck-item{border-bottom:1px solid var(--line)}
-.ck-item:last-child{border-bottom:0}
-.ck-item summary{list-style:none;display:flex;align-items:center;gap:10px;padding:13px 14px;cursor:pointer;font-size:14.5px;font-weight:500}
-.ck-item summary::-webkit-details-marker{display:none}
-.ck-item summary .t{flex:1;min-width:0}
-.ck-item summary > svg{width:16px;height:16px;color:var(--faint);transition:transform .2s var(--ease)}
-.ck-item[open] summary > svg{transform:rotate(90deg)}
-.ck-dot{width:10px;height:10px;border-radius:50%;flex:none;border:1.5px solid var(--faint)}
-.st-pass .ck-dot{background:var(--online);border-color:var(--online)}
-.st-fail .ck-dot{background:var(--danger);border-color:var(--danger)}
-.ck-item ol{margin:0 14px 8px;padding-inline-start:20px;font-size:13.5px;line-height:1.5;color:var(--fg);display:flex;flex-direction:column;gap:4px}
-.ck-exp{margin:0 14px 12px;font-size:13px;line-height:1.5;color:var(--muted)}
-.ck-exp b{color:var(--fg);font-weight:600}
-.ck-item > .btn{margin:0 14px 14px}
-.ck-seg{margin:0 14px 10px!important;background:var(--surface)}
-.ck-seg button.on.r-pass{background:color-mix(in srgb,var(--online) 22%,transparent);color:var(--online)}
-.ck-seg button.on.r-fail{background:color-mix(in srgb,var(--danger) 22%,transparent);color:var(--danger)}
-.ck-note{display:block;width:calc(100% - 28px);margin:0 14px 8px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:9px 12px;font-size:13.5px;resize:vertical;outline:0;color:var(--fg)}
-.ck-row{display:flex;gap:8px;margin:0 14px 14px;flex-wrap:wrap}
-.flash-sec{animation:secFlash 1.6s var(--ease)}
-@keyframes secFlash{0%,40%{box-shadow:0 0 0 2px color-mix(in srgb,var(--tint) 70%,transparent);border-radius:22px}100%{box-shadow:0 0 0 2px transparent}}
-
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
@@ -1233,7 +1105,6 @@ input[type=range]:disabled{opacity:.4}
   <section class="screen" id="creator" aria-label="Sticker creator" aria-hidden="true"></section>
   <section class="screen" id="saved" aria-label="Saved messages" aria-hidden="true"></section>
   <section class="screen" id="appearance" aria-label="Chat design" aria-hidden="true"></section>
-  <section class="screen" id="ai" aria-label="ZYVEN AI" aria-hidden="true"></section>
   <div class="overlay" id="overlay" hidden></div>
   <div class="viewer" id="viewer" hidden role="dialog" aria-modal="true" aria-label="Media viewer"></div>
   <div class="toasts" id="toasts" aria-live="polite"></div>
@@ -1736,7 +1607,6 @@ function renderShell() {
     <header class="tab-head chats-head">
       <div class="head-row">
         <div class="brand">${LOGO(32)}<span class="wordmark">${esc(CONFIG.appName)}</span></div>
-        <button class="icon-btn ai-entry" data-action="open-ai" aria-label="ZYVEN AI assistant">${I('sparkles')}</button>
         <button class="icon-btn" data-action="open-saved" aria-label="Saved messages">${I('bookmark')}</button>
         <button class="icon-btn accent" data-action="new-chat" aria-label="Start a new conversation">${I('pen')}</button>
       </div>
@@ -1968,16 +1838,6 @@ function renderProfile() {
       </div>
 
       <div class="group">
-        <span class="group-label">ZYVEN AI</span>
-        <div class="card">
-          ${linkRow('open-ai', 'sparkles', 'Ask ZYVEN AI', 'Help with any feature, or just ask')}
-          ${linkRow('ai-testing', 'flask', 'App Testing Assistant', 'Step-by-step tests and bug reports')}
-          ${linkRow('ai-checklist', 'checklist', ui.ai?.isDev ? 'Developer testing' : 'Testing checklist', ui.ai?.isDev ? 'Record passed, failed, and not tested' : 'How to test every feature')}
-          ${linkRow('ai-bug', 'bug', 'Report a bug', 'Sent to the ZYVEN server')}
-        </div>
-      </div>
-
-      <div class="group" id="pf-privacy">
         <span class="group-label">Privacy</span>
         <div class="card">
           ${valueRow('onlineStatus')}
@@ -1991,7 +1851,7 @@ function renderProfile() {
         <p class="note">${I('info')}Online status, last seen, photo, and read receipts are saved to your account and enforced by the server. Typing indicators are controlled on this phone.</p>
       </div>
 
-      <div class="group" id="pf-notify">
+      <div class="group">
         <span class="group-label">Notifications</span>
         <div class="card">
           ${toggleRow('notify.messages', 'bell', 'Message alerts', 'Banner when a private message arrives')}
@@ -2023,7 +1883,7 @@ function renderProfile() {
         </div>
       </div>
 
-      <div class="group" id="pf-look">
+      <div class="group">
         <span class="group-label">Appearance</span>
         <div class="card" style="padding-top:14px">
           <div class="seg seg3" role="radiogroup" aria-label="Theme">
@@ -2044,9 +1904,8 @@ function renderProfile() {
       <div class="group">
         <div class="card">${linkRow('logout', 'logout', 'Log out', state.profile.email ? `Signed in as ${esc(state.profile.email)}` : 'Sign out of this phone', 'danger')}</div>
       </div>
-      <p class="foot">${esc(CONFIG.appName)} <code>${esc(CONFIG.version)}</code>${ui.ai?.isDev ? ' · developer tester' : ''}<br>${Cloud.connected ? 'Connected to the ZYVEN server' : Cloud.me ? 'Connecting to the ZYVEN server…' : 'Not signed in'}</p>
+      <p class="foot">${esc(CONFIG.appName)} <code>${esc(CONFIG.version)}</code><br>${Cloud.connected ? 'Connected to the ZYVEN server' : Cloud.me ? 'Connecting to the ZYVEN server…' : 'Not signed in'}</p>
     </div>`;
-  if (Cloud.me && ui.ai && ui.ai.devChecked !== Cloud.me) AI.checkDev();
 }
 
 /* ---------- Conversation ---------- */
@@ -3163,8 +3022,7 @@ function aboutSheet() {
         <li>Accounts with email and password, password reset</li><li>Finding real people by username or name</li>
         <li>Private and group chats between phones, live</li><li>Photos, videos, files, voice messages, stickers, locations</li>
         <li>Replies, edits, deletes, reactions, pins, forwarding</li><li>Delivery and read receipts, typing, online status</li>
-        <li>Group admins, blocking, reports, disappearing messages</li>
-        <li>ZYVEN AI: help, app testing guide, bug reports (needs an AI key on the server)</li></ul></div>
+        <li>Group admins, blocking, reports, disappearing messages</li></ul></div>
       <div class="sim"><h4><i></i>Not yet</h4><ul>
         <li>Voice and video calls</li><li>Notifications while the app is closed (push)</li>
         <li>End-to-end encryption: messages are protected by the server’s access rules, not encrypted on your phone</li>
@@ -4950,12 +4808,7 @@ const num = (v, lo, hi, d) => { const n = Number(v); return Number.isFinite(n) ?
 const str = (v, max) => typeof v === 'string' ? v.slice(0, max) : '';
 
 /* Friendly wording for server errors. */
-function cloudError(e, fallback) {
-  const text = cloudErrorText(e, fallback);
-  try { logAppError(text); } catch (x) { /* before the AI section loads */ }
-  return text;
-}
-function cloudErrorText(e, fallback = 'Something went wrong. Try again.') {
+function cloudError(e, fallback = 'Something went wrong. Try again.') {
   const msg = String(e?.message || e?.error_description || e?.error || e || '');
   const code = String(e?.code || '');
   if ((typeof navigator !== 'undefined' && navigator.onLine === false) || /Failed to fetch|NetworkError|Load failed|network request failed|fetch failed/i.test(msg)) return 'Can’t reach the ZYVEN server. Check your internet connection.';
@@ -5836,8 +5689,7 @@ const authForms = {
 
 async function signOut(erase) {
   const id = Cloud.me;
-  closeOverlay(); closeAI();
-  Object.assign(ui.ai, { convId: null, msgs: [], error: null, loading: false, convs: null, results: null, isDev: false, devChecked: null, diag: false });
+  closeOverlay();
   if (ui.openChatId) closeChat();
   Cloud.stop();
   try { await sb.auth.signOut({ scope: 'local' }); } catch (e) { /* signed out on this phone either way */ }
@@ -6552,698 +6404,6 @@ const forms = {
   },
 };
 
-/* =========================================================
-   7z. ZYVEN AI — assistant, App Testing Assistant, diagnostics,
-   bug reports, and Developer Testing Mode.
-   The AI runs on the server (supabase/functions/zyven-ai). This code
-   only sends what the user types here; private chats are never sent.
-   ========================================================= */
-Object.assign(ICONS, {
-  bug: '<path d="M8.5 8.5a3.5 3.5 0 0 1 7 0"/><rect x="7" y="8.5" width="10" height="11" rx="5"/><path d="M12 12v7.5M4 13h3m10 0h3M5 8.5l2.4 1.6M19 8.5l-2.4 1.6M5 19l2.5-1.8M19 19l-2.5-1.8"/>',
-  flask: '<path d="M9.5 3.5h5M10.5 3.5v5.2L5.2 18a1.6 1.6 0 0 0 1.4 2.5h10.8a1.6 1.6 0 0 0 1.4-2.5l-5.3-9.3V3.5"/><path d="M7.6 14h8.8"/>',
-  pulse: '<path d="M3.5 12h4l2.2-5.5 4.6 11 2.2-5.5h4"/>',
-  history: '<path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3L4.5 9"/><path d="M4.5 4.5V9H9"/><path d="M12 8v4.2l2.8 1.8"/>',
-  checklist: '<path d="m4 7 1.6 1.6L8.5 5.7M4 13l1.6 1.6 2.9-2.9M4 19l1.6 1.6 2.9-2.9"/><path d="M11.5 7h8.5M11.5 13h8.5M11.5 19h8.5"/>',
-});
-Object.assign(ICON_TINT, { bug: '#FF8E7F', flask: '#4ADE9F', pulse: '#5CB0FF', checklist: '#FFC15E' });
-
-const AIL = /^ar\b/i.test((navigator.languages && navigator.languages[0]) || navigator.language || '') ? 'ar' : 'en';
-const AI_TEXT = {
-  en: {
-    title: 'ZYVEN AI', assistant: 'Assistant', testing: 'Testing',
-    ph: 'Ask ZYVEN AI…', phTest: 'What should we test?',
-    hello: 'Hi, I’m ZYVEN AI', helloSub: 'Ask how anything in ZYVEN works, get help with a problem, or just chat.',
-    helloTest: 'App Testing Assistant', helloTestSub: 'I’ll give you step-by-step tests and help turn problems into clear bug reports. I can’t test the app myself: you run the steps, I guide you.',
-    diag: 'Share app diagnostics', diagOn: 'Diagnostics will be sent with this message', view: 'View',
-    retry: 'Retry', copy: 'Copy', copied: 'Copied', newChat: 'New conversation', history: 'History',
-    clearAll: 'Clear all ZYVEN AI history', noHistory: 'No saved conversations yet.',
-    privacyTitle: 'Before you start',
-    privacyBody: 'What you type here is sent to an AI service (Anthropic’s Claude) to write the answers, and saved to your account so you can come back to it. Only you can see it, and you can delete it any time. Your chats with other people are never sent. Don’t type passwords or reset codes.',
-    gotIt: 'Got it', notConfigured: 'ZYVEN AI isn’t switched on yet. The app owner needs to add an AI key on the server.',
-    offline: 'Can’t reach ZYVEN AI. Check your internet connection.', notSent: 'Not sent', you: 'You',
-    checklist: 'Testing checklist', bug: 'Report a bug', diagTitle: 'App diagnostics', modeTest: 'App Testing Assistant is on',
-    signIn: 'Sign in to use ZYVEN AI.', thinking: 'Thinking…', del: 'Delete', sharedDiag: 'Diagnostics shared',
-    disclaimer: 'ZYVEN AI can make mistakes. It can’t see your chats or change your settings.',
-  },
-  ar: {
-    title: 'ZYVEN AI', assistant: 'المساعد', testing: 'الاختبار',
-    ph: 'اسأل ZYVEN AI…', phTest: 'شو بدك نختبر؟',
-    hello: 'أهلًا، أنا ZYVEN AI', helloSub: 'اسألني كيف يشتغل أي شي في ZYVEN، أو خليني أساعدك تحل مشكلة، أو خلينا نسولف.',
-    helloTest: 'مساعد اختبار التطبيق', helloTestSub: 'بعطيك اختبارات خطوة بخطوة وبساعدك تحوّل المشاكل لتقارير أخطاء واضحة. أنا ما بقدر أختبر التطبيق بنفسي: إنت بتنفّذ الخطوات وأنا بوجّهك.',
-    diag: 'مشاركة تشخيص التطبيق', diagOn: 'رح ينبعت التشخيص مع هالرسالة', view: 'عرض',
-    retry: 'إعادة المحاولة', copy: 'نسخ', copied: 'تم النسخ', newChat: 'محادثة جديدة', history: 'السجل',
-    clearAll: 'مسح كل سجل ZYVEN AI', noHistory: 'ما في محادثات محفوظة لسا.',
-    privacyTitle: 'قبل ما تبلّش',
-    privacyBody: 'اللي بتكتبه هون بينبعت لخدمة ذكاء اصطناعي (Claude من Anthropic) عشان تكتب الرد، وبينحفظ في حسابك عشان ترجعله. إنت بس بتشوفه وبتقدر تحذفه أي وقت. محادثاتك مع الناس ما بتنبعت أبدًا. لا تكتب كلمات السر أو رموز الاستعادة.',
-    gotIt: 'تمام', notConfigured: 'ZYVEN AI مش مفعّل لسا. صاحب التطبيق لازم يضيف مفتاح الذكاء الاصطناعي على السيرفر.',
-    offline: 'ما في اتصال بـ ZYVEN AI. تأكد من الإنترنت.', notSent: 'ما انبعتت', you: 'إنت',
-    checklist: 'قائمة الاختبار', bug: 'الإبلاغ عن خطأ', diagTitle: 'تشخيص التطبيق', modeTest: 'مساعد الاختبار شغّال',
-    signIn: 'سجّل دخولك عشان تستخدم ZYVEN AI.', thinking: 'عم يفكّر…', del: 'حذف', sharedDiag: 'تمت مشاركة التشخيص',
-    disclaimer: 'ZYVEN AI ممكن يغلط. ما بيشوف محادثاتك وما بيغيّر إعداداتك.',
-  },
-};
-const AT = k => AI_TEXT[AIL][k] ?? AI_TEXT.en[k] ?? k;
-const AI_SUGGEST = {
-  en: {
-    assistant: ['How do I use ZYVEN?', 'How do I create a group?', 'How do I send a picture?', 'How can I make my account more secure?', 'Why can’t I add someone?', 'How do I change my privacy settings?'],
-    testing: ['Give me a full test checklist', 'Help me test sending and receiving messages', 'I can’t add another person', 'Something seems broken. Help me check', 'Help me write a bug report', 'How do I test notifications?'],
-  },
-  ar: {
-    assistant: ['كيف أستخدم ZYVEN؟', 'كيف أعمل مجموعة؟', 'كيف أبعت صورة؟', 'كيف أخلي حسابي أأمن؟', 'ليش ما بقدر أضيف حدا؟', 'كيف أغيّر إعدادات الخصوصية؟'],
-    testing: ['أعطيني قائمة اختبار كاملة', 'ساعدني أختبر بعت واستقبال الرسائل', 'ما بقدر أضيف شخص تاني', 'في شي خربان، ساعدني أفحص', 'ساعدني أكتب تقرير خطأ', 'كيف أختبر الإشعارات؟'],
-  },
-};
-/* Screens the assistant may open (must match ACTIONS in supabase/functions/zyven-ai/prompt.ts).
-   Opening a screen never changes a setting; the user does that themselves. */
-const AI_TARGETS = {
-  'chats': ['Open Chats', 'chat', () => aiLeave(() => switchTab('chats'))],
-  'contacts': ['Open Contacts', 'contacts', () => aiLeave(() => switchTab('contacts'))],
-  'groups': ['Open Groups', 'groups', () => aiLeave(() => switchTab('groups'))],
-  'profile': ['Open Profile', 'user', () => aiLeave(() => switchTab('profile'))],
-  'edit-profile': ['Edit profile', 'pen', () => editProfileSheet()],
-  'account': ['Open Account', 'user', () => accountSheet()],
-  'change-password': ['Change password', 'lock', () => passwordSheet()],
-  'privacy': ['Open Privacy settings', 'shield', () => aiLeave(() => profileSection('pf-privacy'))],
-  'notifications': ['Open Notification settings', 'bell', () => aiLeave(() => profileSection('pf-notify'))],
-  'blocked': ['Open Blocked users', 'block', () => blockedSheet()],
-  'theme': ['Open Theme and colour', 'moon', () => aiLeave(() => profileSection('pf-look'))],
-  'appearance': ['Open Bubble design', 'brush', () => aiLeave(() => openAppearance())],
-  'saved': ['Open Saved messages', 'bookmark', () => aiLeave(() => openSaved())],
-  'stickers': ['Open Sticker library', 'sticker', () => aiLeave(() => openLibrary('mine'))],
-  'sticker-creator': ['Create a sticker', 'sparkles', () => aiLeave(() => openCreator('profile'))],
-  'find-people': ['Find people', 'userPlus', () => addContactSheet()],
-  'new-chat': ['Start a conversation', 'pen', () => { ui.newChatQuery = ''; newChatSheet(); }],
-  'create-group': ['Create a group', 'groups', () => createGroupSheet()],
-  'about': ['About ZYVEN', 'info', () => aboutSheet()],
-  'test-banner': ['Send a test banner', 'sparkles', () => actions['test-notification']()],
-  'diagnostics': ['View app diagnostics', 'pulse', () => aiDiagSheet()],
-  'bug-report': ['Open the bug report form', 'bug', mid => bugReportSheet(mid)],
-  'test-checklist': ['Open the testing checklist', 'checklist', () => checklistSheet()],
-};
-function aiLeave(fn) { closeOverlay(); closeAI(); if (ui.openChatId) closeChat(); setTimeout(fn, 260); }
-function profileSection(id) {
-  switchTab('profile');
-  setTimeout(() => {
-    const el = document.getElementById(id); if (!el) return;
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    el.classList.remove('flash-sec'); void el.offsetWidth; el.classList.add('flash-sec');
-  }, 320);
-}
-
-ui.ai = { open: false, mode: 'assistant', convId: null, msgs: [], loading: false, error: null, diag: false, isDev: false, devChecked: null, status: null, convs: null, results: null };
-ui.errLog = [];
-
-const AI = {
-  url() { return `${String(CLOUD_CFG.supabaseUrl || '').replace(/\/+$/, '')}/functions/v1/zyven-ai`; },
-  async call(body, timeoutMs = 60000) {
-    if (!sb) throw { error: 'NO_SERVER', message: AT('offline') };
-    const { data } = await sb.auth.getSession();
-    const token = data?.session?.access_token;
-    if (!token) throw { error: 'NOT_SIGNED_IN', message: AT('signIn') };
-    const ctrl = new AbortController();
-    const t = setTimeout(() => ctrl.abort(), timeoutMs);
-    let res;
-    try {
-      res = await fetch(this.url(), {
-        method: 'POST', signal: ctrl.signal,
-        headers: { Authorization: `Bearer ${token}`, apikey: String(CLOUD_CFG.supabaseAnonKey || ''), 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-    } catch (e) {
-      throw { error: e?.name === 'AbortError' ? 'AI_TIMEOUT' : 'OFFLINE', message: e?.name === 'AbortError' ? 'ZYVEN AI took too long to answer. Try again.' : AT('offline') };
-    } finally { clearTimeout(t); }
-    const json = await res.json().catch(() => ({}));
-    if (!res.ok) {
-      // 404 = the server function hasn't been deployed yet.
-      if (res.status === 404 && !json.error) throw { error: 'AI_NOT_DEPLOYED', message: AT('notConfigured') };
-      throw { status: res.status, error: json.error || 'AI_ERROR', message: json.message || 'ZYVEN AI ran into a problem. Try again.', ...json };
-    }
-    return json;
-  },
-  async status(force = false) {
-    if (ui.ai.status && !force && Date.now() - ui.ai.status.at < 120000) return ui.ai.status;
-    try { const r = await this.call({ op: 'status' }, 15000); ui.ai.status = { at: Date.now(), ok: true, configured: !!r.configured, model: r.model || '' }; }
-    catch (e) { ui.ai.status = { at: Date.now(), ok: false, configured: e.error === 'AI_NOT_DEPLOYED' ? false : null, error: e.message }; }
-    return ui.ai.status;
-  },
-  checkDev() {
-    if (!sb || !Cloud.me) return Promise.resolve(false);
-    if (ui.ai.devChecked === Cloud.me) return Promise.resolve(ui.ai.isDev);
-    if (this._dev) return this._dev;
-    const who = Cloud.me;
-    this._dev = (async () => {
-      try {
-        const { data, error } = await sb.rpc('is_dev_tester');
-        if (!error && Cloud.me === who) {
-          const was = ui.ai.isDev;
-          ui.ai.isDev = data === true; ui.ai.devChecked = who;
-          if (was !== ui.ai.isDev) renderProfile();
-        }
-      } catch (e) { /* offline: try again later */ }
-      setTimeout(() => { this._dev = null; }, 30000);
-      return ui.ai.isDev;
-    })();
-    return this._dev;
-  },
-};
-
-/* ---------- Safe Markdown for answers ---------- */
-function aiInline(s) {
-  return s
-    .replace(/`([^`\n]+)`/g, '<code>$1</code>')
-    .replace(/\*\*([^*\n][^*\n]*?)\*\*/g, '<b>$1</b>')
-    .replace(/(^|[\s(])_([^_\n]+)_(?=[\s.,)!?]|$)/g, '$1<i>$2</i>');
-}
-function aiMd(src) {
-  const lines = esc(String(src || '')).split('\n');
-  let html = '', list = null, para = [];
-  const flushPara = () => { if (para.length) { html += `<p>${aiInline(para.join('<br>'))}</p>`; para = []; } };
-  const closeList = () => { if (list) { html += `</${list}>`; list = null; } };
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    if (/^\s*```/.test(line)) {
-      flushPara(); closeList();
-      const code = [];
-      while (++i < lines.length && !/^\s*```/.test(lines[i])) code.push(lines[i]);
-      html += `<pre><code>${code.join('\n')}</code></pre>`;
-      continue;
-    }
-    let m;
-    if ((m = line.match(/^\s*#{1,4}\s+(.+)$/))) { flushPara(); closeList(); html += `<h4>${aiInline(m[1])}</h4>`; continue; }
-    if ((m = line.match(/^\s*[-*•]\s+\[( |x|X)\]\s+(.+)$/))) {
-      flushPara(); if (list !== 'ul') { closeList(); html += '<ul class="ck">'; list = 'ul'; }
-      html += `<li class="${m[1].trim() ? 'on' : ''}"><span class="box" aria-hidden="true"></span>${aiInline(m[2])}</li>`; continue;
-    }
-    if ((m = line.match(/^\s*[-*•]\s+(.+)$/))) { flushPara(); if (list !== 'ul') { closeList(); html += '<ul>'; list = 'ul'; } html += `<li>${aiInline(m[1])}</li>`; continue; }
-    if ((m = line.match(/^\s*(\d{1,3})[.)]\s+(.+)$/))) { flushPara(); if (list !== 'ol') { closeList(); html += `<ol start="${+m[1]}">`; list = 'ol'; } html += `<li>${aiInline(m[2])}</li>`; continue; }
-    if (!line.trim()) { flushPara(); closeList(); continue; }
-    if (list && /^\s{2,}\S/.test(line)) { html = html.replace(/<\/li>$/, `<br>${aiInline(line.trim())}</li>`); continue; }
-    closeList(); para.push(line);
-  }
-  flushPara(); closeList();
-  return html;
-}
-
-/* ---------- Screen ---------- */
-async function openAI(opts = {}) {
-  closeOverlay(); toggleEmoji(false);
-  if (opts.mode && opts.mode !== ui.ai.mode && !ui.ai.loading) { ui.ai.mode = opts.mode; ui.ai.convId = null; ui.ai.msgs = []; ui.ai.error = null; }
-  const el = $('#ai');
-  el.setAttribute('dir', AIL === 'ar' ? 'rtl' : 'ltr');
-  el.innerHTML = `
-    <header class="scr-head ai-head">
-      <button class="icon-btn ghost ai-back" data-action="ai-close" aria-label="Back">${I('back')}</button>
-      <div class="ai-title"><span class="ai-mark">${I('sparkles')}</span><h2>${esc(AT('title'))}</h2></div>
-      <button class="icon-btn ghost" data-action="ai-history" aria-label="${esc(AT('history'))}">${I('history')}</button>
-      <button class="icon-btn ghost" data-action="ai-new" aria-label="${esc(AT('newChat'))}">${I('pen')}</button>
-    </header>
-    <div class="ai-modes" role="radiogroup" aria-label="Mode" id="ai-modes"></div>
-    <div class="ai-scroll" id="ai-scroll" role="log" aria-live="polite"><div class="ai-msgs" id="ai-msgs"></div></div>
-    <div class="ai-dock">
-      <div class="ai-diag-bar" id="ai-diag-bar"></div>
-      <form class="composer ai-composer" id="ai-form">
-        <div class="field">
-          <textarea id="ai-input" rows="1" dir="auto" maxlength="4000" aria-label="${esc(AT('ph'))}"></textarea>
-        </div>
-        <button type="submit" class="icon-btn send" id="ai-send" aria-label="Send">${I('send')}</button>
-      </form>
-    </div>`;
-  el.classList.add('open'); el.setAttribute('aria-hidden', 'false');
-  ui.ai.open = true;
-  renderAIModes(); renderAIDiagBar(); renderAIMsgs(true); aiComposerState();
-  if (opts.prompt) { $('#ai-input').value = opts.prompt; autoGrow($('#ai-input')); aiComposerState(); }
-  if (!matchMedia('(pointer:coarse)').matches) setTimeout(() => $('#ai-input')?.focus(), 420);
-  AI.checkDev();
-  const st = await AI.status();
-  if (ui.ai.open) renderAIMsgs();
-  if (opts.send && st.configured !== false) aiSend();
-}
-function closeAI() { const el = $('#ai'); el.classList.remove('open'); el.setAttribute('aria-hidden', 'true'); ui.ai.open = false; }
-
-function renderAIModes() {
-  const box = $('#ai-modes'); if (!box) return;
-  box.innerHTML = [['assistant', 'sparkles', AT('assistant')], ['testing', 'flask', AT('testing')]].map(([v, ic, l]) =>
-    `<button class="${ui.ai.mode === v ? 'on' : ''}" data-action="ai-mode" data-value="${v}" role="radio" aria-checked="${ui.ai.mode === v}">${I(ic)}${esc(l)}</button>`).join('')
-    + `<button class="ai-tool" data-action="ai-tools" aria-label="More">${I('more')}</button>`;
-  const ta = $('#ai-input'); if (ta) ta.placeholder = ui.ai.mode === 'testing' ? AT('phTest') : AT('ph');
-}
-function renderAIDiagBar() {
-  const box = $('#ai-diag-bar'); if (!box) return;
-  box.innerHTML = `<label class="ai-diag-toggle ${ui.ai.diag ? 'on' : ''}">
-      <input type="checkbox" id="ai-diag" ${ui.ai.diag ? 'checked' : ''}><span class="sw-mini" aria-hidden="true"></span>
-      ${I('pulse')}<span>${esc(ui.ai.diag ? AT('diagOn') : AT('diag'))}</span></label>
-    <button type="button" class="linkish" data-action="ai-diag-view">${esc(AT('view'))}</button>`;
-}
-function aiComposerState() {
-  const ta = $('#ai-input'), btn = $('#ai-send'); if (!ta || !btn) return;
-  const ok = !!ta.value.trim() && !ui.ai.loading;
-  btn.classList.toggle('ready', ok); btn.disabled = !ok;
-}
-
-function aiBubble(m) {
-  if (m.role === 'user') {
-    return `<div class="ai-row me" data-aid="${esc(m.id)}"><div class="ai-b me" dir="auto">${esc(m.content).replace(/\n/g, '<br>')}</div>
-      ${m.shared_diagnostics ? `<span class="ai-meta">${I('pulse')}${esc(AT('sharedDiag'))}</span>` : ''}
-      ${m.failed ? `<span class="ai-meta err">${I('info')}${esc(AT('notSent'))}</span>` : ''}</div>`;
-  }
-  const acts = (m.actions || []).filter(a => AI_TARGETS[a]).map(a =>
-    `<button class="ai-act" data-action="ai-open" data-target="${esc(a)}" data-mid="${esc(m.id)}">${I(AI_TARGETS[a][1])}${esc(AI_TARGETS[a][0])}</button>`).join('');
-  return `<div class="ai-row bot" data-aid="${esc(m.id)}">
-    <span class="ai-av">${I('sparkles')}</span>
-    <div class="ai-col"><div class="ai-b bot" dir="auto">${aiMd(m.content)}</div>
-      ${acts ? `<div class="ai-acts">${acts}</div>` : ''}
-      <div class="ai-tools"><button class="ai-tl" data-action="ai-copy" data-mid="${esc(m.id)}">${I('copy')}${esc(AT('copy'))}</button>
-      ${/###\s*Bug report|\*\*Title:\*\*/i.test(m.content) ? `<button class="ai-tl" data-action="ai-open" data-target="bug-report" data-mid="${esc(m.id)}">${I('bug')}${esc(AT('bug'))}</button>` : ''}</div>
-    </div></div>`;
-}
-function renderAIMsgs(jump = false) {
-  const box = $('#ai-msgs'); if (!box) return;
-  const a = ui.ai, st = a.status;
-  let html = '';
-  if (!Cloud.me) html += `<div class="ai-note warn">${I('info')}<span>${esc(AT('signIn'))}</span></div>`;
-  else if (st && st.configured === false) html += `<div class="ai-note warn">${I('info')}<span>${esc(AT('notConfigured'))}</span></div>`;
-  if (!a.msgs.length) {
-    const test = a.mode === 'testing';
-    html += `<div class="ai-hello">
-      <span class="ai-orb">${I(test ? 'flask' : 'sparkles')}</span>
-      <h3>${esc(test ? AT('helloTest') : AT('hello'))}</h3>
-      <p>${esc(test ? AT('helloTestSub') : AT('helloSub'))}</p>
-      <div class="ai-sugs">${AI_SUGGEST[AIL][a.mode].map(q => `<button class="ai-sug" data-action="ai-suggest" data-text="${esc(q)}" dir="auto">${esc(q)}</button>`).join('')}</div>
-      ${test ? `<div class="ai-shortcuts"><button class="btn secondary sm" data-action="ai-checklist">${I('checklist')}${esc(AT('checklist'))}</button>
-        <button class="btn secondary sm" data-action="ai-bug">${I('bug')}${esc(AT('bug'))}</button></div>` : ''}
-      <p class="ai-disc">${esc(AT('disclaimer'))}</p>
-    </div>`;
-  } else {
-    if (a.mode === 'testing') html += `<div class="ai-mode-tag">${I('flask')}${esc(AT('modeTest'))}</div>`;
-    html += a.msgs.map(aiBubble).join('');
-  }
-  if (a.loading) html += `<div class="ai-row bot"><span class="ai-av">${I('sparkles')}</span><div class="ai-b bot typing-b" aria-label="${esc(AT('thinking'))}"><i></i><i></i><i></i></div></div>`;
-  if (a.error) {
-    html += `<div class="ai-err" role="alert">${I('info')}<span dir="auto">${esc(a.error.message)}</span>
-      ${a.error.retry ? `<button class="btn secondary sm" data-action="ai-retry">${I('refresh')}${esc(AT('retry'))}</button>` : ''}</div>`;
-  }
-  box.innerHTML = html;
-  const sc = $('#ai-scroll');
-  if (sc) requestAnimationFrame(() => sc.scrollTo({ top: a.msgs.length || a.loading ? sc.scrollHeight : 0, behavior: jump ? 'auto' : 'smooth' }));
-}
-
-function aiConsent() {
-  if (state.aiConsent) return Promise.resolve(true);
-  return new Promise(res => {
-    openSheet(`<div class="ai-consent" dir="${AIL === 'ar' ? 'rtl' : 'ltr'}">
-      <span class="ai-orb sm">${I('shield')}</span>
-      <h3>${esc(AT('privacyTitle'))}</h3><p>${esc(AT('privacyBody'))}</p>
-      <div class="acts"><button class="btn secondary" data-action="dlg-no">${AIL === 'ar' ? 'إلغاء' : 'Cancel'}</button>
-      <button class="btn" data-action="dlg-yes">${esc(AT('gotIt'))}</button></div></div>`, { kind: 'dialog' });
-    ui.dlgResolve = ok => { if (ok) { state.aiConsent = true; save(); } closeOverlay(); res(!!ok); };
-  });
-}
-
-async function aiSend(retry = false) {
-  const a = ui.ai;
-  if (a.loading) return;
-  const ta = $('#ai-input');
-  let text = '';
-  if (retry && a.error?.retry === 'resend') text = a.error.text;
-  else if (!retry) text = (ta?.value || '').trim();
-  if (!retry && !text) return;
-  if (!Cloud.me) { toast(AT('signIn'), 'info'); return; }
-  if (!(await aiConsent())) return;
-
-  let diagnostics = null;
-  if (a.diag && !(retry && a.error?.retry === 'retry')) diagnostics = await collectDiagnostics();
-  const serverRetry = retry && a.error?.retry === 'retry';
-  if (retry && a.error?.retry === 'resend') a.msgs = a.msgs.filter(m => m.id !== a.error.localId);
-
-  let local = null;
-  if (!serverRetry) {
-    local = { id: 'local-' + uid(), role: 'user', content: text, shared_diagnostics: !!diagnostics, pending: true };
-    a.msgs.push(local);
-    if (ta) { ta.value = ''; autoGrow(ta); }
-  }
-  a.error = null; a.loading = true;
-  const convAtStart = a.convId;
-  renderAIMsgs(); aiComposerState();
-  try {
-    const r = await AI.call({ op: 'chat', mode: a.mode, lang: AIL, conversation_id: a.convId, text: serverRetry ? undefined : text, retry: serverRetry, diagnostics });
-    if (ui.ai.convId !== convAtStart) return; // user started another conversation meanwhile
-    a.convId = r.conversation_id;
-    if (local) { const i = a.msgs.indexOf(local); if (i >= 0) a.msgs[i] = r.user_message || { ...local, pending: false }; }
-    a.msgs.push(r.assistant_message);
-    a.convs = null;
-    if (a.diag) { a.diag = false; renderAIDiagBar(); }
-  } catch (e) {
-    if (ui.ai.convId !== convAtStart) return;
-    if (e.conversation_id) a.convId = e.conversation_id;
-    if (e.user_message && local) { const i = a.msgs.indexOf(local); if (i >= 0) a.msgs[i] = e.user_message; }
-    const savedOnServer = !!e.user_message || serverRetry;
-    if (!savedOnServer && local) local.failed = true;
-    const canRetry = e.retryable || ['OFFLINE', 'AI_TIMEOUT', 'RATE_LIMITED', 'DB', 'AI_ERROR', 'AI_BUSY', 'AI_UNAVAILABLE'].includes(e.error);
-    a.error = { message: e.message || 'Something went wrong.', retry: canRetry ? (savedOnServer ? 'retry' : 'resend') : '', text, localId: local?.id };
-    if (e.error === 'AI_NOT_CONFIGURED' || e.error === 'AI_NOT_DEPLOYED') { ui.ai.status = { at: Date.now(), ok: true, configured: false }; a.error.retry = 'resend'; }
-    logAppError(`ZYVEN AI: ${e.error || 'error'}`);
-    if (!serverRetry && !savedOnServer && ta && !ta.value) { /* keep the text in the bubble so Retry can resend it */ }
-  } finally {
-    if (local) local.pending = false;
-    a.loading = false;
-    if (ui.ai.open) { renderAIMsgs(); aiComposerState(); }
-  }
-}
-
-async function aiLoadConversation(id) {
-  const { data, error } = await sb.from('ai_messages').select('id,role,content,actions,shared_diagnostics,created_at').eq('conversation_id', id).order('created_at', { ascending: true }).limit(400);
-  if (error) { toast(cloudError(error), 'info'); return; }
-  const conv = (ui.ai.convs || []).find(c => c.id === id);
-  Object.assign(ui.ai, { convId: id, msgs: data || [], error: null, loading: false, mode: conv?.mode || ui.ai.mode });
-  const last = ui.ai.msgs[ui.ai.msgs.length - 1];
-  if (last && last.role === 'user') ui.ai.error = { message: AIL === 'ar' ? 'هالسؤال ما إلو جواب لسا.' : 'This question doesn’t have an answer yet.', retry: 'retry' };
-  closeOverlay(); renderAIModes(); renderAIMsgs(true);
-}
-
-async function aiHistorySheet() {
-  openSheet(`<div class="sheet-head"><h3>${esc(AT('history'))}</h3><button class="icon-btn" data-action="close-overlay" aria-label="Close">${I('x')}</button></div>
-    <div class="list" id="ai-hist"><p class="hint">…</p></div>`);
-  const { data, error } = await sb.from('ai_conversations').select('id,mode,title,updated_at').order('updated_at', { ascending: false }).limit(60);
-  const box = $('#ai-hist'); if (!box) return;
-  if (error) { box.innerHTML = `<p class="hint">${esc(cloudError(error))}</p>`; return; }
-  ui.ai.convs = data || [];
-  if (!ui.ai.convs.length) { box.innerHTML = emptyState({ icon: 'history', title: AT('noHistory'), body: '' }); return; }
-  box.innerHTML = ui.ai.convs.map(c => `<div class="saved-item">
-      <button class="row" data-action="ai-load" data-id="${c.id}"><span class="set-ic" style="--ic:${c.mode === 'testing' ? '#4ADE9F' : '#9D90FF'}">${I(c.mode === 'testing' ? 'flask' : 'sparkles')}</span>
-        <span class="row-main"><span class="row-top"><span class="row-name" dir="auto">${esc(c.title || AT('newChat'))}</span><time class="row-time">${fmtListTime(new Date(c.updated_at).getTime())}</time></span>
-        <span class="row-sub">${esc(c.mode === 'testing' ? AT('testing') : AT('assistant'))}${c.id === ui.ai.convId ? ' · open' : ''}</span></span></button>
-      <button class="row-x" data-action="ai-del" data-id="${c.id}" aria-label="${esc(AT('del'))}">${I('trash')}</button></div>`).join('')
-    + `<button class="btn danger block" style="margin-top:16px" data-action="ai-clear">${I('trash')}${esc(AT('clearAll'))}</button>`;
-}
-
-/* ---------- Diagnostics: only safe, non-personal facts ---------- */
-function logAppError(text) {
-  ui.errLog.push(`${new Date().toISOString().slice(11, 19)} ${String(text).slice(0, 150)}`);
-  if (ui.errLog.length > 12) ui.errLog.shift();
-}
-async function collectDiagnostics() {
-  const d = {
-    appVersion: CONFIG.version,
-    platform: window.Capacitor?.getPlatform?.() || 'web',
-    online: navigator.onLine !== false,
-    signedIn: !!Cloud.me,
-    realtime: Cloud.connected ? 'connected' : (Cloud.channel ? 'connecting' : 'off'),
-    lastSyncAgoSec: Cloud.lastSync ? Math.round((Date.now() - Cloud.lastSync) / 1000) : undefined,
-    chats: state.chats.filter(c => c.type === 'dm').length,
-    groups: state.chats.filter(c => c.type === 'group').length,
-    contacts: state.users.filter(u => u.contact).length,
-    failedMessages: state.chats.reduce((n, c) => n + c.messages.filter(m => m.from === 'me' && m.status === 'failed').length, 0),
-    notificationsAllowed: 'Notification' in window ? Notification.permission : 'not supported',
-    theme: resolvedMode(),
-    language: navigator.language || '',
-    screen: `${innerWidth}x${innerHeight}`,
-    checkedAt: new Date().toISOString(),
-    recentErrors: ui.errLog.slice(-8),
-  };
-  try { const p = await navigator.permissions?.query({ name: 'microphone' }); if (p) d.microphone = p.state; } catch (e) { d.microphone = 'unknown'; }
-  if (sb && Cloud.me) {
-    const t0 = performance.now();
-    try {
-      const { error } = await Promise.race([sb.from('profiles').select('id').eq('id', Cloud.me).limit(1), new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 8000))]);
-      d.serverReachable = !error; d.serverLatencyMs = Math.round(performance.now() - t0);
-    } catch (e) { d.serverReachable = false; }
-    try { const { error } = await sb.storage.from('avatars').list(Cloud.me, { limit: 1 }); d.storageReachable = !error; } catch (e) { d.storageReachable = false; }
-  }
-  const st = await AI.status(true);
-  d.aiService = !st.ok ? 'unreachable' : st.configured ? 'ready' : 'not configured';
-  return d;
-}
-const DIAG_LABELS = {
-  appVersion: 'App version', platform: 'Platform', online: 'Phone has internet', signedIn: 'Signed in',
-  serverReachable: 'ZYVEN server reachable', serverLatencyMs: 'Server response time (ms)', realtime: 'Live updates',
-  lastSyncAgoSec: 'Last sync (seconds ago)', storageReachable: 'File storage reachable', aiService: 'ZYVEN AI service',
-  chats: 'Private chats on this phone', groups: 'Groups on this phone', contacts: 'Contacts', failedMessages: 'Messages that failed to send',
-  notificationsAllowed: 'Notification permission', microphone: 'Microphone permission', theme: 'Theme', language: 'Phone language',
-  screen: 'Screen size', checkedAt: 'Checked at', recentErrors: 'Recent error messages',
-};
-function diagRows(d) {
-  return Object.entries(DIAG_LABELS).filter(([k]) => d[k] !== undefined).map(([k, l]) => {
-    let v = d[k];
-    if (typeof v === 'boolean') v = v ? 'Yes' : 'No';
-    if (Array.isArray(v)) v = v.length ? v.join('\n') : 'None';
-    const bad = (k === 'serverReachable' || k === 'storageReachable' || k === 'online') && d[k] === false || (k === 'aiService' && d[k] !== 'ready') || (k === 'failedMessages' && d[k] > 0);
-    return `<div class="dg-row"><span>${esc(l)}</span><b class="${bad ? 'bad' : ''}">${esc(String(v)).replace(/\n/g, '<br>')}</b></div>`;
-  }).join('');
-}
-async function aiDiagSheet() {
-  openSheet(`<div class="sheet-head"><h3>${esc(AT('diagTitle'))}</h3><button class="icon-btn" data-action="close-overlay" aria-label="Close">${I('x')}</button></div>
-    <p class="sim-tag">${I('shield')}<span>Collected on this phone just now. It is only sent to ZYVEN AI when you turn on “Share app diagnostics” for a message. It never includes passwords, sign-in tokens, keys, message text, or anyone else’s information.</span></p>
-    <div class="dg" id="dg"><p class="hint">Checking…</p></div>
-    <button class="btn secondary block" style="margin-top:14px" data-action="ai-diag-view">${I('refresh')}Check again</button>`);
-  const d = await collectDiagnostics();
-  const box = $('#dg'); if (box) box.innerHTML = diagRows(d);
-}
-
-/* ---------- Bug reports (any signed-in user) ---------- */
-function parseBugReport(text) {
-  const get = label => { const m = String(text).match(new RegExp(`\\*\\*${label}:?\\*\\*:?\\s*([\\s\\S]*?)(?=\\n\\*\\*[A-Z][^*]{1,40}:?\\*\\*|$)`, 'i')); return m ? m[1].trim() : ''; };
-  const sev = get('Severity').toLowerCase(), status = get('Status').toLowerCase();
-  return {
-    title: get('Title').replace(/\n.*/s, '').slice(0, 120),
-    steps: get('Steps to reproduce').slice(0, 3000),
-    expected: get('Expected').slice(0, 1500),
-    actual: get('Actual').slice(0, 1500),
-    severity: /high/.test(sev) ? 'high' : /low/.test(sev) ? 'low' : 'medium',
-    certainty: /confirmed/.test(status) ? 'confirmed' : 'possible',
-  };
-}
-async function bugReportSheet(fromMsgId) {
-  const src = fromMsgId && ui.ai.msgs.find(m => m.id === fromMsgId && m.role === 'assistant');
-  const p = src ? parseBugReport(src.content) : { title: '', steps: '', expected: '', actual: '', severity: 'medium', certainty: 'possible' };
-  ui.bug = { severity: p.severity, certainty: p.certainty };
-  const seg = (k, opts) => `<div class="seg seg3" style="margin:0" role="radiogroup">${opts.map(([v, l]) => `<button type="button" class="${ui.bug[k] === v ? 'on' : ''}" data-action="bug-set" data-k="${k}" data-v="${v}" role="radio" aria-checked="${ui.bug[k] === v}">${l}</button>`).join('')}</div>`;
-  openSheet(`<div class="sheet-head"><h3>Report a bug</h3><button class="icon-btn" data-action="close-overlay" aria-label="Close">${I('x')}</button></div>
-    <form class="form" data-form="bug" novalidate>
-      ${src ? `<p class="sim-tag">${I('sparkles')}<span>Filled in from ZYVEN AI’s draft. Check it before sending.</span></p>` : ''}
-      <div class="fld"><label for="bug-title">What’s wrong? (short title)</label><input id="bug-title" maxlength="120" dir="auto" value="${esc(p.title)}" placeholder="e.g. Can’t add a contact by username"></div>
-      <div class="fld"><label for="bug-steps">Steps to reproduce</label><textarea id="bug-steps" rows="4" maxlength="3000" dir="auto" placeholder="1. Open Contacts&#10;2. Tap the person-plus icon&#10;3. …">${esc(p.steps)}</textarea></div>
-      <div class="fld"><label for="bug-exp">What should happen</label><textarea id="bug-exp" rows="2" maxlength="1500" dir="auto">${esc(p.expected)}</textarea></div>
-      <div class="fld"><label for="bug-act">What actually happens (exact error text if any)</label><textarea id="bug-act" rows="2" maxlength="1500" dir="auto">${esc(p.actual)}</textarea></div>
-      <div class="fld"><label>How sure are you?</label>${seg('certainty', [['confirmed', 'Happens every time'], ['possible', 'Not sure yet']]).replace('seg3', '')}</div>
-      <div class="fld"><label>How bad is it?</label>${seg('severity', [['low', 'Low'], ['medium', 'Medium'], ['high', 'High']])}</div>
-      <label class="chk"><input type="checkbox" id="bug-diag" checked><span>Attach app diagnostics (no messages, passwords, or keys) <button type="button" class="linkish" data-action="ai-diag-view">See what’s included</button></span></label>
-      <span class="err" id="bug-err"></span>
-      <button class="btn block" type="submit">${I('send')}Send report</button>
-    </form>
-    <div class="group-label" style="margin:22px 4px 8px">Your reports</div><div class="list" id="bug-mine"><p class="hint">…</p></div>`, { onMount: renderMyBugs });
-}
-async function renderMyBugs() {
-  const box = $('#bug-mine'); if (!box || !sb) return;
-  const { data, error } = await sb.from('bug_reports').select('id,title,severity,certainty,created_at').order('created_at', { ascending: false }).limit(10);
-  if (!$('#bug-mine')) return;
-  if (error) { box.innerHTML = `<p class="hint">${esc(cloudError(error))}</p>`; return; }
-  box.innerHTML = (data || []).length ? data.map(b => `<div class="row" style="cursor:default"><span class="set-ic" style="--ic:${b.severity === 'high' ? '#FF6B63' : b.severity === 'low' ? '#4ADE9F' : '#FFC15E'}">${I('bug')}</span>
-      <span class="row-main"><span class="row-top"><span class="row-name" dir="auto">${esc(b.title)}</span><time class="row-time">${fmtListTime(new Date(b.created_at).getTime())}</time></span>
-      <span class="row-sub">${b.certainty === 'confirmed' ? 'Confirmed' : 'Possible issue'} · ${esc(b.severity)}</span></span></div>`).join('')
-    : '<p class="hint">You haven’t sent any reports yet.</p>';
-}
-async function submitBug(form) {
-  const v = id => (form.querySelector(id)?.value || '').trim();
-  const err = form.querySelector('#bug-err');
-  const title = v('#bug-title');
-  if (title.length < 3) { err.textContent = 'Give the problem a short title (at least 3 characters).'; return; }
-  if (!v('#bug-steps') && !v('#bug-act')) { err.textContent = 'Add the steps or what actually happens, so it can be investigated.'; return; }
-  const btn = form.querySelector('button[type=submit]'); btn.disabled = true;
-  try {
-    let diagnostics = null;
-    if (form.querySelector('#bug-diag')?.checked) { const d = await collectDiagnostics(); delete d.screen; diagnostics = d; }
-    const { error } = await sb.from('bug_reports').insert({ user_id: Cloud.me, title, steps: v('#bug-steps'), expected: v('#bug-exp'), actual: v('#bug-act'), severity: ui.bug.severity, certainty: ui.bug.certainty, diagnostics });
-    if (error) throw error;
-    toast('Bug report sent. Thank you!', 'bug');
-    closeOverlay();
-  } catch (e) { err.textContent = cloudError(e); btn.disabled = false; }
-}
-
-/* ---------- Testing checklist / Developer Testing Mode ---------- */
-const TWO = 'Needs two accounts on two devices';
-const CHECKLIST = [
-  ['Accounts', [
-    ['auth.signup', 'Create an account', ['Log out if signed in.', 'Tap Create an account, fill in name, @username, email and a password of 8+ characters.', 'Submit.'], 'You land on the Chats tab signed in. A taken username shows “That username is already taken.”'],
-    ['auth.signin', 'Sign in and stay signed in', ['Log out, then sign in with the same email and password.', 'Close the app fully and open it again.'], 'You’re signed in both times; a wrong password shows an error, not a crash.'],
-    ['auth.reset', 'Reset a forgotten password', ['On the sign-in screen tap Forgot password?', 'Enter your email, then the code from the email and a new password.'], 'You can sign in with the new password; the old one no longer works.'],
-    ['auth.password', 'Change password', ['Profile → Account → Change password.', 'Enter a new password twice and save.'], 'A success message; signing in again needs the new password.'],
-    ['auth.logout', 'Log out', ['Profile → Log out → confirm.'], 'You return to the sign-in screen; your chats aren’t visible.'],
-    ['profile.edit', 'Edit profile', ['Profile → Edit profile.', 'Change photo, name, username and bio. Save.'], 'Changes show on your Profile and, on another account, in chats and search.'],
-  ]],
-  ['People', [
-    ['people.find', 'Find a registered person', ['Contacts → person-plus icon.', 'Type the other account’s @username.'], 'They appear with an Add button. A username that doesn’t exist shows “No one found”.'],
-    ['people.add', 'Add and remove a contact', ['Tap Add.', 'Open the Contacts tab, tap them → Remove contact.'], 'They appear in Contacts, then disappear after removing.'],
-    ['chat.start', 'Start a private chat', ['Chats → pen icon → pick the contact.'], 'A chat opens with their name at the top.'],
-  ]],
-  ['Messaging', [
-    ['chat.send', 'Send and receive text', ['From account A, send “hello” to B.', 'Watch B’s phone. Reply from B.'], 'B gets it within a few seconds without refreshing; A sees the reply. ' + TWO + '.', true],
-    ['chat.receipts', 'Delivery and read ticks', ['Send from A while B’s app is closed, then open the chat on B.'], 'A sees one tick (sent) → two ticks (delivered) → read colour once B opens the chat.', true],
-    ['chat.typing', 'Typing indicator and online status', ['Start typing on B without sending.'], 'A sees “typing…” and B’s online dot.', true],
-    ['chat.photo', 'Send a photo and a video', ['Paperclip → Photos, pick one, send. Repeat with Videos.'], 'Both send and open full screen on both phones.'],
-    ['chat.file', 'Send a document', ['Paperclip → Documents, pick a PDF.'], 'The other side can open or save it. Files over 25 MB are refused with a message.'],
-    ['chat.voice', 'Voice message', ['With an empty message box, tap the microphone, speak, tap send.'], 'It plays on both phones. Denying the microphone shows a clear message.'],
-    ['chat.sticker', 'Emoji, stickers and GIFs', ['Tap the sticker icon, send a sticker.'], 'It shows on both phones.'],
-    ['chat.location', 'Share location', ['Paperclip → Location → allow → send.'], 'A location card appears. Denying permission shows a clear message.'],
-    ['chat.reply', 'Reply, edit, react', ['Press and hold a message → Reply. Hold your own message → Edit. Hold any message → react.'], 'The reply quotes the original, the edit shows “edited”, the reaction appears on both phones.'],
-    ['chat.delete', 'Delete for me / for everyone', ['Hold your message → Delete → Delete for everyone.'], 'It disappears (or shows as deleted) on both phones.'],
-    ['chat.pin', 'Pin, forward, save', ['Hold a message → Pin; → Forward to another chat; → Save.'], 'The pin bar shows it; the forward arrives as “Forwarded”; it appears in Saved messages.'],
-    ['chat.ttl', 'Disappearing messages', ['Chat menu (⋯) → Disappearing messages → 1 minute. Send a message, wait.'], 'The message disappears after about a minute on both phones.'],
-    ['chat.offline', 'No internet', ['Turn on airplane mode, send a message, then turn it off.'], 'The message shows as failed with a retry option, and sends when you retry online.'],
-  ]],
-  ['Groups', [
-    ['group.create', 'Create a group', ['Groups → + → name it, pick contacts, create.'], 'Everyone added sees the group and its messages.', true],
-    ['group.members', 'Add and remove members', ['Group info → add someone; then remove them.'], 'They gain and lose access; a system line shows each change.', true],
-    ['group.admin', 'Admin rules', ['Make a member admin; set “only admins can edit info”; try editing as a non-admin.'], 'Non-admins can’t edit info; they see “Only admins can…”.', true],
-    ['group.leave', 'Leave a group', ['Chat menu → Leave group.'], 'You can still read the history but can’t send.'],
-  ]],
-  ['Privacy and safety', [
-    ['privacy.online', 'Online status and last seen', ['Profile → Privacy → Online status → Nobody.'], 'The other account no longer sees your online dot or last seen.', true],
-    ['privacy.receipts', 'Read receipts off', ['Turn off Read receipts, read a new message.'], 'The sender doesn’t see the read colour; you don’t see theirs.', true],
-    ['privacy.block', 'Block and unblock', ['Open a person → Block. Have them message you. Then Unblock.'], 'While blocked they can’t message you; after unblocking they can.', true],
-    ['privacy.report', 'Report a person', ['Open a person → Report → pick a reason.'], 'A confirmation; it’s listed in Profile → Reports you’ve made.'],
-  ]],
-  ['Notifications and look', [
-    ['notify.banner', 'In-app banners', ['Open a different chat, have the other account message you.'], 'A banner appears while the app is open. (Push when the app is closed isn’t built yet.)', true],
-    ['notify.test', 'Test banner and quiet hours', ['Profile → Send a test banner. Turn on Quiet hours.'], 'The test banner follows your sound/preview settings.'],
-    ['look.theme', 'Theme and accent', ['Profile → Appearance: switch Dark / Light / System and accents.'], 'The whole app updates instantly and stays after restarting.'],
-    ['look.bubbles', 'Bubble design', ['Profile → Bubble design, pick one, then Reset to Default.'], 'Chats change style; reset restores the default.'],
-  ]],
-  ['ZYVEN AI', [
-    ['ai.ask', 'Ask ZYVEN AI', ['Open ZYVEN AI, ask “How do I create a group?”, then a follow-up like “and how do I add more people later?”.'], 'A relevant answer, and the follow-up is understood without repeating yourself.'],
-    ['ai.arabic', 'Arabic', ['Ask a question in Arabic.'], 'The answer is in Arabic and reads right-to-left.'],
-    ['ai.actions', 'Open-screen buttons', ['Ask “how do I change my privacy settings?”, then tap the button under the answer.'], 'It opens Profile at the Privacy section; nothing is changed automatically.'],
-    ['ai.history', 'History and clearing', ['Start a new conversation, open History, reopen the old one, delete one, then Clear all.'], 'Old conversations reopen; deleted ones are gone after restarting.'],
-    ['ai.offline', 'AI with no internet', ['Turn on airplane mode and ask something.'], 'A clear “can’t reach ZYVEN AI” message with Retry, which works once online.'],
-    ['ai.diag', 'Diagnostics', ['Tap View next to “Share app diagnostics”.'], 'Shows version and connection facts only; no messages, passwords, or keys.'],
-  ]],
-];
-async function checklistSheet() {
-  const dev = await AI.checkDev();
-  if (dev && !ui.ai.results) {
-    const { data, error } = await sb.from('test_results').select('item_key,status,note,updated_at');
-    if (!error) ui.ai.results = Object.fromEntries((data || []).map(r => [r.item_key, r]));
-  }
-  renderChecklist(dev);
-}
-function renderChecklist(dev, keepOpen = '') {
-  const res = ui.ai.results || {};
-  const all = CHECKLIST.flatMap(([, items]) => items);
-  const n = s => all.filter(it => (res[it[0]]?.status || 'untested') === s).length;
-  const body = CHECKLIST.map(([area, items]) => `<div class="group-label" style="margin:18px 4px 8px">${esc(area)}</div><div class="ck-list">${items.map(([key, title, steps, expect, two]) => {
-    const st = res[key]?.status || 'untested';
-    return `<details class="ck-item ${dev ? 'st-' + st : ''}" ${keepOpen === key ? 'open' : ''}>
-      <summary>${dev ? `<span class="ck-dot" aria-label="${st}"></span>` : ''}<span class="t">${esc(title)}</span>${two ? `<span class="tag">2 devices</span>` : ''}${I('chev')}</summary>
-      <ol>${steps.map(s => `<li>${esc(s)}</li>`).join('')}</ol>
-      <p class="ck-exp"><b>Expected:</b> ${esc(expect)}</p>
-      ${dev ? `<div class="seg seg3 ck-seg" role="radiogroup" aria-label="Result">
-          ${[['pass', 'Passed'], ['fail', 'Failed'], ['untested', 'Not tested']].map(([v, l]) => `<button type="button" class="${st === v ? 'on' : ''} r-${v}" data-action="ck-set" data-key="${key}" data-v="${v}" role="radio" aria-checked="${st === v}">${l}</button>`).join('')}</div>
-        <textarea class="ck-note" data-key="${key}" rows="2" maxlength="1000" dir="auto" placeholder="Notes: device, what you saw…">${esc(res[key]?.note || '')}</textarea>
-        <div class="ck-row"><button type="button" class="btn secondary sm" data-action="ck-note" data-key="${key}">Save note</button>${st === 'fail' ? `<button type="button" class="btn secondary sm" data-action="ck-bug" data-key="${key}">${I('bug')}Report bug</button>` : ''}</div>`
-      : `<button type="button" class="btn secondary sm" data-action="ck-ask" data-key="${key}">${I('sparkles')}Ask ZYVEN AI to guide me</button>`}
-    </details>`;
-  }).join('')}</div>`).join('');
-  openSheet(`<div class="sheet-head"><h3>${dev ? 'Developer testing' : 'Testing checklist'}</h3><button class="icon-btn" data-action="close-overlay" aria-label="Close">${I('x')}</button></div>
-    ${dev ? `<div class="ck-sum"><span class="p"><b>${n('pass')}</b>Passed</span><span class="f"><b>${n('fail')}</b>Failed</span><span class="u"><b>${n('untested')}</b>Not tested</span></div>
-      <p class="sim-tag">${I('shield')}<span>Developer Testing Mode: results are saved to your account only. Nothing is marked as passed unless you mark it.</span></p>`
-    : `<p class="sim-tag">${I('info')}<span>A manual guide to every feature that exists today. Follow the steps and compare with “Expected”. Something different? Report a bug.</span></p>`}
-    ${body}
-    <button class="btn secondary block" style="margin-top:18px" data-action="ai-bug">${I('bug')}Report a bug</button>`);
-}
-async function setCheck(key, status, note) {
-  const prev = ui.ai.results?.[key];
-  const row = { user_id: Cloud.me, item_key: key, status: status || prev?.status || 'untested', note: note ?? prev?.note ?? '', app_version: CONFIG.version, platform: window.Capacitor?.getPlatform?.() || 'web', updated_at: new Date().toISOString() };
-  const { error } = await sb.from('test_results').upsert(row, { onConflict: 'user_id,item_key' });
-  if (error) { toast(cloudError(error), 'info'); return false; }
-  ui.ai.results = { ...(ui.ai.results || {}), [key]: row };
-  return true;
-}
-
-Object.assign(actions, {
-  'open-ai': el => openAI({ mode: el?.dataset?.mode }),
-  'ai-close': () => closeAI(),
-  'ai-mode': el => {
-    if (ui.ai.loading || el.dataset.value === ui.ai.mode) return;
-    ui.ai.mode = el.dataset.value === 'testing' ? 'testing' : 'assistant';
-    if (ui.ai.msgs.length) Object.assign(ui.ai, { convId: null, msgs: [], error: null });
-    renderAIModes(); renderAIMsgs(true);
-  },
-  'ai-new': () => { if (ui.ai.loading) return; Object.assign(ui.ai, { convId: null, msgs: [], error: null }); renderAIMsgs(true); $('#ai-input')?.focus(); },
-  'ai-suggest': el => { const ta = $('#ai-input'); ta.value = el.dataset.text; autoGrow(ta); aiComposerState(); aiSend(); },
-  'ai-retry': () => aiSend(true),
-  'ai-copy': el => { const m = ui.ai.msgs.find(x => x.id === el.dataset.mid); if (m) copyText(m.content); },
-  'ai-open': el => { const t = AI_TARGETS[el.dataset.target]; if (t) t[2](el.dataset.mid); },
-  'ai-history': () => aiHistorySheet(),
-  'ai-load': el => aiLoadConversation(el.dataset.id),
-  'ai-del': async el => {
-    const { error } = await sb.from('ai_conversations').delete().eq('id', el.dataset.id);
-    if (error) { toast(cloudError(error), 'info'); return; }
-    if (ui.ai.convId === el.dataset.id) { Object.assign(ui.ai, { convId: null, msgs: [], error: null }); renderAIMsgs(true); }
-    toast(AIL === 'ar' ? 'انحذفت المحادثة' : 'Conversation deleted', 'trash'); aiHistorySheet();
-  },
-  'ai-clear': async () => {
-    const ok = await confirmDialog({ title: AT('clearAll') + '?', body: AIL === 'ar' ? 'رح تنحذف كل محادثاتك مع ZYVEN AI من حسابك. ما في تراجع.' : 'Every ZYVEN AI conversation will be deleted from your account. This can’t be undone.', confirmLabel: AT('del'), danger: true });
-    if (!ok) return;
-    closeOverlay();
-    const { error } = await sb.from('ai_conversations').delete().eq('user_id', Cloud.me);
-    if (error) { toast(cloudError(error), 'info'); return; }
-    Object.assign(ui.ai, { convId: null, msgs: [], error: null, convs: [] }); renderAIMsgs(true);
-    toast(AIL === 'ar' ? 'انمسح سجل ZYVEN AI' : 'ZYVEN AI history cleared', 'trash');
-  },
-  'ai-diag-view': () => aiDiagSheet(),
-  'ai-tools': () => openSheet(`<div class="sheet-head"><h3>${esc(AT('title'))}</h3><button class="icon-btn" data-action="close-overlay" aria-label="Close">${I('x')}</button></div>
-    <div class="act-list">
-      <button class="act" data-action="ai-checklist">${I('checklist')}<span class="t">${ui.ai.isDev ? 'Developer testing' : esc(AT('checklist'))}<small>${ui.ai.isDev ? 'Record passed, failed, and not tested' : 'How to test every feature'}</small></span></button>
-      <button class="act" data-action="ai-bug">${I('bug')}<span class="t">${esc(AT('bug'))}<small>Saved to the ZYVEN server</small></span></button>
-      <button class="act" data-action="ai-diag-view">${I('pulse')}<span class="t">${esc(AT('diagTitle'))}<small>Version and connection checks</small></span></button>
-      <button class="act" data-action="ai-history">${I('history')}<span class="t">${esc(AT('history'))}<small>Open, delete, or clear conversations</small></span></button>
-    </div>`),
-  'ai-checklist': () => checklistSheet(),
-  'ai-testing': () => openAI({ mode: 'testing' }),
-  'ai-bug': () => bugReportSheet(),
-  'bug-set': el => {
-    ui.bug[el.dataset.k] = el.dataset.v;
-    el.parentElement.querySelectorAll('button').forEach(b => { const on = b === el; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); });
-  },
-  'ck-set': async el => {
-    if (!(await setCheck(el.dataset.key, el.dataset.v))) return;
-    const d = el.closest('details'); if (!d) return;
-    d.className = `ck-item st-${el.dataset.v}`;
-    d.querySelector('.ck-dot')?.setAttribute('aria-label', el.dataset.v);
-    d.querySelectorAll('.ck-seg button').forEach(b => { const on = b === el; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); });
-    const row = d.querySelector('.ck-row');
-    const bugBtn = row.querySelector('[data-action="ck-bug"]');
-    if (el.dataset.v === 'fail' && !bugBtn) row.insertAdjacentHTML('beforeend', `<button type="button" class="btn secondary sm" data-action="ck-bug" data-key="${el.dataset.key}">${I('bug')}Report bug</button>`);
-    if (el.dataset.v !== 'fail' && bugBtn) bugBtn.remove();
-    const res = ui.ai.results || {}, all = CHECKLIST.flatMap(([, items]) => items);
-    const n = s => all.filter(it => (res[it[0]]?.status || 'untested') === s).length;
-    const sum = document.querySelector('.ck-sum');
-    if (sum) sum.innerHTML = `<span class="p"><b>${n('pass')}</b>Passed</span><span class="f"><b>${n('fail')}</b>Failed</span><span class="u"><b>${n('untested')}</b>Not tested</span>`;
-  },
-  'ck-note': async el => {
-    const ta = el.closest('details').querySelector('.ck-note');
-    if (await setCheck(el.dataset.key, null, ta.value.trim())) toast('Note saved', 'check');
-  },
-  'ck-bug': el => {
-    const it = CHECKLIST.flatMap(([, items]) => items).find(x => x[0] === el.dataset.key); if (!it) return;
-    bugReportSheet();
-    setTimeout(() => {
-      const set = (id, v) => { const f = $(id); if (f && !f.value) f.value = v; };
-      set('#bug-title', `${it[1]} doesn’t work as expected`);
-      set('#bug-steps', it[2].map((s, i) => `${i + 1}. ${s}`).join('\n'));
-      set('#bug-exp', it[3]);
-      set('#bug-act', ui.ai.results?.[it[0]]?.note || '');
-    }, 60);
-  },
-  'ck-ask': el => {
-    const it = CHECKLIST.flatMap(([, items]) => items).find(x => x[0] === el.dataset.key); if (!it) return;
-    closeOverlay();
-    const q = AIL === 'ar' ? `وجّهني خطوة بخطوة لاختبار: ${it[1]}` : `Walk me through testing this, one step at a time: ${it[1]}`;
-    setTimeout(() => openAI({ mode: 'testing', prompt: q, send: true }), 200);
-  },
-});
-forms.bug = form => submitBug(form);
-
-
 /* ---------- Event wiring (delegated) ---------- */
 let lpTimer = null, lpFired = false, lpStart = null;
 const openPressMenu = el => el.dataset.stkpress ? stickerSheet(el.dataset.stkpress)
@@ -7285,7 +6445,6 @@ document.addEventListener('click', e => {
 }, true);
 
 document.addEventListener('change', e => {
-  if (e.target.id === 'ai-diag') { ui.ai.diag = e.target.checked; renderAIDiagBar(); if (ui.ai.diag) toast(AIL === 'ar' ? 'رح ينبعت التشخيص مع رسالتك الجاية' : 'Diagnostics will be attached to your next message', 'pulse'); return; }
   if (['img-in', 'vid-in', 'doc-in', 'any-in'].includes(e.target.id)) {
     const f = e.target.files && e.target.files[0];
     const id = e.target.id;
@@ -7337,7 +6496,6 @@ document.addEventListener('change', e => {
 });
 
 document.addEventListener('input', e => {
-  if (e.target.id === 'ai-input') { autoGrow(e.target); aiComposerState(); return; }
   const key = e.target.dataset.input;
   if (key === 'chat-search') { ui.chatQuery = e.target.value; renderChatsList(); }
   else if (key === 'contact-search') { ui.contactQuery = e.target.value; renderContactsList(); }
@@ -7411,7 +6569,6 @@ document.addEventListener('input', e => {
 document.addEventListener('submit', e => {
   e.preventDefault();
   if (e.target.id === 'composer-form') { sendMessage(); return; }
-  if (e.target.id === 'ai-form') { aiSend(); return; }
   const name = e.target.dataset.form;
   if (authForms[name]) { if (!Auth.busy) authForms[name](e.target).catch(err => { Auth.setBusy(false); Auth.err(authError(err)); }); return; }
   const f = forms[name];
@@ -7420,7 +6577,6 @@ document.addEventListener('submit', e => {
 
 document.addEventListener('keydown', e => {
   if (e.target.id === 'composer' && e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); sendMessage(); }
-  if (e.target.id === 'ai-input' && e.key === 'Enter' && !e.shiftKey && !e.isComposing && !matchMedia('(pointer:coarse)').matches) { e.preventDefault(); aiSend(); }
   if (e.key === 'Enter' && (e.target.id === 'gd-search' || e.target.id === 'gadd-search')) {
     e.preventDefault();
     const first = e.target.closest('.sheet')?.querySelector('.pick:not([hidden])');
@@ -7436,7 +6592,6 @@ document.addEventListener('keydown', e => {
     else if ($('#creator').classList.contains('open')) actions['cr-close']();
     else if ($('#appearance').classList.contains('open')) closeAppearance();
     else if ($('#saved').classList.contains('open')) closeSaved();
-    else if ($('#ai').classList.contains('open')) closeAI();
     else if ($('#stickers').classList.contains('open')) closeLibrary();
     else if (ui.rec) stopRecording(false);
     else if ($('#emoji-panel').classList.contains('open')) toggleEmoji(false);
