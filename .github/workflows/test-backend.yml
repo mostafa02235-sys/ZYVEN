@@ -48,7 +48,7 @@ jobs:
           supabase status -o env > supabase.env
           sed 's/=.*/=…/' supabase.env
 
-      - name: Database rules (78 privacy and permission checks)
+      - name: Database rules (93 privacy and permission checks)
         run: |
           set -a; . ./supabase.env; set +a
           set +e
@@ -88,12 +88,29 @@ jobs:
             exit 1
           fi
 
+      - name: Photos, wallpapers, and frames (two accounts, two browsers)
+        run: |
+          set -a; . ./supabase.env; set +a
+          curl -s -o /dev/null http://127.0.0.1:8080/index.html || { npx --yes http-server www -p 8080 -a 127.0.0.1 -s & sleep 3; }
+          set +e
+          SUPABASE_URL="$API_URL" SUPABASE_ANON_KEY="${ANON_KEY:-$PUBLISHABLE_KEY}" SERVICE_ROLE_KEY="${SERVICE_ROLE_KEY:-$SECRET_KEY}" \
+          APP_URL="http://127.0.0.1:8080/index.html" node tests/custom-e2e.mjs > custom-output.txt 2>&1
+          code=$?
+          set -e
+          cat custom-output.txt
+          echo "::notice title=Photos, wallpapers, frames::$(tail -1 custom-output.txt)"
+          if [ $code -ne 0 ]; then
+            msg=$( (grep -E '^FAIL|Error|error' custom-output.txt; tail -5 custom-output.txt) | head -40 | sed 's/%/%25/g' | sed ':a;N;$!ba;s/\n/%0A/g')
+            echo "::error title=Customization tests failed::${msg}"
+            exit 1
+          fi
+
       - name: Publish the test report
         if: always()
         run: |
           mkdir -p tests/results
-          cp db-results.txt e2e-output.txt tests/results/ 2>/dev/null || true
-          { echo "## Database rules"; echo '```'; tail -90 db-results.txt 2>/dev/null; echo '```'; cat tests/results/e2e.md 2>/dev/null; } >> "$GITHUB_STEP_SUMMARY" || true
+          cp db-results.txt e2e-output.txt custom-output.txt tests/results/ 2>/dev/null || true
+          { echo "## Database rules"; echo '```'; tail -90 db-results.txt 2>/dev/null; echo '```'; cat tests/results/e2e.md 2>/dev/null; cat tests/results/custom-e2e.md 2>/dev/null; } >> "$GITHUB_STEP_SUMMARY" || true
           cd tests/results
           echo "Run ${{ github.run_id }} for ${{ github.sha }}" > RUN.txt
           git init -q

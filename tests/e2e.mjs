@@ -241,6 +241,8 @@ async function uiTests() {
       // photo through storage
       const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAJElEQVR4nGNgoBAwMjAw/Gdg+M9AihJGBgaG/2iA/ZjqhgYQAADy1gcHw8bXXAAAAABJRU5ErkJggg==', 'base64');
       await px.setInputFiles('#img-in', { name: 'dot.png', mimeType: 'image/png', buffer: png });
+      await px.waitForSelector('#pp-send:not([disabled])', { timeout: 15000 });
+      await px.click('#pp-send');
       const img = await py.waitForFunction(() => [...document.querySelectorAll('.mrow.them .media')].some(m => /url\("?https?:/.test(m.style.background)), null, { timeout: 25000 }).catch(() => null);
       ok('photo uploads and arrives for Y', !!img);
     }

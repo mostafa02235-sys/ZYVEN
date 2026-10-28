@@ -251,6 +251,61 @@ set role authenticated;
 select _ok('member can join typing channel', public.can_use_media(substr((select realtime.topic()), 8), true));
 reset role;
 
+
+-- ================= Customization: frames and wallpapers =================
+select pg_temp.act('aaaaaaaa-0000-0000-0000-000000000001'); set role authenticated;
+update profiles set frame = 'gold' where id = 'aaaaaaaa-0000-0000-0000-000000000001';
+select _ok('frame: owner can pick a frame', (select frame from get_profiles(array['aaaaaaaa-0000-0000-0000-000000000001'::uuid])) = 'gold');
+do $$ begin
+  begin update profiles set frame = 'bad frame!' where id = 'aaaaaaaa-0000-0000-0000-000000000001'; perform _ok('frame: invalid frame name rejected', false);
+  exception when check_violation then perform _ok('frame: invalid frame name rejected', true); end;
+end $$;
+reset role;
+select pg_temp.act('bbbbbbbb-0000-0000-0000-000000000002'); set role authenticated;
+select _ok('frame: other people see the frame', (select frame from get_profiles(array['aaaaaaaa-0000-0000-0000-000000000001'::uuid])) = 'gold');
+select _ok('frame: search shows the frame', exists (select 1 from search_profiles('alice') where frame = 'gold'));
+update profiles set frame = 'comic' where id = 'aaaaaaaa-0000-0000-0000-000000000001';
+reset role;
+select _ok('frame: nobody can change someone else''s frame', (select frame from profiles where id = 'aaaaaaaa-0000-0000-0000-000000000001') = 'gold');
+
+-- Wallpapers: private to the person who set them
+select pg_temp.act('aaaaaaaa-0000-0000-0000-000000000001'); set role authenticated;
+insert into chat_wallpapers (conversation_id, kind, color) select id, 'color', '#102030' from _conv;
+insert into storage.objects (bucket_id, name) values ('wallpapers', 'aaaaaaaa-0000-0000-0000-000000000001/w1.jpg');
+update chat_wallpapers set kind = 'image', path = 'aaaaaaaa-0000-0000-0000-000000000001/w1.jpg', color = null, settings = '{"zoom":1.4,"x":0.3,"y":0.6,"dim":0.35}' where conversation_id = (select id from _conv);
+select _ok('wallpaper: owner can set and change a chat wallpaper', (select kind from chat_wallpapers) = 'image');
+do $$ begin
+  begin insert into chat_wallpapers (conversation_id, kind, path) select id, 'image', 'bbbbbbbb-0000-0000-0000-000000000002/stolen.jpg' from t_group;
+        perform _ok('wallpaper: file must be in your own folder', false);
+  exception when check_violation then perform _ok('wallpaper: file must be in your own folder', true); end;
+  begin insert into chat_wallpapers (conversation_id, kind, color) values ('99999999-0000-0000-0000-000000000009', 'color', '#000000');
+        perform _ok('wallpaper: only for chats you are in', false);
+  exception when others then perform _ok('wallpaper: only for chats you are in', true); end;
+  begin insert into chat_wallpapers (conversation_id, kind, color) select id, 'color', 'red' from t_g2;
+        perform _ok('wallpaper: colour must be #RRGGBB', false);
+  exception when check_violation then perform _ok('wallpaper: colour must be #RRGGBB', true); end;
+  begin insert into storage.objects (bucket_id, name) values ('wallpapers', 'bbbbbbbb-0000-0000-0000-000000000002/x.jpg');
+        perform _ok('wallpaper: cannot upload into someone else''s folder', false);
+  exception when others then perform _ok('wallpaper: cannot upload into someone else''s folder', true); end;
+end $$;
+reset role;
+select pg_temp.act('bbbbbbbb-0000-0000-0000-000000000002'); set role authenticated;
+select _ok('wallpaper: other people cannot see your wallpaper', (select count(*) from chat_wallpapers) = 0);
+select _ok('wallpaper: other people cannot see your wallpaper files', (select count(*) from storage.objects where bucket_id = 'wallpapers') = 0);
+delete from chat_wallpapers; delete from storage.objects where bucket_id = 'wallpapers';
+reset role;
+select _ok('wallpaper: other people cannot delete it', (select count(*) from chat_wallpapers) = 1 and (select count(*) from storage.objects where bucket_id = 'wallpapers') = 1);
+select pg_temp.act('aaaaaaaa-0000-0000-0000-000000000001'); set role authenticated;
+delete from chat_wallpapers where conversation_id = (select id from _conv);
+select _ok('wallpaper: owner can remove it', (select count(*) from chat_wallpapers) = 0);
+reset role;
+set role anon;
+do $$ begin
+  begin perform * from chat_wallpapers; perform _ok('wallpaper: signed-out visitors blocked', false);
+  exception when insufficient_privilege then perform _ok('wallpaper: signed-out visitors blocked', true); end;
+end $$;
+reset role;
+
 \o
 \pset tuples_only off
 select n, case when ok then 'PASS' else 'FAIL' end as result, name, left(detail, 80) as detail from public._results order by n;

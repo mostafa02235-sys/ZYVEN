@@ -1087,6 +1087,135 @@ input[type=range]:disabled{opacity:.4}
 .stk-prev h3{margin:12px 0 0;font-family:var(--f-display);font-weight:600;font-size:22px;letter-spacing:-.02em}
 .stk-prev .meta{font-size:12.5px;color:var(--muted)}
 
+/* ---------- Profile frames ---------- */
+.av.framed{overflow:visible}
+.av .fr-ov{position:absolute;inset:calc(var(--s) * -.25);z-index:1;pointer-events:none;display:block}
+.av .fr-ov svg{width:100%;height:100%;display:block;overflow:visible}
+.av.framed .dot{z-index:2}
+.row > .av.framed,.pick > .av.framed,.saved-item .av.framed{margin-inline:calc(var(--s) * .16)}
+.fr-anim-spin{animation:frSpin 14s linear infinite}
+.fr-anim-pulse{animation:frPulse 2.6s ease-in-out infinite}
+@keyframes frSpin{to{transform:rotate(360deg)}}
+@keyframes frPulse{0%,100%{opacity:.75;transform:scale(.985)}50%{opacity:1;transform:scale(1.015)}}
+.fr-body{padding:18px 16px 120px;display:flex;flex-direction:column;gap:14px}
+.fr-hero{display:flex;flex-direction:column;align-items:center;gap:6px;padding:26px 0 8px;text-align:center}
+.fr-big{padding:36px;margin-bottom:6px}
+.fr-hero > b{font-family:var(--f-display);font-weight:600;font-size:19px;letter-spacing:-.01em}
+.fr-hero > span{font-size:13px;color:var(--muted)}
+.fr-sizes{display:flex;align-items:center;gap:22px;margin-top:16px;padding:16px 20px;border-radius:20px;border:1px solid var(--line);width:100%;justify-content:center}
+.fr-row-demo{display:flex;flex-direction:column;align-items:flex-start;text-align:left;min-width:0}
+.fr-row-demo b{font-weight:600;font-size:14.5px}.fr-row-demo small{color:var(--muted);font-size:12px}
+.fr-tabs{padding:2px 0}
+.fr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.fr-tile{position:relative;display:flex;flex-direction:column;align-items:center;gap:12px;padding:24px 6px 12px;border-radius:20px;border:1px solid var(--line);font-size:12.5px;color:var(--muted);transition:border-color .2s,background .2s}
+.fr-tile.on{border-color:var(--tint);background:color-mix(in srgb,var(--tint) 10%,transparent);color:var(--fg)}
+.fr-tile:active{transform:scale(.98)}
+.fr-badge{font-style:normal;font-size:9.5px;font-family:var(--f-mono);padding:1px 6px;border-radius:6px;background:var(--surface-2);color:var(--muted);margin-top:-6px}
+.fr-body > *,.wp-body > *{flex:none}
+.fr-acts{position:absolute;left:0;right:0;bottom:0;z-index:5;display:flex;gap:10px;padding:12px 16px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:var(--bg)}
+.fr-acts .btn{flex:1}
+
+/* ---------- Photo send preview ---------- */
+.pp,.crop{position:absolute;inset:0;z-index:60;background:#000;color:#fff;display:flex;flex-direction:column;opacity:0;transform:translateY(16px);transition:opacity .25s,transform .3s var(--ease)}
+.pp.open,.crop.open{opacity:1;transform:none}
+.pp-head{display:flex;align-items:center;gap:8px;padding:10px 8px;border-bottom:1px solid #1d1d1d}
+.pp-head .icon-btn{color:#fff;background:transparent;border-color:transparent}
+.pp-title{flex:1;display:flex;flex-direction:column;align-items:center;min-width:0;text-align:center}
+.pp-title b{font-family:var(--f-display);font-weight:600;font-size:17px}
+.pp-title span{font-size:12px;color:#a3a3a3;font-family:var(--f-mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.pp-title span.bad{color:var(--danger);font-family:var(--f-body)}
+.pp-stage{flex:1;min-height:0;display:grid;place-items:center;position:relative;padding:12px}
+.pp-img{max-width:100%;max-height:100%;object-fit:contain;border-radius:12px;animation:pop .25s var(--ease) both}
+.pp-err{display:flex;flex-direction:column;align-items:center;gap:10px;color:#a3a3a3;text-align:center;max-width:30ch;font-size:14px}
+.pp-err svg{width:34px;height:34px}
+.pp-spin{position:absolute;width:34px;height:34px;border-radius:50%;border:3px solid rgba(255,255,255,.2);border-top-color:#fff;animation:spin .8s linear infinite}
+.pp-spin.sm{position:static;width:16px;height:16px;border-width:2px;border-color:color-mix(in srgb,currentColor 30%,transparent);border-top-color:currentColor}
+@keyframes spin{to{transform:rotate(360deg)}}
+.pp-strip{display:flex;gap:8px;padding:10px 12px;overflow-x:auto;scrollbar-width:none}
+.pp-th{flex:none;width:56px;height:56px;border-radius:12px;background:#1a1a1a center/cover no-repeat;border:2px solid transparent;display:grid;place-items:center;color:#fff;transition:border-color .2s,transform .15s}
+.pp-th.on{border-color:#fff}
+.pp-th.prep{opacity:.5}.pp-th.error{border-color:var(--danger)}
+.pp-th svg{width:18px;height:18px}
+.pp-more{border:1.5px dashed #555;cursor:pointer;background:transparent}
+.pp-foot{display:flex;gap:8px;padding:8px 10px calc(12px + env(safe-area-inset-bottom));align-items:center}
+.pp-foot input{flex:1;min-width:0;height:46px;border-radius:23px;background:#141414;border:1px solid #262626;color:#fff;padding:0 16px;font-size:15px;outline:0}
+.pp-foot .icon-btn{width:46px;height:46px;border-radius:50%}
+.pp-foot .icon-btn:disabled{opacity:.4}
+
+/* ---------- Upload progress on photo/video bubbles ---------- */
+.media .up-ring{position:absolute;inset:0;margin:auto;z-index:2;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;
+  background:conic-gradient(#fff calc(var(--p,0) * 360deg),rgba(255,255,255,.22) 0);-webkit-mask:radial-gradient(circle,transparent 22px,#000 23px);mask:radial-gradient(circle,transparent 22px,#000 23px)}
+.media .up-pct{position:absolute;inset:0;margin:auto;z-index:2;width:56px;height:56px;display:grid;place-items:center;font:600 11.5px var(--f-mono);color:#fff;pointer-events:none}
+.media .up-dim{position:absolute;inset:0;z-index:1;background:rgba(0,0,0,.38)}
+.media .up-fail{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:rgba(0,0,0,.55);color:#fff;font-size:13px;font-weight:600}
+.media .up-fail svg{width:24px;height:24px;color:var(--danger)}
+
+/* ---------- Zoomable viewer ---------- */
+.vw-zoom{position:relative;width:100%;height:100%;display:grid;place-items:center;overflow:hidden;touch-action:none;cursor:zoom-in}
+.vw-zoom.zoomed{cursor:grab}
+.vw-img{max-width:100%;max-height:100%;object-fit:contain;user-select:none;-webkit-user-drag:none;will-change:transform}
+.vw-spin{position:absolute;right:14px;top:14px;width:22px;height:22px;border-radius:50%;border:2.5px solid rgba(255,255,255,.25);border-top-color:#fff;animation:spin .8s linear infinite}
+
+/* ---------- Cropper ---------- */
+.crop-stage{position:relative;width:min(84vw,320px);aspect-ratio:1;margin:auto;overflow:hidden;border-radius:24px;touch-action:none;background:#111;cursor:grab}
+.crop-stage img{position:absolute;left:50%;top:50%;max-width:none;user-select:none;-webkit-user-drag:none}
+.crop-mask{position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 2px rgba(255,255,255,.7)}
+.crop-mask.round{border-radius:50%;box-shadow:0 0 0 999px rgba(0,0,0,.55),inset 0 0 0 2px rgba(255,255,255,.75)}
+.crop-frame{position:absolute;inset:-25%;pointer-events:none;opacity:.9}
+.crop-frame svg{width:100%;height:100%}
+.crop-ctl{display:flex;align-items:center;gap:12px;padding:18px 24px 8px;color:#a3a3a3}
+.crop-ctl svg{width:18px;height:18px}
+.crop-ctl input{flex:1;accent-color:#fff}
+.crop-acts{display:flex;gap:10px;padding:10px 16px calc(16px + env(safe-area-inset-bottom))}
+.crop-acts .btn{flex:1}
+.crop .btn{background:#fff;color:#000}.crop .btn.secondary{background:#1c1c1c;color:#fff}
+
+/* ---------- Chat wallpaper layer ---------- */
+.cw-layer{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:#000}
+#msgs.has-cw{background:transparent!important}
+.cw-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.cw-fill,.cw-dim{position:absolute;inset:0}
+.cw-still[hidden]{display:none}
+
+/* ---------- Wallpaper editor ---------- */
+.wp-sub{display:block;font-family:var(--f-body);font-size:12.5px;font-weight:400;color:var(--muted);letter-spacing:0}
+.wp-body{padding:14px 16px 28px;display:flex;flex-direction:column;gap:14px}
+.wp-prev{position:relative;width:min(100%,250px);aspect-ratio:9/16;margin:0 auto;border-radius:26px;overflow:hidden;border:1px solid var(--line);background:#000;touch-action:none;cursor:grab;flex:none}
+.wp-prev.k-color,.wp-prev.empty{cursor:default}
+.wp-empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--muted);font-size:13px;text-align:center;padding:0 28px 120px}
+.wp-empty svg{width:30px;height:30px}
+.wp-bubs{position:absolute;left:10px;right:10px;bottom:14px;display:flex;flex-direction:column;gap:6px;pointer-events:none}
+.wp-b{max-width:78%;padding:7px 11px;border-radius:15px;font-size:11.5px;line-height:1.35}
+.wp-b.in{align-self:flex-start;background:var(--bubble-in);color:var(--fg);border-bottom-left-radius:5px}
+.wp-b.out{align-self:flex-end;background:var(--accent);color:var(--accent-ink);border-bottom-right-radius:5px}
+.seg4{grid-template-columns:repeat(4,1fr)!important;margin:0!important}
+.seg4 button{font-size:13px;gap:6px}
+.wp-panel{display:flex;flex-direction:column;gap:12px}
+.wp-hint{display:flex;align-items:center;justify-content:center;gap:6px;padding:0!important}
+.wp-hint svg{width:14px;height:14px}
+.wp-rng{display:grid;grid-template-columns:96px 1fr 52px;align-items:center;gap:10px;font-size:13.5px}
+.wp-rng .l{color:var(--muted)}
+.wp-rng input{width:100%;accent-color:var(--tint)}
+.wp-rng output{font-family:var(--f-mono);font-size:12px;text-align:right;color:var(--fg)}
+.wp-seg-box{display:flex;flex-direction:column;gap:10px;padding:12px 14px;border-radius:16px;background:var(--surface)}
+.wp-sound,.wp-default{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;background:var(--surface);font-size:14px}
+.wp-sound > svg,.wp-default > svg{width:20px;height:20px;color:var(--muted);flex:none}
+.wp-sound span:nth-child(2),.wp-default span{flex:1;display:flex;flex-direction:column;gap:2px}
+.wp-sound small,.wp-default small{color:var(--muted);font-size:12.5px;line-height:1.4}
+.sw-lock{font:600 11.5px var(--f-mono);padding:4px 10px;border-radius:999px;background:var(--surface-2);color:var(--muted)}
+.wp-colors{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.wp-col{aspect-ratio:1;border-radius:14px;background:var(--c);border:1px solid var(--line);position:relative;display:grid;place-items:center;color:#fff}
+.wp-col.on{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--tint)}
+.wp-col.custom{background:conic-gradient(#FF6B63,#FFC15E,#4ADE9F,#5CB0FF,#9D90FF,#FF7AB6,#FF6B63);overflow:hidden;cursor:pointer}
+.wp-col.custom svg{width:18px;height:18px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))}
+.wp-col.custom input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.wp-err{min-height:0;margin:0;text-align:center}
+.wp-acts{display:flex;gap:10px}
+.wp-acts .btn{flex:1}
+
+@media (prefers-reduced-motion:reduce){
+  .fr-anim-spin,.fr-anim-pulse{animation:none}
+}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
@@ -1105,6 +1234,8 @@ input[type=range]:disabled{opacity:.4}
   <section class="screen" id="creator" aria-label="Sticker creator" aria-hidden="true"></section>
   <section class="screen" id="saved" aria-label="Saved messages" aria-hidden="true"></section>
   <section class="screen" id="appearance" aria-label="Chat design" aria-hidden="true"></section>
+  <section class="screen" id="wallpaper" aria-label="Chat wallpaper" aria-hidden="true"></section>
+  <section class="screen" id="frames" aria-label="Profile frames" aria-hidden="true"></section>
   <div class="overlay" id="overlay" hidden></div>
   <div class="viewer" id="viewer" hidden role="dialog" aria-modal="true" aria-label="Media viewer"></div>
   <div class="toasts" id="toasts" aria-live="polite"></div>
@@ -1318,7 +1449,7 @@ function blankState() {
     settings: DEFAULT_SETTINGS(),
     stickers: { mine: [], favorites: [], recent: [] }, recentEmoji: [],
     chatStyle: { design: 'default', in: 'design', out: 'design', wall: 'black', radius: null, spacing: 'design' },
-    session: {},
+    session: {}, walls: {},
   };
 }
 /* Fills in anything missing from an older on-device copy. */
@@ -1435,12 +1566,12 @@ const userAvatar = (id, size = 48, showOnline = true) => {
   const u = getUser(id);
   if (!u) return avatar('?', 0, size);
   const online = showOnline && u.online && !isBlocked(u.id);
-  if (!u.photo) return avatar(u.name, u.hue, size, { online });
-  return `<span class="av" style="--s:${size}px;--h:${u.hue};background:url('${u.photo}') center/cover no-repeat" aria-hidden="true">${online ? '<i class="dot"></i>' : ''}</span>`;
+  if (!u.photo) return withFrame(avatar(u.name, u.hue, size, { online }), u.frame, size);
+  return withFrame(`<span class="av" style="--s:${size}px;--h:${u.hue};background:url('${u.photo}') center/cover no-repeat" aria-hidden="true">${online ? '<i class="dot"></i>' : ''}</span>`, u.frame, size);
 };
-const avatarFor = (p, size) => p.photo
+const avatarFor = (p, size) => withFrame(p.photo
   ? `<span class="av" style="--s:${size}px;--h:${p.hue};background:url('${p.photo}') center/cover no-repeat" aria-hidden="true"></span>`
-  : avatar(p.name || '?', p.hue, size);
+  : avatar(p.name || '?', p.hue, size), p.frame, size);
 /* Group pictures: a colour with initials, an icon, a sample scene, or an uploaded photo. */
 function groupAvatar(g, size = 52) {
   const p = g.pic;
@@ -1645,6 +1776,7 @@ function renderShell() {
     </header>
     <div class="pin-bar" id="pin-bar" hidden></div>
     <div class="msgs-wrap">
+      <div class="cw-layer" id="cw-layer" hidden aria-hidden="true"></div>
       <div class="msgs" id="msgs" role="log" aria-live="polite"></div>
       <button class="to-bottom" id="to-bottom" data-action="to-bottom" aria-label="Jump to the latest message">${I('down')}<span class="badge" id="to-bottom-n" hidden></span></button>
     </div>
@@ -1675,7 +1807,8 @@ function renderShell() {
     <input type="file" id="file-in" accept="image/*,video/*" hidden>
     <input type="file" id="audio-in" accept="audio/*,.m4a,.mp3,.wav,.ogg,.opus,.webm" hidden>
     <input type="file" id="audio-cap" accept="audio/*" capture hidden>
-    <input type="file" id="img-in" accept="image/*" hidden>
+    <input type="file" id="img-in" accept="image/*" multiple hidden>
+    <input type="file" id="cam-in" accept="image/*" capture="environment" hidden>
     <input type="file" id="vid-in" accept="video/*" hidden>
     <input type="file" id="doc-in" accept=".pdf,.doc,.docx,.odt,.rtf,.txt,.md,.csv,.xls,.xlsx,.ods,.ppt,.pptx,.odp,.epub,.json,application/pdf,text/plain" hidden>
     <input type="file" id="any-in" hidden>`;
@@ -1866,6 +1999,17 @@ function renderProfile() {
         <p class="note">${I('info')}Banners appear while ZYVEN is open. Notifications when the app is closed (push) aren’t set up yet.</p>
       </div>
 
+      <div class="group" id="pf-custom">
+        <span class="group-label">Customization</span>
+        <div class="card">
+          ${linkRow('cz-walls', 'wallpaper', 'Chat wallpapers', Object.keys(state.walls || {}).length ? `${Object.keys(state.walls).length} chat${Object.keys(state.walls).length === 1 ? '' : 's'} customized` : 'Photo or colour, per chat')}
+          ${linkRow('cz-video', 'film', 'Video wallpapers', 'A silent, looping video behind a chat')}
+          ${linkRow('edit-profile', 'camera', 'Profile picture', 'Change, crop, and reposition')}
+          ${linkRow('open-frames', 'frame', 'Profile frames', validFrame(state.profile.frame) ? FRAMES[state.profile.frame].name : 'Decorate your photo')}
+          ${linkRow('cz-reset', 'refresh', 'Reset customization', 'Remove all wallpapers and your frame', 'danger')}
+        </div>
+      </div>
+
       <div class="group">
         <span class="group-label">Chat design</span>
         <div class="card">
@@ -1953,11 +2097,15 @@ function mediaBlock(m, metaHtml) {
   const sc = SCENES[m.scene];
   const r = m.ratio || sc?.ratio || 4 / 3;
   const w = r >= 1 ? 252 : Math.max(168, Math.round(300 * r));
-  const bg = m.src ? `url('${m.src}') center/cover no-repeat`
+  const pic = m.thumb || m.src;
+  const bg = pic ? `url('${pic}') center/cover no-repeat`
     : m.poster ? `url('${m.poster}') center/cover no-repeat`
     : sc ? sc.bg : 'var(--surface-3)';
-  return `<button type="button" class="media" data-action="view-media" data-msg="${m.id}" style="width:${w}px;aspect-ratio:${r};background:${bg}" aria-label="Open ${m.type === 'video' ? 'video' : 'photo'}">
-    ${m.type === 'video' ? `<span class="vd">${I('film')}${fmtDur(m.duration)}</span><span class="play">${I('play')}</span>` : ''}
+  const up = m.from === 'me' && m.pending
+    ? `<span class="up-dim"></span><span class="up-ring" style="--p:${m.progress || 0}"></span><span class="up-pct" role="progressbar" aria-label="Uploading">${Math.round((m.progress || 0) * 100)}%</span>`
+    : m.from === 'me' && m.status === 'failed' ? `<span class="up-fail">${I('refresh')}Tap to retry</span>` : '';
+  return `<button type="button" class="media" data-action="view-media" data-msg="${m.id}" style="width:${w}px;aspect-ratio:${r};background:${bg}" aria-label="${m.status === 'failed' ? 'Not sent. Tap to retry' : `Open ${m.type === 'video' ? 'video' : 'photo'}`}">
+    ${m.type === 'video' && !up ? `<span class="vd">${I('film')}${fmtDur(m.duration)}</span><span class="play">${I('play')}</span>` : ''}${up}
     ${metaHtml ? `<span class="ometa">${metaHtml}</span>` : ''}</button>`;
 }
 
@@ -2431,6 +2579,7 @@ function voiceLimitSheet(kind, err) {
 /* ---------- Media viewer ---------- */
 function openViewer(id) {
   const m = findMsg(id); if (!m || m.deleted) return;
+  if (m.from === 'me' && m.status === 'failed') { failedSheet(id); return; }
   closeOverlay();
   const v = $('#viewer');
   const sc = SCENES[m.scene];
@@ -2438,7 +2587,7 @@ function openViewer(id) {
   const bg = m.src ? `url('${m.src}')` : m.poster ? `url('${m.poster}')` : '';
   const frame = `<div class="vw-media" id="vw-media" style="aspect-ratio:${r};width:min(100%, ${Math.round(r * 520)}px)">
     <div class="vw-frame" style="${bg ? `background-image:${bg}` : `background:${sc ? sc.bg : '#222'}`}"></div></div>`;
-  let body = frame, foot = '';
+  let body = m.type === 'image' && (m.src || m.thumb) ? photoViewerBody(m, r) : frame, foot = '';
   ui.vid = null;
   if (m.type === 'video') {
     const vsrc = m.url || (m.blob && ui.blobs.has(m.id) ? m.blob : null);
@@ -2456,6 +2605,7 @@ function openViewer(id) {
   v.hidden = false;
   requestAnimationFrame(() => requestAnimationFrame(() => v.classList.add('open')));
   if (ui.vid) { $('#vw-media').classList.add('playing'); runVid(); }
+  if (m.type === 'image') mountPhotoViewer(m);
 }
 function runVid() {
   const step = t => {
@@ -2602,6 +2752,7 @@ function chatActionsSheet(id) {
     </div>
     <div class="act-list" style="margin-top:10px">
       ${validPins(c).length ? `<button class="act" data-action="chat-pins" data-id="${id}">${I('pin')}Pinned messages · ${validPins(c).length}</button>` : ''}
+      <button class="act" data-action="wp-open" data-id="${id}">${I('wallpaper')}<span class="t">Wallpaper<small>${Walls.get(id) ? { color: 'Colour', image: 'Photo', video: 'Video' }[Walls.get(id).kind] : 'Default'}</small></span></button>
       <button class="act" data-action="ttl-open" data-id="${id}">${I('timer')}<span class="t">Disappearing messages<small>${c.ttl ? TTL[c.ttl][1] : 'Off'}</small></span></button>
       <button class="act" data-action="open-appearance">${I('brush')}<span class="t">Chat design<small>${esc(DESIGNS[CS().design]?.name || 'Default')}</small></span></button>
       <button class="act" data-action="open-saved">${I('bookmark')}Saved messages</button>
@@ -2672,6 +2823,7 @@ function groupInfoSheet(id) {
       </div>`}
       ${left ? '' : `<div class="act-list wide" style="margin-top:6px">
         <button class="act" data-action="chat-pins" data-id="${id}">${I('pin')}<span class="t">Pinned messages<small>${pins ? `${pins} pinned` : 'None yet'}</small></span></button>
+        <button class="act" data-action="wp-open" data-id="${id}">${I('wallpaper')}<span class="t">Wallpaper<small>${Walls.get(id) ? { color: 'Colour', image: 'Photo', video: 'Video' }[Walls.get(id).kind] : 'Default'}</small></span></button>
         <button class="act" data-action="ttl-open" data-id="${id}">${I('timer')}<span class="t">Disappearing messages<small>${g.ttl ? TTL[g.ttl][1] : 'Off'}</small></span></button>
         <button class="act" data-action="open-appearance">${I('brush')}<span class="t">Chat design<small>${esc(DESIGNS[CS().design]?.name || 'Default')} bubbles</small></span></button>
         ${admin ? `<button class="act" data-action="group-editinfo" data-id="${id}">${I('crown')}<span class="t">Who can edit group info<small>${g.editInfo === 'admins' ? 'Only admins' : 'All members'} · name, picture, description, pins</small></span></button>` : ''}
@@ -2898,7 +3050,7 @@ function renderPfPreview() {
   const vis = S().privacy.onlineStatus;
   const showPhoto = S().privacy.photo !== 'nobody';
   box.innerHTML = `<span class="pf-label">Preview</span>
-    <div class="pf-card">${avatarFor({ name, hue: ui.pdraft.hue, photo: showPhoto ? ui.pdraft.photo : null }, 64)}
+    <div class="pf-card">${avatarFor({ name, hue: ui.pdraft.hue, photo: showPhoto ? ui.pdraft.photo : null, frame: state.profile.frame }, 64)}
       <div class="pf-txt"><b>${esc(name)}</b><span class="handle">@${esc(user || 'username')}</span>
         <span class="st ${vis === 'nobody' ? 'off' : ''}"><i></i>${vis === 'nobody' ? 'Online status hidden' : 'Online'}</span>
         ${bio ? `<p>${esc(bio)}</p>` : '<p class="faint">No bio yet</p>'}</div></div>
@@ -3121,7 +3273,8 @@ function attachSheet() {
     <div class="sheet-head"><h3>Share</h3><button class="icon-btn" data-action="close-overlay" aria-label="Close">${I('x')}</button></div>
     <div class="attach-sec">From this device</div>
     <div class="attach-grid three">
-      ${opt('label', 'for="img-in"', 'image', '#5CB0FF', 'Photos', 'JPG, PNG, WebP')}
+      ${opt('label', 'for="img-in"', 'image', '#5CB0FF', 'Photos', 'Up to 10 at once')}
+      ${opt('label', 'for="cam-in"', 'camera', '#4ADE9F', 'Camera', 'Take a photo')}
       ${opt('label', 'for="vid-in"', 'film', '#FF7AB6', 'Videos', 'MP4, WebM, MOV')}
       ${opt('label', 'for="doc-in"', 'file', '#FF5A5F', 'Documents', 'PDF, Word, Excel')}
       ${opt('label', 'for="any-in"', 'folder', '#FFC15E', 'Other files', 'Up to 25 MB')}
@@ -4798,7 +4951,7 @@ const sb = (() => {
     });
   } catch (e) { console.error('ZYVEN: could not start the server client', e); return null; }
 })();
-const PROFILE_OWN_COLS = 'id,username,display_name,bio,hue,avatar_path,privacy_online,privacy_last_seen,privacy_photo,read_receipts,created_at';
+const PROFILE_OWN_COLS = 'id,username,display_name,bio,hue,avatar_path,privacy_online,privacy_last_seen,privacy_photo,read_receipts,frame,created_at';
 const MSG_COLS = 'id,conversation_id,sender_id,kind,body,meta,reactions,created_at,edited_at,deleted_at,deleted_by,expires_at';
 const PAGE = 50;
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -4872,7 +5025,7 @@ const Media = {
   },
 };
 const dataUrlToBlob = async u => (await fetch(u)).blob();
-const metaPaths = meta => [meta?.path, meta?.poster_path].filter(p => typeof p === 'string');
+const metaPaths = meta => [meta?.path, meta?.poster_path, meta?.thumb_path].filter(p => typeof p === 'string');
 const safeFileName = n => (String(n || 'file').replace(/[^\w.\- ]+/g, '_').replace(/\s+/g, ' ').trim().slice(-80) || 'file');
 const audioExt = mime => (/mp4|aac|m4a/.test(mime || '') ? 'm4a' : /ogg|opus/.test(mime || '') ? 'ogg' : /mpeg|mp3/.test(mime || '') ? 'mp3' : /wav/.test(mime || '') ? 'wav' : 'webm');
 
@@ -4897,7 +5050,7 @@ function cleanPic(p) {
 }
 function setMediaUrls(m) {
   const meta = m.meta || {};
-  if (m.type === 'image') m.src = Media.url(meta.path) || (m.src && m.src.startsWith('data:') ? m.src : m.src || null);
+  if (m.type === 'image') { m.src = Media.url(meta.path) || m.src || null; m.thumb = Media.url(meta.thumb_path) || m.thumb || null; }
   else if (m.type === 'video') { m.url = Media.url(meta.path) || m.url || null; m.poster = Media.url(meta.poster_path) || m.poster || null; }
   else if (m.type === 'voice') m.audio = Media.url(meta.path) || m.audio || null;
   else if (m.type === 'file') m.data = Media.url(meta.path) || m.data || null;
@@ -4979,7 +5132,7 @@ function sysText(m) {
 function profileToUser(p, prev) {
   return {
     id: p.id, name: str(p.display_name, 32) || p.username, username: str(p.username, 24), bio: str(p.bio, 140),
-    hue: num(p.hue, 0, 360, 250), photoPath: p.avatar_path || null, photo: Media.url(p.avatar_path, 'avatars'),
+    hue: num(p.hue, 0, 360, 250), photoPath: p.avatar_path || null, photo: Media.url(p.avatar_path, 'avatars'), frame: validFrame(p.frame),
     online: !!p.online, lastSeen: p.last_seen_at ? Date.parse(p.last_seen_at) : null, readReceipts: p.read_receipts !== false,
     contact: prev?.contact || false,
   };
@@ -5114,7 +5267,7 @@ const Cloud = {
     await Media.sign([data.avatar_path], 'avatars');
     Object.assign(state.profile, {
       id: data.id, name: data.display_name, username: data.username, bio: data.bio || '', hue: num(data.hue, 0, 360, 250),
-      photoPath: data.avatar_path || null, photo: Media.url(data.avatar_path, 'avatars'), since: Date.parse(data.created_at),
+      photoPath: data.avatar_path || null, photo: Media.url(data.avatar_path, 'avatars'), since: Date.parse(data.created_at), frame: validFrame(data.frame),
     });
     Object.assign(S().privacy, { onlineStatus: data.privacy_online, lastSeen: data.privacy_last_seen, photo: data.privacy_photo, readReceipts: data.read_receipts });
     renderProfile();
@@ -5371,7 +5524,11 @@ const Cloud = {
         case 'image':
           body = msg.caption || null; meta.ratio = msg.ratio;
           if (f.copy?.path) copies.push(['path', f.copy.path]);
-          else uploads.push(['path', f.main || (msg.src?.startsWith('data:') ? await dataUrlToBlob(msg.src) : null), 'photo.jpg']);
+          else {
+            const main = f.main || (msg.src?.startsWith('data:') ? await dataUrlToBlob(msg.src) : null);
+            uploads.push(['path', main, `photo.${main?.type === 'image/png' ? 'png' : main?.type === 'image/webp' ? 'webp' : main?.type === 'image/gif' ? 'gif' : 'jpg'}`]);
+            if (f.thumb) uploads.push(['thumb_path', f.thumb, 'thumb.jpg']);
+          }
           break;
         case 'video':
           body = msg.caption || null; Object.assign(meta, { ratio: msg.ratio, duration: msg.duration });
@@ -5403,10 +5560,14 @@ const Cloud = {
         case 'location': ['lat', 'lng', 'acc', 'label'].forEach(k => { if (msg[k] !== undefined) meta[k] = msg[k]; }); break;
         default: throw new Error('Unsupported message');
       }
+      const total = uploads.reduce((n, [, b]) => n + (b?.size || 0), 0) || 1;
+      let doneBytes = 0;
+      msg.progress = 0;
       for (const [key, blob, name] of uploads) {
         if (!blob) throw new Error('The file for this message is no longer on this phone. Delete it and send it again.');
         if (blob.size > 25 * 1024 * 1024) throw new Error('too large');
-        meta[key] = await Media.upload(`${c.id}/${msg.id}/${name}`, blob, blob.type);
+        meta[key] = await Media.uploadProgress(`${c.id}/${msg.id}/${name}`, blob, 'chat-media', p => { msg.progress = (doneBytes + p * blob.size) / total; paintProgress(msg); });
+        doneBytes += blob.size;
       }
       for (const [key, from] of copies) meta[key] = await Media.copy(from, `${c.id}/${msg.id}/${from.split('/').pop()}`);
       const { data, error } = await sb.from('messages').insert({ id: msg.id, conversation_id: c.id, kind: msg.type, body, meta }).select(MSG_COLS).single();
@@ -5690,6 +5851,9 @@ const authForms = {
 async function signOut(erase) {
   const id = Cloud.me;
   closeOverlay();
+  try { if (ui.pp) closePhotoPreview(); if (ui.crop) ui.crop.close(); if ($('#wallpaper').classList.contains('open')) closeWallpaper(); if ($('#frames').classList.contains('open')) closeFrames(); stopWallVideo(); } catch (x) {}
+  ui.wallUrls.forEach(u => { if (u.startsWith('blob:')) URL.revokeObjectURL(u); }); ui.wallUrls.clear();
+  if (erase) { try { if ('caches' in window) caches.delete('zyven-wallpapers-v1'); } catch (x) {} }
   if (ui.openChatId) closeChat();
   Cloud.stop();
   try { await sb.auth.signOut({ scope: 'local' }); } catch (e) { /* signed out on this phone either way */ }
@@ -5832,7 +5996,8 @@ function takeCaption() {
 }
 function handleFile(file) {
   if (!file || !ui.openChatId) return;
-  if (file.type.startsWith('image/')) {
+  if (file.type.startsWith('image/')) { openPhotoPreview([file]); return; }
+  if (false) {
     const reader = new FileReader();
     reader.onload = () => {
       const img = new Image();
@@ -6404,6 +6569,990 @@ const forms = {
   },
 };
 
+/* =========================================================
+   7x. PROFILE PICTURE FRAMES — original vector frames drawn on top of
+   the photo (the photo itself is never changed). viewBox -60..60;
+   the photo is the circle of radius 40, so decorations stay on the
+   ring outside it and never cover the face.
+   ========================================================= */
+const FR = (() => {
+  const P = (deg, r) => { const a = deg * Math.PI / 180; return [+(Math.cos(a) * r).toFixed(2), +(Math.sin(a) * r).toFixed(2)]; };
+  const ring = (r, stroke, w, extra = '') => `<circle r="${r}" fill="none" stroke="${stroke}" stroke-width="${w}" ${extra}/>`;
+  const star4 = (x, y, r, fill, stroke = 'none', sw = 0) =>
+    `<path d="M${x} ${y - r}Q${x} ${y} ${x + r} ${y}Q${x} ${y} ${x} ${y + r}Q${x} ${y} ${x - r} ${y}Q${x} ${y} ${x} ${y - r}Z" fill="${fill}" stroke="${stroke}" stroke-width="${sw}" stroke-linejoin="round"/>`;
+  const star5 = (x, y, r, fill, stroke = 'none', sw = 0) => {
+    const pts = []; for (let i = 0; i < 10; i++) { const rr = i % 2 ? r * .45 : r; const [a, b] = P(-90 + i * 36, rr); pts.push(`${(x + a).toFixed(2)},${(y + b).toFixed(2)}`); }
+    return `<polygon points="${pts.join(' ')}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}" stroke-linejoin="round"/>`;
+  };
+  const flower = (x, y, r, petal, center, rot = 0) => {
+    let s = '';
+    for (let i = 0; i < 5; i++) s += `<ellipse cx="${x}" cy="${y - r * .55}" rx="${r * .42}" ry="${r * .6}" fill="${petal}" transform="rotate(${rot + i * 72} ${x} ${y})"/>`;
+    return s + `<circle cx="${x}" cy="${y}" r="${r * .26}" fill="${center}"/>`;
+  };
+  const on = (deg, r, fn) => { const [x, y] = P(deg, r); return fn(x, y); };
+  const along = (r, from, to, n, fn) => { let s = ''; for (let i = 0; i < n; i++) s += on(from + (to - from) * (n === 1 ? .5 : i / (n - 1)), r, fn); return s; };
+  const grad = (id, stops, x2 = 1, y2 = 1) => `<linearGradient id="${id}" x1="0" y1="0" x2="${x2}" y2="${y2}">${stops.map(([o, c]) => `<stop offset="${o}" stop-color="${c}"/>`).join('')}</linearGradient>`;
+  const glow = (id, sd = 2.2) => `<filter id="${id}" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="${sd}" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>`;
+  const cloud = (x, y, s, fill, stroke) => `<g fill="${fill}" stroke="${stroke}" stroke-width="${s * .12}">${[[0, 0, 1], [s * .9, -s * .35, .8], [s * 1.7, 0, .9], [s * .8, s * .25, .85]].map(([dx, dy, k]) => `<circle cx="${x + dx}" cy="${y + dy}" r="${s * .6 * k}"/>`).join('')}</g>`;
+  const snow = (x, y, r, c) => { let s = ''; for (let i = 0; i < 3; i++) { const [a, b] = P(i * 60, r); s += `<line x1="${x - a}" y1="${y - b}" x2="${x + a}" y2="${y + b}"/>`; } return `<g stroke="${c}" stroke-width="${r * .22}" stroke-linecap="round">${s}</g><circle cx="${x}" cy="${y}" r="${r * .22}" fill="${c}"/>`; };
+  const flame = (x, y, s, rot, c1, c2) => `<g transform="translate(${x} ${y}) rotate(${rot}) scale(${s})"><path d="M0 6C-5 3-6-3-2-8C-2-4 1-3 1-6C4-2 6 3 0 6Z" fill="${c1}"/><path d="M0 5C-2 3-2 0 0-2C1 0 2 1 2 2C2 4 1 5 0 5Z" fill="${c2}"/></g>`;
+  const fish = (x, y, s, rot, c) => `<g transform="translate(${x} ${y}) rotate(${rot}) scale(${s})" fill="${c}"><ellipse rx="4" ry="2.2"/><path d="M3 0L6.5-2.4V2.4Z"/><circle cx="-2.2" cy="-.5" r=".55" fill="#13304d"/></g>`;
+  const lantern = (x, y, s, f) => `<g transform="translate(${x} ${y}) scale(${s})" filter="url(#${f})"><rect x="-4" y="-5.5" width="8" height="11" rx="3.2" fill="url(#${f}l)"/><rect x="-2.6" y="-6.6" width="5.2" height="1.6" rx=".6" fill="#B5652A"/><rect x="-2.2" y="5" width="4.4" height="1.4" rx=".6" fill="#B5652A"/><path d="M-1.6-5V5M1.6-5V5" stroke="#E38B37" stroke-width=".5" opacity=".7"/></g>`;
+  const tri = (x, y, s, rot, c) => `<polygon points="0,${-s} ${s * .87},${s * .5} ${-s * .87},${s * .5}" fill="${c}" transform="translate(${x} ${y}) rotate(${rot})"/>`;
+  const dotsField = (cx, cy, rad, step, maxR, color) => {
+    let s = '';
+    for (let x = cx - rad; x <= cx + rad; x += step) for (let y = cy - rad; y <= cy + rad; y += step) {
+      const d = Math.hypot(x - cx, y - cy); if (d > rad) continue;
+      if (Math.hypot(x, y) < 51 || Math.abs(x) > 59 || Math.abs(y) > 59) continue;
+      s += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(maxR * (1 - d / rad) + .3).toFixed(2)}" fill="${color}"/>`;
+    }
+    return s;
+  };
+  return { P, ring, star4, star5, flower, on, along, grad, glow, cloud, snow, flame, fish, lantern, tri, dotsField };
+})();
+
+const FRAMES = {
+  /* ---------- Classic ---------- */
+  thin: { name: 'Thin line', cat: 'classic', svg: u => FR.ring(42.6, '#FFFFFF', 1.6, 'opacity=".92"') },
+  mono: { name: 'Minimal mono', cat: 'classic', svg: u => FR.ring(43, '#FFFFFF', 2.4) + FR.ring(47.2, '#000000', 4.4) + FR.ring(47.2, '#FFFFFF', 1.2, 'stroke-dasharray="6 5"') + FR.ring(51.2, '#FFFFFF', 1) },
+  silver: {
+    name: 'Elegant silver', cat: 'classic', premium: true,
+    svg: u => `<defs>${FR.grad(u, [[0, '#FFFFFF'], [.3, '#9A9A9A'], [.55, '#F2F2F2'], [.8, '#6E6E6E'], [1, '#DADADA']])}</defs>`
+      + FR.ring(45.6, `url(#${u})`, 6) + FR.ring(42, '#FFFFFF', .8, 'opacity=".55"') + FR.ring(49.4, '#BDBDBD', .9)
+      + `<path d="M0-55L3.4-49.5L0-44L-3.4-49.5Z" fill="url(#${u})" stroke="#555" stroke-width=".5"/>` + FR.star4(0, 49.5, 3.4, '#F5F5F5'),
+  },
+  gold: {
+    name: 'Gold outline', cat: 'classic', premium: true,
+    svg: u => `<defs>${FR.grad(u, [[0, '#FFF3B0'], [.28, '#E7B53B'], [.5, '#9C6B12'], [.72, '#F6D365'], [1, '#B8860B']])}</defs>`
+      + FR.ring(45.4, `url(#${u})`, 5) + FR.ring(50.2, `url(#${u})`, 1.1) + FR.ring(42.2, '#5A3D06', .7)
+      + [-90, 30, 150].map(a => FR.on(a, 45.4, (x, y) => `<g transform="translate(${x} ${y}) rotate(${a + 90})"><path d="M0-6L4 0L0 6L-4 0Z" fill="url(#${u})" stroke="#7A520C" stroke-width=".6"/><circle r="1.8" fill="${a === -90 ? '#E5484D' : '#3E8BFF'}"/></g>`)).join(''),
+  },
+  metal: {
+    name: 'Metallic', cat: 'classic', premium: true,
+    svg: u => `<defs>${FR.grad(u, [[0, '#EEF1F5'], [.3, '#5B6270'], [.55, '#D2D7DF'], [.8, '#3B414C'], [1, '#AEB4BE']])}</defs>`
+      + FR.ring(47.5, `url(#${u})`, 10) + FR.ring(42.6, '#0B0D10', 1.6) + FR.ring(52.6, '#1C2027', .8)
+      + FR.along(47.5, 0, 315, 8, (x, y) => `<circle cx="${x}" cy="${y}" r="2" fill="#D9DDE4" stroke="#2A2F37" stroke-width=".7"/><path d="M${x - 1.1} ${y}H${x + 1.1}" stroke="#2A2F37" stroke-width=".5"/>`),
+  },
+  gradient: { name: 'Gradient', cat: 'classic', svg: u => `<defs>${FR.grad(u, [[0, '#8B7CFF'], [.3, '#5CB0FF'], [.55, '#4ADE9F'], [.78, '#FFC15E'], [1, '#FF7AB6']])}</defs>` + FR.ring(45.2, `url(#${u})`, 5.2) + FR.ring(50, `url(#${u})`, .8, 'opacity=".6"') },
+  glow: { name: 'Soft glow', cat: 'classic', svg: u => `<defs>${FR.glow(u, 3)}</defs>` + FR.ring(45, '#9D90FF', 4.5, `filter="url(#${u})" opacity=".85"`) + FR.ring(44.6, '#E3DEFF', 1.6) },
+  retro: { name: 'Retro', cat: 'classic', svg: u => FR.ring(43.2, '#E07A2E', 3.2) + FR.ring(46.6, '#F2B33D', 3.2) + FR.ring(50, '#8C5A2B', 3.2) + FR.ring(53.2, '#2E8B7A', 2.2) },
+  geo: {
+    name: 'Geometric', cat: 'classic',
+    svg: u => FR.ring(43, '#FFFFFF', 1.4, 'opacity=".8"') + FR.along(50, -90, 240, 12, (x, y) => '') +
+      Array.from({ length: 12 }, (_, i) => FR.on(-90 + i * 30, 49.5, (x, y) => FR.tri(x, y, i % 2 ? 4.4 : 5.8, -90 + i * 30 + 90 + (i % 2 ? 180 : 0), ['#FF6B63', '#FFC15E', '#4ADE9F', '#5CB0FF', '#9D90FF', '#FF7AB6'][i % 6]))).join(''),
+  },
+
+  /* ---------- Themed ---------- */
+  comic: {
+    name: 'Comic pop', cat: 'themed',
+    svg: u => FR.dotsField(46, -44, 18, 3.4, 1.5, '#FFFFFF') + FR.dotsField(-48, 44, 15, 3.4, 1.3, '#FFFFFF')
+      + `<path d="M18-59L59-18M-59 18L-18 59" stroke="#FFFFFF" stroke-width="2.2"/>`
+      + FR.ring(46, '#111111', 7.5) + FR.ring(46, '#FFFFFF', 1.5, 'stroke-dasharray="5 4"') + FR.ring(42.1, '#FFFFFF', 1.3) + FR.ring(50.4, '#FFFFFF', 1.1)
+      + `<text x="-52" y="-34" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="19" fill="#FFFFFF" stroke="#111" stroke-width="2.4" paint-order="stroke">!?</text>`
+      + FR.star4(41, 39, 13, '#FFFFFF', '#111', 1.6) + FR.star5(-50, 18, 3, '#FFFFFF') + FR.star5(36, -54, 2.4, '#FFFFFF'),
+  },
+  cat: {
+    name: 'Cat ears', cat: 'themed',
+    svg: u => [-128, -52].map(a => { const [x1, y1] = FR.P(a - 14, 46); const [x2, y2] = FR.P(a + 14, 46); const [x3, y3] = FR.P(a, 60); const [i1, j1] = FR.P(a - 7, 49); const [i2, j2] = FR.P(a + 7, 49); const [i3, j3] = FR.P(a, 56.5);
+        return `<polygon points="${x1},${y1} ${x3},${y3} ${x2},${y2}" fill="#7A5A3C" stroke="#4A3524" stroke-width="1" stroke-linejoin="round"/><polygon points="${i1},${j1} ${i3},${j3} ${i2},${j2}" fill="#F4B6C2"/>`; }).join('')
+      + FR.ring(46, '#7A5A3C', 6.5) + FR.ring(42.6, '#4A3524', 1.1) + FR.ring(49.4, '#A07A52', .9)
+      + FR.on(140, 52, (x, y) => `<g fill="#F7C6D0"><ellipse cx="${x}" cy="${y + 1.5}" rx="3.2" ry="2.6"/><circle cx="${x - 3}" cy="${y - 2}" r="1.3"/><circle cx="${x}" cy="${y - 3.2}" r="1.3"/><circle cx="${x + 3}" cy="${y - 2}" r="1.3"/></g>`)
+      + FR.on(42, 51, (x, y) => `<circle cx="${x}" cy="${y}" r="7" fill="#F6C453" stroke="#B9862A" stroke-width=".8"/><path d="M${x - 6} ${y - 2}Q${x} ${y - 6} ${x + 6} ${y - 1}M${x - 6.5} ${y + 1.5}Q${x} ${y - 2} ${x + 6.5} ${y + 2.5}M${x - 4} ${y + 5}Q${x + 1} ${y + 1} ${x + 5} ${y + 5}" stroke="#B9862A" stroke-width=".7" fill="none"/>`)
+      + FR.on(70, 55, (x, y) => `<path d="M${x - 9} ${y + 1}Q${x - 4} ${y - 4} ${x - 1} ${y + 2}" stroke="#F6C453" stroke-width="1" fill="none"/>`),
+  },
+  sakura: {
+    name: 'Sakura night', cat: 'themed', premium: true,
+    svg: u => `<defs>${FR.grad(u, [[0, '#4A2378'], [.5, '#8E5CC4'], [1, '#5B2A86']])}</defs>`
+      + FR.ring(46, `url(#${u})`, 7.5) + FR.ring(42, '#D9C2F5', .8, 'opacity=".7"')
+      + FR.along(46, 10, 120, 8, (x, y) => `<circle cx="${x}" cy="${y}" r=".8" fill="#FFE29A"/>`)
+      + [[-160, 50, 7], [-140, 53, 8.5], [-120, 50, 7.5], [-100, 54, 6.2], [-150, 44, 5]].map(([a, r, s], i) => FR.on(a, r, (x, y) => FR.flower(x, y, s, i % 2 ? '#F7B6D2' : '#FAD1E3', '#FFE3A3', i * 20))).join('')
+      + [[-45, 53, 6.5, '#B7A6F2'], [-30, 52, 5.5, '#F2A7C3'], [-58, 51, 5, '#C9B8FF']].map(([a, r, s, c]) => FR.on(a, r, (x, y) => FR.flower(x, y, s, c, '#FFFFFF', 15))).join('')
+      + [[20, 55], [35, 57], [62, 54], [92, 56]].map(([a, r], i) => FR.on(a, r, (x, y) => `<ellipse cx="${x}" cy="${y}" rx="1.6" ry="2.6" fill="#F7B6D2" transform="rotate(${i * 50} ${x} ${y})"/>`)).join(''),
+  },
+  lantern: {
+    name: 'Lantern sky', cat: 'themed', premium: true,
+    svg: u => `<defs>${FR.grad(u, [[0, '#14205A'], [.5, '#3B4FA8'], [1, '#1B2A6B']])}${FR.glow(u + 'g', 1.6)}<radialGradient id="${u}gl" cx=".5" cy=".4" r=".7"><stop offset="0" stop-color="#FFF1BF"/><stop offset="1" stop-color="#F2A93B"/></radialGradient></defs>`
+      + FR.ring(46, `url(#${u})`, 7.5) + FR.ring(42.2, '#F4C56A', .9, 'opacity=".8"')
+      + FR.along(46, -40, 200, 14, (x, y) => `<circle cx="${x}" cy="${y}" r=".75" fill="#FFFFFF" opacity=".85"/>`)
+      + [[-150, 52, 1.05], [-128, 55, .8], [-108, 53, .65], [-168, 49, .7]].map(([a, r, s]) => FR.on(a, r, (x, y) => FR.lantern(x, y, s, u + 'g'))).join('').replaceAll(`url(#${u}gl)`, `url(#${u}gl)`)
+      + FR.on(80, 50, (x, y) => FR.cloud(x - 8, y, 5, '#EAF2FF', '#9DB5E8')) + FR.on(115, 50, (x, y) => FR.cloud(x - 6, y, 3.8, '#EAF2FF', '#9DB5E8')),
+  },
+  flame: {
+    name: 'Sun & flame', cat: 'themed', premium: true,
+    svg: u => `<defs>${FR.grad(u, [[0, '#FFE6A8'], [.5, '#F5B04C'], [1, '#F2994A']])}</defs>`
+      + FR.ring(46, `url(#${u})`, 6.5) + FR.ring(42.4, '#B5452A', .9) + FR.ring(49.6, '#B5452A', .9)
+      + `<g transform="translate(0 -50)"><circle r="6.2" fill="#FFD25E" stroke="#C7631F" stroke-width=".9"/>${Array.from({ length: 8 }, (_, i) => { const [a, b] = FR.P(i * 45, 8); const [c, d] = FR.P(i * 45, 11); return `<line x1="${a}" y1="${b}" x2="${c}" y2="${d}" stroke="#E07A2E" stroke-width="1.4" stroke-linecap="round"/>`; }).join('')}<circle r="2.4" fill="#E07A2E"/></g>`
+      + [[-10, 51, 1.15], [15, 52, 1.3], [40, 51, 1.5], [62, 52, 1.2], [85, 51, 1]].map(([a, r, s]) => FR.on(a, r, (x, y) => FR.flame(x, y, s, a + 90, '#FF8A3D', '#7EE7E3'))).join(''),
+  },
+  ocean: {
+    name: 'Ocean wave', cat: 'themed',
+    svg: u => `<defs>${FR.grad(u, [[0, '#9BF0FF'], [.5, '#3FA9F5'], [1, '#2F80ED']])}</defs>`
+      + FR.ring(46, `url(#${u})`, 6.5) + FR.ring(42.4, '#D8FBFF', .9) + FR.ring(49.6, '#B8F3A5', 1.1)
+      + FR.on(180, 50, (x, y) => `<path d="M${x - 4} ${y + 22}C${x - 12} ${y + 6} ${x - 9} ${y - 16} ${x + 2} ${y - 24}C${x - 2} ${y - 14} ${x + 1} ${y - 6} ${x + 7} ${y - 4}C${x + 1} ${y + 2} ${x + 2} ${y + 14} ${x + 5} ${y + 22}Z" fill="#E9FCFF" stroke="#58B9E8" stroke-width=".9"/>`)
+      + [[-48, 54, 2.6], [-38, 57, 1.6], [-60, 56, 1.8], [-25, 55, 1.2]].map(([a, r, s]) => FR.on(a, r, (x, y) => `<circle cx="${x}" cy="${y}" r="${s}" fill="none" stroke="#FFFFFF" stroke-width=".7" opacity=".9"/>`)).join('')
+      + [[35, 52, -5], [55, 53, 15], [72, 52, 35]].map(([a, r, rot]) => FR.on(a, r, (x, y) => FR.fish(x, y, .9, rot + 180, '#FF9F6B'))).join(''),
+  },
+  moon: {
+    name: 'Moon pavilion', cat: 'themed', premium: true,
+    svg: u => `<defs>${FR.grad(u, [[0, '#18246A'], [.5, '#3550B5'], [1, '#1D2B6F']])}${FR.glow(u + 'g', 2)}</defs>`
+      + FR.ring(46, `url(#${u})`, 8) + FR.ring(41.8, '#8FB0FF', .8, 'opacity=".7"') + FR.ring(50.4, '#8FB0FF', .7, 'opacity=".5"')
+      + FR.along(46, -60, 30, 7, (x, y) => `<circle cx="${x}" cy="${y}" r=".8" fill="#FFFFFF"/>`)
+      + FR.on(-135, 50, (x, y) => `<circle cx="${x}" cy="${y}" r="10" fill="#F6EEC8" filter="url(#${u}g)"/><circle cx="${x - 3}" cy="${y - 2}" r="2" fill="#E2D6A4"/><circle cx="${x + 3}" cy="${y + 3}" r="1.4" fill="#E2D6A4"/>`)
+      + FR.on(50, 52, (x, y) => FR.cloud(x - 9, y, 5.5, '#F2F6FF', '#9DB5E8')) + FR.on(160, 50, (x, y) => `<g fill="#7FD3B5" stroke="#3F8E73" stroke-width=".6"><ellipse cx="${x}" cy="${y}" rx="6" ry="2.4"/><ellipse cx="${x + 3}" cy="${y + 5}" rx="4.4" ry="1.8"/></g>${FR.flower(x - 1, y - 5, 4.2, '#F6B9CF', '#FFE08A', 0)}`),
+  },
+  summer: {
+    name: 'Summer splash', cat: 'themed',
+    svg: u => `<defs>${FR.grad(u, [[0, '#7FD8FF'], [1, '#1E88E5']])}</defs>`
+      + FR.ring(46, `url(#${u})`, 6.5) + FR.ring(42.2, '#FFE07A', 1.4)
+      + FR.on(115, 51, (x, y) => `<circle cx="${x}" cy="${y}" r="6.5" fill="none" stroke="#FF5D5D" stroke-width="3.6"/><circle cx="${x}" cy="${y}" r="6.5" fill="none" stroke="#FFFFFF" stroke-width="3.6" stroke-dasharray="5.1 5.1"/>`)
+      + FR.on(150, 52, (x, y) => FR.star5(x, y, 6, '#FF8FB1', '#E0567F', .7)) + FR.on(165, 47, (x, y) => FR.star5(x, y, 4.2, '#FFD25E', '#D9A520', .6))
+      + FR.on(5, 50, (x, y) => `<path d="M${x - 4} ${y + 18}C${x + 6} ${y + 8} ${x + 10} ${y - 4} ${x + 4} ${y - 18}C${x + 12} ${y - 10} ${x + 14} ${y + 6} ${x + 6} ${y + 18}Z" fill="#E9F8FF" stroke="#4FA9E6" stroke-width=".9"/>`)
+      + FR.on(-120, 52, (x, y) => `<ellipse cx="${x}" cy="${y}" rx="7.5" ry="5" fill="#FFD54A" stroke="#D9A520" stroke-width=".8"/><path d="M${x + 6} ${y - 1}l4 1.2l-4 1.4z" fill="#FF8A3D"/><circle cx="${x + 3}" cy="${y - 1.5}" r=".9" fill="#222"/>`),
+  },
+  cyber: {
+    name: 'Neon cyber', cat: 'themed',
+    svg: u => `<defs>${FR.glow(u, 1.8)}</defs>`
+      + FR.ring(46.5, '#0E1726', 8.5) + FR.ring(42, '#29E7FF', .9, 'opacity=".6"')
+      + `<g filter="url(#${u})" stroke="#29E7FF" stroke-width="2.2" fill="none" stroke-linecap="round">${[[-160, -120], [-60, -20], [20, 70], [110, 140]].map(([a, b]) => { const [x1, y1] = FR.P(a, 46.5); const [x2, y2] = FR.P(b, 46.5); return `<path d="M${x1} ${y1}A46.5 46.5 0 0 1 ${x2} ${y2}"/>`; }).join('')}</g>`
+      + `<g fill="#29E7FF" opacity=".75">${[[-138, 56, 7, -20], [-122, 58, 4.5, 30], [-40, 57, 6.5, 40], [-55, 58, 3.5, -10]].map(([a, r, s, rot]) => FR.on(a, r, (x, y) => `<polygon points="0,${-s} ${s * .45},0 0,${s * .6} ${-s * .35},0" transform="translate(${x} ${y}) rotate(${a + 90 + rot})"/>`)).join('')}</g>`
+      + FR.along(53.5, 60, 120, 5, (x, y) => `<rect x="${x - 2.2}" y="${y - .5}" width="4.4" height="1" fill="#7FF3FF" opacity=".8"/>`),
+  },
+  winter: {
+    name: 'Winter frost', cat: 'themed',
+    svg: u => `<defs>${FR.grad(u, [[0, '#F2FBFF'], [.5, '#A9DCF7'], [1, '#E3F4FF']])}</defs>`
+      + FR.ring(45.6, `url(#${u})`, 5.5) + FR.ring(42, '#FFFFFF', .8, 'opacity=".8"')
+      + [[-140, 52, 5.2], [-110, 54, 3.4], [-60, 53, 4.4], [20, 53, 3.6], [60, 52, 5.4], [130, 53, 4.2], [170, 54, 3]].map(([a, r, s]) => FR.on(a, r, (x, y) => FR.snow(x, y, s, '#EAF7FF'))).join('')
+      + FR.along(55, -20, 40, 5, (x, y) => `<circle cx="${x}" cy="${y}" r=".8" fill="#FFFFFF"/>`),
+  },
+
+  /* ---------- Animated (only move on large previews; still in lists) ---------- */
+  aurora: { name: 'Aurora spin', cat: 'animated', anim: 'spin', svg: u => `<defs>${FR.grad(u, [[0, '#4ADE9F'], [.35, '#5CB0FF'], [.65, '#9D90FF'], [1, '#FF7AB6']], 1, 0)}</defs>` + FR.ring(45.4, `url(#${u})`, 5.6) + FR.along(50.5, 0, 300, 6, (x, y) => FR.star4(x, y, 2.6, '#FFFFFF')) },
+  pulse: { name: 'Pulse glow', cat: 'animated', anim: 'pulse', svg: u => `<defs>${FR.glow(u, 3.4)}</defs>` + FR.ring(45.4, '#4ADE9F', 4.8, `filter="url(#${u})"`) + FR.ring(45, '#D9FFEE', 1.4) },
+};
+const FRAME_CATS = [['all', 'All'], ['classic', 'Classic'], ['themed', 'Themed'], ['animated', 'Animated'], ['premium', 'Premium-ready']];
+const validFrame = f => (typeof f === 'string' && Object.prototype.hasOwnProperty.call(FRAMES, f)) ? f : null;
+let frameSeq = 0;
+function frameSvg(id, size) {
+  const f = FRAMES[id]; if (!f) return '';
+  const u = `fr${++frameSeq}`;
+  const anim = f.anim && size >= 64 ? ` fr-anim-${f.anim}` : '';
+  return `<svg class="fr-svg${anim}" viewBox="-60 -60 120 120" aria-hidden="true" focusable="false">${f.svg(u)}</svg>`;
+}
+/* Puts a frame around any avatar span. Tiny avatars (reactions, etc.) skip it. */
+function withFrame(html, frame, size) {
+  if (!validFrame(frame) || size < 28) return html;
+  return html.replace(/<\/span>\s*$/, `<i class="fr-ov">${frameSvg(frame, size)}</i></span>`).replace('class="av', 'class="av framed');
+}
+
+/* =========================================================
+   7y. PHOTOS, WALLPAPERS, PROFILE PHOTO CROP, FRAMES, CUSTOMIZATION
+   ========================================================= */
+Object.assign(ICONS, {
+  wallpaper: '<rect x="3.5" y="4.5" width="17" height="15" rx="3"/><path d="m3.5 16 5-5 4 4 2.5-2.5 5 5"/><circle cx="15.5" cy="9" r="1.6"/>',
+  frame: '<circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="8.5" stroke-dasharray="2.6 2.4"/>',
+  palette: '<path d="M12 3.5a8.5 8.5 0 1 0 0 17c1.4 0 1.9-1 1.9-1.9 0-1.6-1.3-1.6-1.3-2.9 0-.9.7-1.6 1.7-1.6h2.1a4.1 4.1 0 0 0 4.1-4.1C20.5 6.6 16.7 3.5 12 3.5z"/><circle cx="7.6" cy="11" r="1.1"/><circle cx="10" cy="7.4" r="1.1"/><circle cx="14.4" cy="7.4" r="1.1"/>',
+  crop: '<path d="M7 3.5v13.5h13.5M3.5 7H17v13.5"/>',
+  zoomIn: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="m20 20-4.8-4.8M10.5 8v5M8 10.5h5"/>',
+});
+Object.assign(ICON_TINT, { wallpaper: '#5CB0FF', frame: '#FFC15E', palette: '#FF7AB6', crop: '#4ADE9F' });
+
+const PHOTO_MAX_DIM = 2560, PHOTO_KEEP_BYTES = 1.5e6, PHOTO_BATCH = 10;
+const WALL_MAX_BYTES = 50 * 1024 * 1024;
+const WALL_VIDEO_TYPES = ['video/mp4', 'video/webm', 'video/quicktime', 'video/3gpp'];
+const WALL_COLORS = ['#000000', '#0B1020', '#1A1033', '#0F1F17', '#240F14', '#14181F', '#2A1E0A', '#102A33', '#2B2B2B', '#3A1D4A'];
+const fmtMB = b => b >= 1e6 ? `${(b / 1048576).toFixed(1)} MB` : `${Math.max(1, Math.round(b / 1024))} KB`;
+
+/* ---------- Image helpers ---------- */
+async function decodeImage(file) {
+  try { if (window.createImageBitmap) return await createImageBitmap(file, { imageOrientation: 'from-image' }); } catch (e) { /* fall back */ }
+  return new Promise((res, rej) => {
+    const u = URL.createObjectURL(file); const i = new Image();
+    i.onload = () => { res(i); setTimeout(() => URL.revokeObjectURL(u), 1000); };
+    i.onerror = () => { URL.revokeObjectURL(u); rej(new Error('This picture can’t be opened. Try a JPG or PNG.')); };
+    i.src = u;
+  });
+}
+const canvasBlob = (cv, type, q) => new Promise(r => { try { cv.toBlob(b => r(b), type, q); } catch (e) { r(null); } });
+let webpOk = null;
+const canWebp = () => webpOk ?? (webpOk = (() => { try { const c = document.createElement('canvas'); c.width = c.height = 1; return c.toDataURL('image/webp').startsWith('data:image/webp'); } catch (e) { return false; } })());
+function drawScaled(src, w, h, max, fill) {
+  const s = Math.min(1, max / Math.max(w, h));
+  const cv = document.createElement('canvas');
+  cv.width = Math.max(1, Math.round(w * s)); cv.height = Math.max(1, Math.round(h * s));
+  const ctx = cv.getContext('2d');
+  if (fill) { ctx.fillStyle = fill; ctx.fillRect(0, 0, cv.width, cv.height); }
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(src, 0, 0, cv.width, cv.height);
+  return cv;
+}
+/* Photo for a message: keeps small JPEG/WebP/GIF files as they are, otherwise
+   resizes to 2560 px on the long side (aspect ratio kept) at high quality.
+   Also makes a ~480 px thumbnail so chats don't load full-size pictures. */
+async function preparePhoto(file) {
+  if (!file || !/^image\//.test(file.type || '') && !/\.(jpe?g|png|webp|gif|heic|heif)$/i.test(file.name || '')) throw new Error('That isn’t a picture.');
+  if (file.size > 40 * 1024 * 1024) throw new Error(`This picture is too large (${fmtMB(file.size)}).`);
+  const img = await decodeImage(file);
+  const w = img.width || img.naturalWidth, h = img.height || img.naturalHeight;
+  if (!w || !h) throw new Error('This picture can’t be opened.');
+  const isGif = file.type === 'image/gif';
+  const keep = (isGif && file.size <= FILE_MAX) || (/image\/(jpeg|webp)/.test(file.type) && file.size <= PHOTO_KEEP_BYTES && Math.max(w, h) <= PHOTO_MAX_DIM);
+  let blob = file, ow = w, oh = h;
+  if (!keep) {
+    const png = file.type === 'image/png';
+    const type = png && canWebp() ? 'image/webp' : 'image/jpeg';
+    const cv = drawScaled(img, w, h, PHOTO_MAX_DIM, type === 'image/jpeg' ? '#000' : null);
+    blob = await canvasBlob(cv, type, .86); ow = cv.width; oh = cv.height;
+    if (!blob) throw new Error('This picture couldn’t be prepared.');
+    if (blob.size > file.size && /image\/(jpeg|webp)/.test(file.type) && Math.max(w, h) <= PHOTO_MAX_DIM) { blob = file; ow = w; oh = h; }
+  }
+  if (blob.size > FILE_MAX) throw new Error(`Pictures can be up to ${fmtMB(FILE_MAX)} after compression.`);
+  const thumb = await canvasBlob(drawScaled(img, w, h, 480, '#000'), 'image/jpeg', .72);
+  try { img.close?.(); } catch (e) {}
+  return { blob, thumb, ratio: +(w / h).toFixed(3), w: ow, h: oh, original: file.size };
+}
+
+/* ---------- Uploads with progress (Supabase Storage over XHR) ---------- */
+Media.uploadProgress = async function (path, blob, bucket = 'chat-media', onProgress) {
+  const { data } = await sb.auth.getSession();
+  const token = data?.session?.access_token;
+  if (!token) throw new Error('Your session has expired. Sign in again.');
+  const base = String(CLOUD_CFG.supabaseUrl || '').replace(/\/+$/, '');
+  const url = `${base}/storage/v1/object/${bucket}/${path.split('/').map(encodeURIComponent).join('/')}`;
+  return new Promise((res, rej) => {
+    const x = new XMLHttpRequest();
+    x.open('POST', url);
+    x.timeout = 10 * 60 * 1000;
+    x.setRequestHeader('Authorization', `Bearer ${token}`);
+    x.setRequestHeader('apikey', String(CLOUD_CFG.supabaseAnonKey || ''));
+    x.setRequestHeader('x-upsert', 'false');
+    x.setRequestHeader('cache-control', 'max-age=31536000');
+    x.setRequestHeader('Content-Type', blob.type || 'application/octet-stream');
+    x.upload.onprogress = e => { if (e.lengthComputable && onProgress) onProgress(e.loaded / e.total); };
+    x.onload = () => {
+      if (x.status >= 200 && x.status < 300) { onProgress?.(1); res(path); return; }
+      let msg = ''; try { const j = JSON.parse(x.responseText || '{}'); msg = j.message || j.error || ''; } catch (e) {}
+      // Already uploaded by an earlier attempt: that's fine.
+      if (x.status === 409 || /already exists|Duplicate/i.test(msg)) { onProgress?.(1); res(path); return; }
+      rej(Object.assign(new Error(msg || `Upload failed (${x.status})`), { status: x.status }));
+    };
+    x.onerror = () => rej(new Error('Failed to fetch'));
+    x.ontimeout = () => rej(new Error('Failed to fetch'));
+    x.onabort = () => rej(new Error('Upload cancelled'));
+    x.send(blob);
+  });
+};
+function paintProgress(msg) {
+  const box = document.querySelector(`#msgs [data-mid="${msg.id}"] .media`);
+  if (!box) return;
+  const p = Math.max(0, Math.min(1, msg.progress || 0));
+  box.querySelector('.up-ring')?.style.setProperty('--p', p);
+  const t = box.querySelector('.up-pct'); if (t) t.textContent = `${Math.round(p * 100)}%`;
+}
+
+/* ---------- Send photos: preview, add more, remove, caption ---------- */
+ui.pp = null;
+function openPhotoPreview(files) {
+  if (!ui.openChatId) return;
+  const list = [...(files || [])].filter(Boolean);
+  if (!list.length) return;
+  if (!ui.pp) {
+    ui.pp = { items: [], cur: 0, chatId: ui.openChatId };
+    const el = document.createElement('div');
+    el.className = 'pp'; el.id = 'pp'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', 'Send photos');
+    $('#app').appendChild(el);
+    el.innerHTML = `
+      <header class="pp-head">
+        <button type="button" class="icon-btn ghost" data-action="pp-close" aria-label="Cancel">${I('x')}</button>
+        <div class="pp-title"><b id="pp-count"></b><span id="pp-info"></span></div>
+        <button type="button" class="icon-btn ghost" data-action="pp-remove" aria-label="Remove this photo">${I('trash')}</button>
+      </header>
+      <div class="pp-stage" id="pp-stage"></div>
+      <div class="pp-strip" id="pp-strip"></div>
+      <form class="pp-foot" id="pp-form">
+        <input id="pp-cap" maxlength="2000" placeholder="Add a caption…" autocomplete="off" dir="auto" aria-label="Caption">
+        <button type="submit" class="icon-btn send ready" id="pp-send" aria-label="Send photos">${I('send')}</button>
+      </form>
+      <input type="file" id="pp-add" accept="image/*" multiple hidden>`;
+    const ta = $('#composer'); if (ta.value.trim() && ui.compose.mode !== 'edit') $('#pp-cap').value = ta.value.trim();
+    requestAnimationFrame(() => el.classList.add('open'));
+  }
+  const room = PHOTO_BATCH - ui.pp.items.length;
+  if (list.length > room) toast(`You can send up to ${PHOTO_BATCH} photos at once.`, 'image');
+  list.slice(0, Math.max(0, room)).forEach(file => {
+    const it = { id: uid(), file, status: 'prep', url: URL.createObjectURL(file) };
+    ui.pp.items.push(it);
+    preparePhoto(file).then(r => {
+      Object.assign(it, r, { status: 'ready' });
+      URL.revokeObjectURL(it.url); it.url = URL.createObjectURL(r.blob); it.thumbUrl = URL.createObjectURL(r.thumb);
+      renderPhotoPreview();
+    }).catch(e => { it.status = 'error'; it.error = e.message || 'This picture can’t be used.'; renderPhotoPreview(); });
+  });
+  ui.pp.cur = Math.max(0, ui.pp.items.length - Math.min(list.length, room));
+  renderPhotoPreview();
+}
+function renderPhotoPreview() {
+  const pp = ui.pp; if (!pp) return;
+  if (!pp.items.length) { closePhotoPreview(); return; }
+  pp.cur = Math.min(pp.cur, pp.items.length - 1);
+  const it = pp.items[pp.cur];
+  $('#pp-count').textContent = pp.items.length === 1 ? '1 photo' : `${pp.items.length} photos`;
+  $('#pp-info').textContent = it.status === 'prep' ? 'Preparing…' : it.status === 'error' ? it.error
+    : it.blob === it.file ? `${it.w}×${it.h} · ${fmtMB(it.blob.size)} · original` : `${it.w}×${it.h} · ${fmtMB(it.original)} → ${fmtMB(it.blob.size)}`;
+  $('#pp-info').classList.toggle('bad', it.status === 'error');
+  $('#pp-stage').innerHTML = it.status === 'error'
+    ? `<div class="pp-err">${I('image')}<span>${esc(it.error)}</span></div>`
+    : `<img src="${it.url}" alt="Photo ${pp.cur + 1}" class="pp-img">${it.status === 'prep' ? '<span class="pp-spin" aria-hidden="true"></span>' : ''}`;
+  $('#pp-strip').innerHTML = pp.items.map((x, i) => `<button type="button" class="pp-th ${i === pp.cur ? 'on' : ''} ${x.status}" data-action="pp-pick" data-i="${i}" aria-label="Photo ${i + 1}" style="background-image:url('${x.thumbUrl || x.url}')">${x.status === 'error' ? I('info') : ''}</button>`).join('')
+    + (pp.items.length < PHOTO_BATCH ? `<label class="pp-th pp-more" for="pp-add" aria-label="Add more photos">${I('plus')}</label>` : '');
+  const ready = pp.items.filter(x => x.status === 'ready').length, busy = pp.items.some(x => x.status === 'prep');
+  const btn = $('#pp-send'); btn.disabled = busy || !ready;
+  btn.setAttribute('aria-label', busy ? 'Preparing photos' : `Send ${ready} photo${ready === 1 ? '' : 's'}`);
+}
+function closePhotoPreview() {
+  const el = $('#pp'); const pp = ui.pp; ui.pp = null;
+  pp?.items.forEach(x => { URL.revokeObjectURL(x.url); if (x.thumbUrl) URL.revokeObjectURL(x.thumbUrl); });
+  if (!el) return;
+  el.classList.remove('open');
+  setTimeout(() => el.remove(), 260);
+}
+function sendPhotoPreview() {
+  const pp = ui.pp; if (!pp) return;
+  if (ui.openChatId !== pp.chatId) { closePhotoPreview(); return; }
+  const ready = pp.items.filter(x => x.status === 'ready');
+  if (!ready.length) return;
+  const cap = ($('#pp-cap')?.value || '').trim();
+  const ta = $('#composer'); if (cap && ta.value.trim() === cap) { ta.value = ''; autoGrow(ta); updateComposerBtn(); const c = getChat(ui.openChatId); if (c) c.draft = ''; }
+  ready.forEach((x, i) => {
+    const src = URL.createObjectURL(x.blob), thumb = URL.createObjectURL(x.thumb);
+    postMine({ type: 'image', src, thumb, ratio: x.ratio, caption: i === 0 ? cap : '', _files: { main: x.blob, thumb: x.thumb } });
+  });
+  if (pp.items.length > ready.length) toast(`${pp.items.length - ready.length} picture${pp.items.length - ready.length === 1 ? '' : 's'} couldn’t be used and weren’t sent.`, 'info');
+  pp.items = []; // object URLs for sent photos stay alive for the bubbles
+  closePhotoPreview();
+}
+
+/* ---------- Full-screen photo with pinch, double-tap, and wheel zoom ---------- */
+function attachZoom(box, img) {
+  let s = 1, tx = 0, ty = 0, start = null, lastTap = { t: 0, x: 0, y: 0 }, moved = false;
+  const pts = new Map();
+  const apply = (anim) => {
+    img.style.transition = anim ? 'transform .22s var(--ease)' : 'none';
+    img.style.transform = `translate(${tx}px,${ty}px) scale(${s})`;
+    box.dataset.scale = s.toFixed(2);
+    box.classList.toggle('zoomed', s > 1.01);
+  };
+  const clamp = () => {
+    const mx = Math.max(0, (img.offsetWidth * s - box.clientWidth) / 2), my = Math.max(0, (img.offsetHeight * s - box.clientHeight) / 2);
+    tx = Math.min(mx, Math.max(-mx, tx)); ty = Math.min(my, Math.max(-my, ty));
+  };
+  const rel = (x, y) => { const r = box.getBoundingClientRect(); return [x - r.left - r.width / 2, y - r.top - r.height / 2]; };
+  const zoomTo = (ns, cx, cy, anim) => { ns = Math.min(5, Math.max(1, ns)); tx = cx - (cx - tx) * (ns / s); ty = cy - (cy - ty) * (ns / s); s = ns; if (s === 1) { tx = 0; ty = 0; } clamp(); apply(anim); };
+  box.addEventListener('pointerdown', e => {
+    box.setPointerCapture?.(e.pointerId);
+    pts.set(e.pointerId, { x: e.clientX, y: e.clientY }); moved = false;
+    const p = [...pts.values()];
+    start = p.length >= 2
+      ? { d: Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y) || 1, s, tx, ty, mid: rel((p[0].x + p[1].x) / 2, (p[0].y + p[1].y) / 2) }
+      : { x: e.clientX, y: e.clientY, tx, ty };
+  });
+  box.addEventListener('pointermove', e => {
+    if (!pts.has(e.pointerId)) return;
+    pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    const p = [...pts.values()];
+    if (p.length >= 2 && start?.d) {
+      const d = Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y);
+      s = start.s; tx = start.tx; ty = start.ty;
+      zoomTo(start.s * d / start.d, start.mid[0], start.mid[1], false); moved = true;
+    } else if (p.length === 1 && start && start.x !== undefined) {
+      const dx = e.clientX - start.x, dy = e.clientY - start.y;
+      if (Math.abs(dx) + Math.abs(dy) > 6) moved = true;
+      if (s > 1) { tx = start.tx + dx; ty = start.ty + dy; clamp(); apply(false); }
+    }
+  });
+  const up = e => {
+    if (!pts.has(e.pointerId)) return;
+    pts.delete(e.pointerId);
+    if (pts.size === 1) { const [q] = [...pts.values()]; start = { x: q.x, y: q.y, tx, ty }; return; }
+    if (pts.size) return;
+    if (!moved && e.type === 'pointerup') {
+      const t = Date.now();
+      if (t - lastTap.t < 320 && Math.hypot(e.clientX - lastTap.x, e.clientY - lastTap.y) < 30) {
+        const [cx, cy] = rel(e.clientX, e.clientY); zoomTo(s > 1.01 ? 1 : 2.5, cx, cy, true); lastTap.t = 0;
+      } else lastTap = { t, x: e.clientX, y: e.clientY };
+    }
+    start = null;
+  };
+  box.addEventListener('pointerup', up); box.addEventListener('pointercancel', up);
+  box.addEventListener('dblclick', e => e.preventDefault());
+  box.addEventListener('wheel', e => { e.preventDefault(); const [cx, cy] = rel(e.clientX, e.clientY); zoomTo(s * (e.deltaY < 0 ? 1.18 : 1 / 1.18), cx, cy, false); }, { passive: false });
+  apply(false);
+  return { reset: () => { s = 1; tx = 0; ty = 0; apply(true); } };
+}
+function photoViewerBody(m, r) {
+  const full = m.src || m.thumb || '';
+  const first = m.thumb || full;
+  return `<div class="vw-zoom" id="vw-zoom" data-scale="1"><img id="vw-img" class="vw-img" src="${esc(first)}" alt="Photo" draggable="false" style="aspect-ratio:${r}">
+    ${full && full !== first ? '<span class="vw-spin" id="vw-spin" role="status" aria-label="Loading full size"></span>' : ''}</div>`;
+}
+function mountPhotoViewer(m) {
+  const box = $('#vw-zoom'), img = $('#vw-img'); if (!box || !img) return;
+  attachZoom(box, img);
+  const full = m.src || m.thumb;
+  if (full && full !== img.getAttribute('src')) {
+    const pre = new Image();
+    pre.onload = () => { if ($('#vw-img') === img) { img.src = full; $('#vw-spin')?.remove(); } };
+    pre.onerror = () => { $('#vw-spin')?.remove(); const f = $('.vw-foot'); if (f && !f.querySelector('.vw-note')) f.insertAdjacentHTML('beforeend', `<span class="vw-note">${I('info')}The full-size photo couldn’t load. Showing a smaller copy.</span>`); };
+    pre.src = full;
+  }
+}
+
+/* ---------- Generic cropper (profile photo) ---------- */
+function openCropper(file, { title = 'Move and scale', out = 512, frame = null, round = true } = {}, done) {
+  const url = URL.createObjectURL(file);
+  const el = document.createElement('div');
+  el.className = 'crop'; el.id = 'crop'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', title);
+  el.innerHTML = `
+    <header class="pp-head"><button type="button" class="icon-btn ghost" data-action="crop-cancel" aria-label="Cancel">${I('x')}</button>
+      <div class="pp-title"><b>${esc(title)}</b><span>Drag to move · pinch to zoom</span></div><span style="width:40px"></span></header>
+    <div class="crop-stage" id="crop-stage"><img id="crop-img" alt="" draggable="false"><div class="crop-mask ${round ? 'round' : ''}"></div>
+</div>
+    <div class="crop-ctl"><span>${I('image')}</span><input type="range" id="crop-zoom" min="1" max="4" step="0.01" value="1" aria-label="Zoom"><span>${I('zoomIn')}</span></div>
+    <div class="crop-acts"><button type="button" class="btn secondary" data-action="crop-cancel">Cancel</button><button type="button" class="btn" data-action="crop-done">${I('check')}Use photo</button></div>`;
+  $('#app').appendChild(el);
+  requestAnimationFrame(() => el.classList.add('open'));
+  const img = $('#crop-img'), stage = $('#crop-stage');
+  const st = { z: 1, ox: 0, oy: 0, w: 0, h: 0, S: 0 };
+  const base = () => st.S / Math.min(st.w, st.h);
+  const clamp = () => {
+    const sc = base() * st.z, mx = Math.max(0, (st.w * sc - st.S) / 2), my = Math.max(0, (st.h * sc - st.S) / 2);
+    st.ox = Math.min(mx, Math.max(-mx, st.ox)); st.oy = Math.min(my, Math.max(-my, st.oy));
+  };
+  const paint = () => { clamp(); const sc = base() * st.z; img.style.width = `${st.w * sc}px`; img.style.height = `${st.h * sc}px`; img.style.transform = `translate(calc(-50% + ${st.ox}px), calc(-50% + ${st.oy}px))`; };
+  img.onload = () => { st.w = img.naturalWidth; st.h = img.naturalHeight; st.S = stage.clientWidth; paint(); };
+  img.onerror = () => { toast('That picture can’t be opened. Try a JPG or PNG.', 'image'); close(); };
+  img.src = url;
+  const pts = new Map(); let g = null;
+  stage.addEventListener('pointerdown', e => { stage.setPointerCapture?.(e.pointerId); pts.set(e.pointerId, [e.clientX, e.clientY]); const p = [...pts.values()]; g = p.length >= 2 ? { d: Math.hypot(p[0][0] - p[1][0], p[0][1] - p[1][1]) || 1, z: st.z } : { x: e.clientX, y: e.clientY, ox: st.ox, oy: st.oy }; });
+  stage.addEventListener('pointermove', e => {
+    if (!pts.has(e.pointerId) || !g) return; pts.set(e.pointerId, [e.clientX, e.clientY]); const p = [...pts.values()];
+    if (p.length >= 2 && g.d) { st.z = Math.min(4, Math.max(1, g.z * Math.hypot(p[0][0] - p[1][0], p[0][1] - p[1][1]) / g.d)); $('#crop-zoom').value = st.z; }
+    else if (g.x !== undefined) { st.ox = g.ox + e.clientX - g.x; st.oy = g.oy + e.clientY - g.y; }
+    paint();
+  });
+  const up = e => { pts.delete(e.pointerId); const p = [...pts.values()]; g = p.length === 1 ? { x: p[0][0], y: p[0][1], ox: st.ox, oy: st.oy } : null; };
+  stage.addEventListener('pointerup', up); stage.addEventListener('pointercancel', up);
+  stage.addEventListener('wheel', e => { e.preventDefault(); st.z = Math.min(4, Math.max(1, st.z * (e.deltaY < 0 ? 1.08 : 1 / 1.08))); $('#crop-zoom').value = st.z; paint(); }, { passive: false });
+  ui.crop = {
+    zoom: v => { st.z = +v; paint(); },
+    close: () => close(),
+    done: async () => {
+      if (!st.w) return;
+      const sc = base() * st.z, sw = st.S / sc;
+      const sx = st.w / 2 - st.ox / sc - sw / 2, sy = st.h / 2 - st.oy / sc - sw / 2;
+      const cv = document.createElement('canvas'); cv.width = cv.height = out;
+      const ctx = cv.getContext('2d'); ctx.imageSmoothingQuality = 'high'; ctx.fillStyle = '#000'; ctx.fillRect(0, 0, out, out);
+      ctx.drawImage(img, sx, sy, sw, sw, 0, 0, out, out);
+      let data; try { data = cv.toDataURL('image/jpeg', .9); } catch (e) { toast('That photo couldn’t be used', 'image'); return; }
+      close(); done(data);
+    },
+  };
+  function close() { ui.crop = null; el.classList.remove('open'); setTimeout(() => { el.remove(); URL.revokeObjectURL(url); }, 260); }
+}
+
+/* =========================================================
+   Chat wallpapers: colour, photo, or video, per conversation.
+   Saved on the server (chat_wallpapers + private "wallpapers" bucket),
+   cached on the phone so files aren't downloaded again.
+   ========================================================= */
+const wallDefaults = () => ({ zoom: 1, x: .5, y: .5, dim: .3, bright: 1, start: 0, len: 0 });
+function cleanWall(r) {
+  if (!r || !['color', 'image', 'video'].includes(r.kind)) return null;
+  const s = r.settings || {};
+  return {
+    kind: r.kind, color: /^#[0-9a-f]{6}$/i.test(r.color || '') ? r.color : null,
+    path: typeof r.path === 'string' ? r.path : null, poster: typeof r.poster_path === 'string' ? r.poster_path : null,
+    s: { zoom: num(s.zoom, 1, 3, 1), x: num(s.x, 0, 1, .5), y: num(s.y, 0, 1, .5), dim: num(s.dim, 0, .85, .3), bright: num(s.bright, .4, 1.3, 1), start: num(s.start, 0, 36000, 0), len: num(s.len, 0, 60, 0) },
+    updatedAt: r.updated_at || null,
+  };
+}
+ui.wallUrls = new Map();
+const Walls = {
+  get: id => (state.walls || {})[id] || null,
+  async load() {
+    if (!sb || !Cloud.me) return;
+    const { data, error } = await sb.from('chat_wallpapers').select('*');
+    if (error) throw error;
+    const map = {};
+    (data || []).forEach(r => { const w = cleanWall(r); if (w) map[r.conversation_id] = w; });
+    state.walls = map; save();
+    if (ui.openChatId) applyWallpaper(ui.openChatId);
+  },
+  /* A local URL for a wallpaper file: from the phone's cache, else downloaded once and cached. */
+  async fileUrl(path) {
+    if (!path) return null;
+    if (ui.wallUrls.has(path)) return ui.wallUrls.get(path);
+    const key = `https://zyven.local/wallpapers/${path}`;
+    try {
+      if ('caches' in window) {
+        const cache = await caches.open('zyven-wallpapers-v1');
+        let res = await cache.match(key);
+        if (!res) {
+          await Media.sign([path], 'wallpapers');
+          const u = Media.url(path, 'wallpapers'); if (!u) return null;
+          const net = await fetch(u); if (!net.ok) throw new Error(`HTTP ${net.status}`);
+          await cache.put(key, net.clone());
+          res = net;
+        }
+        const url = URL.createObjectURL(await res.blob());
+        ui.wallUrls.set(path, url);
+        return url;
+      }
+    } catch (e) { console.warn('ZYVEN: wallpaper cache', e); }
+    await Media.sign([path], 'wallpapers');
+    return Media.url(path, 'wallpapers');
+  },
+  async cacheLocal(path, blob) {
+    ui.wallUrls.set(path, URL.createObjectURL(blob));
+    try { if ('caches' in window) await (await caches.open('zyven-wallpapers-v1')).put(`https://zyven.local/wallpapers/${path}`, new Response(blob, { headers: { 'Content-Type': blob.type } })); } catch (e) {}
+  },
+  async forget(paths) {
+    const used = new Set(Object.values(state.walls || {}).flatMap(w => [w.path, w.poster]).filter(Boolean));
+    const gone = [...new Set(paths.filter(p => p && !used.has(p)))];
+    if (!gone.length) return;
+    gone.forEach(p => { const u = ui.wallUrls.get(p); if (u?.startsWith('blob:')) URL.revokeObjectURL(u); ui.wallUrls.delete(p); });
+    try { if ('caches' in window) { const c = await caches.open('zyven-wallpapers-v1'); await Promise.all(gone.map(p => c.delete(`https://zyven.local/wallpapers/${p}`))); } } catch (e) {}
+    sb.storage.from('wallpapers').remove(gone).then(() => {}, () => {});
+  },
+  async save(chatId, w) {
+    const row = { user_id: Cloud.me, conversation_id: chatId, kind: w.kind, color: w.kind === 'color' ? w.color : null, path: w.kind === 'color' ? null : w.path, poster_path: w.kind === 'video' ? w.poster : null, settings: w.s };
+    const { data, error } = await sb.from('chat_wallpapers').upsert(row, { onConflict: 'user_id,conversation_id' }).select('*').single();
+    if (error) throw error;
+    const old = Walls.get(chatId);
+    state.walls = { ...(state.walls || {}), [chatId]: cleanWall(data) }; save();
+    if (old) Walls.forget([old.path, old.poster]);
+  },
+  async remove(chatId) {
+    const old = Walls.get(chatId); if (!old) return;
+    const { error } = await sb.from('chat_wallpapers').delete().eq('conversation_id', chatId);
+    if (error) throw error;
+    const next = { ...(state.walls || {}) }; delete next[chatId]; state.walls = next; save();
+    Walls.forget([old.path, old.poster]);
+  },
+};
+const wallPos = s => `object-position:${(s.x * 100).toFixed(1)}% ${(s.y * 100).toFixed(1)}%;transform:scale(${s.zoom});transform-origin:${(s.x * 100).toFixed(1)}% ${(s.y * 100).toFixed(1)}%;filter:brightness(${s.bright})`;
+const calmMode = () => { try { return matchMedia('(prefers-reduced-motion: reduce)').matches || navigator.connection?.saveData === true; } catch (e) { return false; } };
+function wallMarkup(w, src, poster) {
+  if (!w) return '';
+  const dim = `<div class="cw-dim" style="background:rgba(0,0,0,${w.s.dim})"></div>`;
+  if (w.kind === 'color') return `<div class="cw-fill" style="background:${w.color}"></div>${w.s.dim > 0 && w.color !== '#000000' ? dim : ''}`;
+  if (w.kind === 'image') return src ? `<img class="cw-media" src="${esc(src)}" alt="" style="${wallPos(w.s)}">${dim}` : dim;
+  const still = poster ? `<img class="cw-media cw-still" src="${esc(poster)}" alt="" style="${wallPos(w.s)}">` : '';
+  return `${still}${src && !calmMode() ? `<video class="cw-media cw-video" muted playsinline preload="auto" disablepictureinpicture disableremoteplayback ${poster ? `poster="${esc(poster)}"` : ''} src="${esc(src)}" style="${wallPos(w.s)}"></video>` : ''}${dim}`;
+}
+/* Loops a video between start and start+len (or the whole video), always silent. */
+function runWallVideo(v, s) {
+  if (!v) return;
+  v.muted = true; v.defaultMuted = true; v.volume = 0;
+  const start = s.start || 0, end = s.len ? start + s.len : 0;
+  const still = v.parentElement?.querySelector('.cw-still');
+  const fail = () => { v.remove(); if (still) still.hidden = false; };
+  v.addEventListener('error', fail, { once: true });
+  v.addEventListener('loadedmetadata', () => { try { if (start) v.currentTime = Math.min(start, Math.max(0, (v.duration || 0) - .2)); } catch (e) {} });
+  v.addEventListener('playing', () => { if (still) still.hidden = true; });
+  v.addEventListener('timeupdate', () => { if (end && v.currentTime >= end - .08) { try { v.currentTime = start; } catch (e) {} } });
+  v.addEventListener('ended', () => { try { v.currentTime = start; v.play().catch(() => {}); } catch (e) {} });
+  if (!end) v.loop = true;
+  if (document.visibilityState === 'visible') v.play().catch(() => { /* autoplay blocked: the still frame stays */ });
+}
+let wallToken = 0;
+async function applyWallpaper(chatId = ui.openChatId) {
+  const layer = $('#cw-layer'), msgs = $('#msgs'); if (!layer || !msgs) return;
+  const token = ++wallToken;
+  stopWallVideo(layer);
+  const w = chatId ? Walls.get(chatId) : null;
+  if (!w) { layer.innerHTML = ''; layer.hidden = true; msgs.classList.remove('has-cw'); delete layer.dataset.kind; return; }
+  layer.hidden = false; msgs.classList.add('has-cw'); layer.dataset.kind = w.kind;
+  if (w.kind === 'color') { layer.innerHTML = wallMarkup(w); return; }
+  const [src, poster] = await Promise.all([Walls.fileUrl(w.path), w.kind === 'video' ? Walls.fileUrl(w.poster) : null]);
+  if (token !== wallToken || ui.openChatId !== chatId) return;
+  layer.innerHTML = wallMarkup(w, src, poster);
+  if (w.kind === 'video') runWallVideo(layer.querySelector('video'), w.s);
+}
+function stopWallVideo(root = $('#cw-layer')) {
+  root?.querySelectorAll('video').forEach(v => { try { v.pause(); v.removeAttribute('src'); v.load(); } catch (e) {} });
+}
+document.addEventListener('visibilitychange', () => {
+  const vids = document.querySelectorAll('#cw-layer video, #wp-prev video');
+  if (document.visibilityState === 'hidden') vids.forEach(v => v.pause());
+  else vids.forEach(v => { if (v.closest('#cw-layer') ? !!ui.openChatId : !!$('#wallpaper.open')) v.play().catch(() => {}); });
+});
+
+/* ---------- Wallpaper editor ---------- */
+ui.wp = null;
+async function openWallpaper(chatId, tab) {
+  const c = getChat(chatId); if (!c) return;
+  closeOverlay(); toggleEmoji?.(false);
+  const cur = Walls.get(chatId);
+  ui.wp = {
+    chatId, tab: tab || (cur?.kind === 'video' ? 'video' : cur?.kind === 'color' ? 'color' : 'photo'),
+    color: cur?.color || '#0B1020', s: { ...wallDefaults(), ...(cur?.s || {}) },
+    cur: { kind: cur?.kind || null, path: cur?.path || null, poster: cur?.poster || null, src: null, posterSrc: null },
+    file: null, fileKind: null, fileSrc: null, filePoster: null, dur: 0, busy: false, err: '',
+  };
+  if (cur && cur.kind !== 'color') { ui.wp.cur.src = await Walls.fileUrl(cur.path); if (cur.kind === 'video') ui.wp.cur.posterSrc = await Walls.fileUrl(cur.poster); }
+  const el = $('#wallpaper');
+  el.innerHTML = `
+    <header class="scr-head">
+      <button class="icon-btn ghost" data-action="wp-close" aria-label="Back">${I('back')}</button>
+      <h2>Chat wallpaper<small class="wp-sub">${esc(chatTitle(c))}</small></h2>
+    </header>
+    <div class="scr-body wp-body">
+      <div class="wp-prev" id="wp-prev" aria-label="Wallpaper preview. Drag to reposition."></div>
+      <div class="seg seg4 wp-tabs" role="tablist" id="wp-tabs"></div>
+      <div class="wp-panel" id="wp-panel"></div>
+      <p class="err wp-err" id="wp-err" role="alert"></p>
+      <div class="wp-acts" id="wp-acts"></div>
+    </div>
+    <input type="file" id="wp-img" accept="image/*" hidden>
+    <input type="file" id="wp-vid" accept="video/mp4,video/webm,video/quicktime,video/3gpp,video/*" hidden>`;
+  el.classList.add('open'); el.setAttribute('aria-hidden', 'false');
+  renderWallEditor(true);
+  attachWallDrag();
+}
+function closeWallpaper() {
+  const el = $('#wallpaper'); stopWallVideo($('#wp-prev'));
+  if (ui.wp?.fileSrc) URL.revokeObjectURL(ui.wp.fileSrc);
+  if (ui.wp?.filePoster) URL.revokeObjectURL(ui.wp.filePoster);
+  ui.wp = null; el.classList.remove('open'); el.setAttribute('aria-hidden', 'true');
+  setTimeout(() => { if (!el.classList.contains('open')) el.innerHTML = ''; }, 450);
+}
+function wpDraft() {
+  const wp = ui.wp; if (!wp) return null;
+  if (wp.tab === 'default') return null;
+  if (wp.tab === 'color') return { kind: 'color', color: wp.color, s: wp.s };
+  const kind = wp.tab === 'video' ? 'video' : 'image';
+  if (wp.fileKind === kind) return { kind, src: wp.fileSrc, poster: wp.filePoster, fresh: true, s: wp.s };
+  if (wp.cur.kind === kind) return { kind, src: wp.cur.src, poster: wp.cur.posterSrc, path: wp.cur.path, s: wp.s };
+  return { kind, empty: true, s: wp.s };
+}
+function renderWallPreview(full) {
+  const wp = ui.wp, box = $('#wp-prev'); if (!wp || !box) return;
+  const d = wpDraft();
+  const bubbles = `<div class="wp-bubs"><span class="wp-b in">Hey! How do I look? 👋</span><span class="wp-b out">Your new wallpaper looks great</span><span class="wp-b in">Text stays easy to read</span></div>`;
+  if (!d || d.empty) {
+    stopWallVideo(box);
+    box.className = 'wp-prev' + (d?.empty ? ' empty' : '');
+    box.innerHTML = (d?.empty ? `<div class="wp-empty">${I(d.kind === 'video' ? 'film' : 'image')}<span>${d.kind === 'video' ? 'Choose a video to preview it here' : 'Choose a photo to preview it here'}</span></div>` : '<div class="cw-fill" style="background:var(--bg)"></div>') + bubbles;
+    return;
+  }
+  box.className = `wp-prev k-${d.kind}`;
+  if (!full && d.kind !== 'color') {
+    box.querySelectorAll('.cw-media').forEach(m => m.setAttribute('style', wallPos(d.s)));
+    const dim = box.querySelector('.cw-dim'); if (dim) dim.style.background = `rgba(0,0,0,${d.s.dim})`;
+    return;
+  }
+  stopWallVideo(box);
+  box.innerHTML = wallMarkup(d, d.src, d.poster) + bubbles;
+  if (d.kind === 'video') {
+    const v = box.querySelector('video');
+    if (v) { v.id = 'wp-video'; runWallVideo(v, d.s); v.addEventListener('loadedmetadata', () => { if (!wp.dur && v.duration && isFinite(v.duration)) { wp.dur = v.duration; renderWallPanel(); } }, { once: true }); }
+  }
+}
+function renderWallEditor(full = true) {
+  const wp = ui.wp; if (!wp) return;
+  $('#wp-tabs').innerHTML = [['photo', 'image', 'Photo'], ['video', 'film', 'Video'], ['color', 'palette', 'Colour'], ['default', 'refresh', 'Default']].map(([v, ic, l]) =>
+    `<button type="button" class="${wp.tab === v ? 'on' : ''}" data-action="wp-tab" data-v="${v}" role="tab" aria-selected="${wp.tab === v}">${I(ic)}${l}</button>`).join('');
+  renderWallPanel(); renderWallPreview(full);
+  $('#wp-err').textContent = wp.err || '';
+  const cur = Walls.get(wp.chatId), d = wpDraft();
+  const canApply = wp.tab === 'default' ? !!cur : d && !d.empty;
+  $('#wp-acts').innerHTML = `
+    ${cur ? `<button type="button" class="btn secondary" data-action="wp-remove" ${wp.busy ? 'disabled' : ''}>${I('trash')}Remove</button>` : ''}
+    <button type="button" class="btn" data-action="wp-apply" id="wp-apply" ${wp.busy || !canApply ? 'disabled' : ''}>${wp.busy ? `<span class="pp-spin sm"></span><span id="wp-busy">${esc(wp.busy)}</span>` : `${I('check')}${wp.tab === 'default' ? 'Restore default' : 'Apply'}`}</button>`;
+}
+function rangeRow(id, label, min, max, step, val, fmt) {
+  return `<label class="wp-rng"><span class="l">${label}</span><input type="range" id="${id}" data-input="${id}" min="${min}" max="${max}" step="${step}" value="${val}" aria-label="${label}"><output id="${id}-v">${fmt(+val)}</output></label>`;
+}
+function renderWallPanel() {
+  const wp = ui.wp, box = $('#wp-panel'); if (!wp || !box) return;
+  const s = wp.s;
+  const look = `${rangeRow('wp-zoom', 'Zoom', 1, 3, .01, s.zoom, v => `${v.toFixed(1)}×`)}
+    ${rangeRow('wp-dim', 'Dark overlay', 0, .85, .01, s.dim, v => `${Math.round(v * 100)}%`)}
+    ${rangeRow('wp-bright', 'Brightness', .4, 1.3, .01, s.bright, v => `${Math.round(v * 100)}%`)}`;
+  if (wp.tab === 'photo') {
+    box.innerHTML = `<label class="btn secondary block" for="wp-img">${I('image')}${wpDraft()?.empty ? 'Choose from gallery' : 'Choose a different photo'}</label>
+      ${wpDraft()?.empty ? '' : `<p class="hint wp-hint">${I('crop')}Drag the preview to reposition</p>${look}`}`;
+  } else if (wp.tab === 'video') {
+    const has = !wpDraft()?.empty;
+    const maxLen = Math.min(30, wp.dur || 30);
+    if (has && wp.dur && (!s.len || s.len > maxLen)) s.len = wp.dur > 30 ? Math.min(15, maxLen) : 0;
+    const segment = has && wp.dur > 30 ? `
+      <div class="wp-seg-box"><span class="group-label">Segment · the video is ${fmtDur(wp.dur)}</span>
+      ${rangeRow('wp-start', 'Start', 0, Math.max(0, Math.floor(wp.dur - (s.len || 15))), 1, Math.min(s.start, Math.max(0, wp.dur - (s.len || 15))), v => fmtDur(v))}
+      ${rangeRow('wp-len', 'Length', 3, maxLen, 1, s.len || 15, v => `${v}s`)}</div>` : '';
+    box.innerHTML = `<label class="btn secondary block" for="wp-vid">${I('film')}${has ? 'Choose a different video' : 'Choose a video'}</label>
+      <p class="hint wp-hint">MP4 or WebM, up to 50 MB. Videos play silently, loop, and pause when the chat is closed.</p>
+      ${has ? `<div class="wp-sound">${I('sound')}<span><b>Sound off</b><small>Wallpaper videos are always muted</small></span><span class="sw-lock" aria-label="Sound is off">Off</span></div>
+      ${segment}<p class="hint wp-hint">${I('crop')}Drag the preview to reposition</p>${look}` : ''}`;
+  } else if (wp.tab === 'color') {
+    box.innerHTML = `<div class="wp-colors" role="radiogroup" aria-label="Colour">${WALL_COLORS.map(c => `<button type="button" class="wp-col ${wp.color.toLowerCase() === c.toLowerCase() ? 'on' : ''}" style="--c:${c}" data-action="wp-color" data-v="${c}" role="radio" aria-checked="${wp.color.toLowerCase() === c.toLowerCase()}" aria-label="${c === '#000000' ? 'AMOLED black' : c}"></button>`).join('')}
+      <label class="wp-col custom" style="--c:${wp.color}" aria-label="Custom colour">${I('palette')}<input type="color" id="wp-custom" value="${wp.color}"></label></div>
+      ${rangeRow('wp-dim', 'Dark overlay', 0, .85, .01, s.dim, v => `${Math.round(v * 100)}%`)}`;
+  } else {
+    box.innerHTML = `<div class="wp-default">${I('refresh')}<span><b>ZYVEN default</b><small>The AMOLED black background, or the chat design you picked in Profile → Chat design.</small></span></div>`;
+  }
+}
+function attachWallDrag() {
+  const box = $('#wp-prev'); if (!box) return;
+  let g = null;
+  box.addEventListener('pointerdown', e => {
+    const d = wpDraft(); if (!d || d.empty || d.kind === 'color') return;
+    box.setPointerCapture?.(e.pointerId); g = { x: e.clientX, y: e.clientY, sx: ui.wp.s.x, sy: ui.wp.s.y };
+  });
+  box.addEventListener('pointermove', e => {
+    if (!g || !ui.wp) return;
+    const r = box.getBoundingClientRect(), z = ui.wp.s.zoom;
+    ui.wp.s.x = Math.min(1, Math.max(0, g.sx - (e.clientX - g.x) / (r.width * z)));
+    ui.wp.s.y = Math.min(1, Math.max(0, g.sy - (e.clientY - g.y) / (r.height * z)));
+    renderWallPreview(false);
+  });
+  const end = () => { g = null; };
+  box.addEventListener('pointerup', end); box.addEventListener('pointercancel', end);
+}
+function captureFrame(video, max = 1080) {
+  return new Promise(res => {
+    try {
+      const w = video.videoWidth, h = video.videoHeight; if (!w || !h) return res(null);
+      canvasBlob(drawScaled(video, w, h, max, '#000'), 'image/jpeg', .8).then(res, () => res(null));
+    } catch (e) { res(null); }
+  });
+}
+function loadVideoAt(src, t) {
+  return new Promise((res, rej) => {
+    const v = document.createElement('video'); v.muted = true; v.playsInline = true; v.preload = 'auto'; v.crossOrigin = 'anonymous';
+    const to = setTimeout(() => rej(new Error('This video takes too long to load.')), 20000);
+    v.onerror = () => { clearTimeout(to); rej(new Error('This video format isn’t supported on this phone. Try an MP4 (H.264) video.')); };
+    v.onloadedmetadata = () => { try { v.currentTime = Math.min(Math.max(0, t), Math.max(0, (v.duration || 1) - .1)); } catch (e) { clearTimeout(to); res(v); } };
+    v.onseeked = () => { clearTimeout(to); res(v); };
+    v.src = src;
+  });
+}
+async function pickWallFile(file, kind) {
+  const wp = ui.wp; if (!wp || !file) return;
+  wp.err = '';
+  if (kind === 'image') {
+    if (!/^image\//.test(file.type)) { wp.err = 'That isn’t a picture. Choose a JPG, PNG, or WebP photo.'; renderWallEditor(false); return; }
+    if (file.size > 40 * 1024 * 1024) { wp.err = `This picture is too large (${fmtMB(file.size)}).`; renderWallEditor(false); return; }
+  } else {
+    if (!/^video\//.test(file.type)) { wp.err = 'That isn’t a video. Choose an MP4 or WebM video.'; renderWallEditor(false); return; }
+    if (!WALL_VIDEO_TYPES.includes(file.type)) { wp.err = `${file.type.replace('video/', '').toUpperCase()} videos aren’t supported. Choose an MP4 or WebM video.`; renderWallEditor(false); return; }
+    if (file.size > WALL_MAX_BYTES) { wp.err = `Video wallpapers can be up to 50 MB. This one is ${fmtMB(file.size)}.`; renderWallEditor(false); return; }
+  }
+  if (wp.fileSrc) URL.revokeObjectURL(wp.fileSrc);
+  if (wp.filePoster) URL.revokeObjectURL(wp.filePoster);
+  wp.file = file; wp.fileKind = kind; wp.fileSrc = URL.createObjectURL(file); wp.filePoster = null; wp.dur = 0;
+  wp.s = { ...wallDefaults(), dim: wp.s.dim };
+  if (kind === 'video') {
+    try {
+      const v = await loadVideoAt(wp.fileSrc, 0);
+      wp.dur = v.duration && isFinite(v.duration) ? v.duration : 0;
+      if (!v.videoWidth) throw new Error('This video has no picture. Choose another video.');
+      if (wp.dur > 30) wp.s.len = 15;
+      const still = await captureFrame(v, 720); if (still) wp.filePoster = URL.createObjectURL(still);
+    } catch (e) { wp.err = e.message; wp.file = null; wp.fileKind = null; URL.revokeObjectURL(wp.fileSrc); wp.fileSrc = null; }
+  } else {
+    try { await decodeImage(file); } catch (e) { wp.err = e.message; wp.file = null; wp.fileKind = null; URL.revokeObjectURL(wp.fileSrc); wp.fileSrc = null; }
+  }
+  renderWallEditor(true);
+}
+async function applyWallEditor() {
+  const wp = ui.wp; if (!wp || wp.busy) return;
+  const chatId = wp.chatId;
+  const setBusy = t => { wp.busy = t; const b = $('#wp-busy'); if (b) b.textContent = t; else renderWallEditor(false); };
+  wp.err = '';
+  try {
+    if (!navigator.onLine) throw new Error('You’re offline. Connect to the internet and try again.');
+    if (wp.tab === 'default') { setBusy('Restoring…'); await Walls.remove(chatId); }
+    else if (wp.tab === 'color') { setBusy('Saving…'); await Walls.save(chatId, { kind: 'color', color: wp.color, s: { ...wallDefaults(), dim: wp.s.dim } }); }
+    else {
+      const kind = wp.tab === 'video' ? 'video' : 'image';
+      const fresh = wp.fileKind === kind;
+      let path = !fresh && wp.cur.kind === kind ? wp.cur.path : null, poster = !fresh && kind === 'video' && wp.cur.kind === 'video' ? wp.cur.poster : null;
+      const pct = (label, w0, w1) => p => setBusy(`${label} ${Math.round((w0 + (w1 - w0) * p) * 100)}%`);
+      if (fresh) {
+        if (kind === 'image') {
+          setBusy('Preparing…');
+          const img = await decodeImage(wp.file);
+          const w = img.width || img.naturalWidth, h = img.height || img.naturalHeight;
+          let blob = wp.file;
+          if (!(wp.file.type === 'image/jpeg' && wp.file.size <= 2.5e6 && Math.max(w, h) <= 2400)) blob = await canvasBlob(drawScaled(img, w, h, 2400, '#000'), 'image/jpeg', .87);
+          if (!blob) throw new Error('This picture couldn’t be prepared.');
+          path = `${Cloud.me}/${uid()}.jpg`;
+          await Media.uploadProgress(path, blob, 'wallpapers', pct('Uploading', 0, 1));
+          await Walls.cacheLocal(path, blob);
+        } else {
+          const ext = { 'video/mp4': 'mp4', 'video/webm': 'webm', 'video/quicktime': 'mov', 'video/3gpp': '3gp' }[wp.file.type] || 'mp4';
+          path = `${Cloud.me}/${uid()}.${ext}`;
+          await Media.uploadProgress(path, wp.file, 'wallpapers', pct('Uploading', 0, .92));
+          await Walls.cacheLocal(path, wp.file);
+          poster = null;
+        }
+      }
+      if (kind === 'video' && (!poster || fresh || wp.s.start !== (Walls.get(chatId)?.s.start ?? -1))) {
+        setBusy('Saving a still frame…');
+        let still = null;
+        try { const v = await loadVideoAt(fresh ? wp.fileSrc : (wp.cur.src || await Walls.fileUrl(path)), wp.s.start || 0); still = await captureFrame(v); } catch (e) { /* the still is optional */ }
+        if (still) { poster = `${Cloud.me}/${uid()}.jpg`; await Media.uploadProgress(poster, still, 'wallpapers'); await Walls.cacheLocal(poster, still); }
+      }
+      if (!path) throw new Error(kind === 'video' ? 'Choose a video first.' : 'Choose a photo first.');
+      setBusy('Saving…');
+      await Walls.save(chatId, { kind, path, poster, s: { ...wp.s, len: kind === 'video' ? wp.s.len : 0, start: kind === 'video' ? wp.s.start : 0 } });
+    }
+    const label = wp.tab === 'default' ? 'Default background restored' : 'Wallpaper applied';
+    wp.busy = false;
+    closeWallpaper();
+    if (ui.openChatId === chatId) applyWallpaper(chatId);
+    toast(label, 'wallpaper');
+  } catch (e) {
+    console.warn('ZYVEN: wallpaper', e);
+    wp.busy = false;
+    wp.err = /Failed to fetch|NetworkError|offline/i.test(e?.message || '') ? 'Couldn’t reach the ZYVEN server. Check your connection and tap Apply again.' : (e?.message || cloudError(e));
+    renderWallEditor(false);
+  }
+}
+function wallChatPicker(tab) {
+  const chats = sortedChats();
+  openSheet(`<div class="sheet-head"><h3>${tab === 'video' ? 'Video wallpapers' : 'Chat wallpapers'}</h3><button class="icon-btn" data-action="close-overlay" aria-label="Close">${I('x')}</button></div>
+    <p class="sheet-sub">Pick a conversation. Each chat can have its own ${tab === 'video' ? 'video' : 'photo, colour, or video'} background.</p>
+    <div class="list">${chats.length ? chats.map(c => { const w = Walls.get(c.id); return `<button class="row" data-action="wp-open" data-id="${c.id}" data-tab="${tab}">${chatAvatar(c, 44)}
+      <span class="row-main"><span class="row-name">${esc(chatTitle(c))}</span><span class="row-sub">${w ? { color: 'Colour', image: 'Photo', video: 'Video' }[w.kind] + ' wallpaper' : 'Default background'}</span></span>${I('chev')}</button>`; }).join('')
+      : emptyState({ icon: 'chat', title: 'No chats yet', body: 'Start a conversation first, then give it a wallpaper.' })}</div>`);
+}
+
+/* ---------- Profile frames ---------- */
+ui.fr = null;
+function openFrames() {
+  closeOverlay();
+  ui.fr = { draft: validFrame(state.profile.frame), tab: 'all', busy: false };
+  const el = $('#frames');
+  el.innerHTML = `
+    <header class="scr-head">
+      <button class="icon-btn ghost" data-action="fr-close" aria-label="Back">${I('back')}</button>
+      <h2>Profile frames</h2>
+    </header>
+    <div class="scr-body fr-body">
+      <div class="fr-hero" id="fr-hero"></div>
+      <div class="chips fr-tabs" id="fr-tabs" role="tablist"></div>
+      <div class="fr-grid" id="fr-grid"></div>
+      <p class="sim-tag">${I('info')}<span>All frames are free. Frames are drawn around your photo, so your original picture is never changed, and they stay outside the circle so your face is never covered.</span></p>
+    </div>
+    <div class="fr-acts" id="fr-acts"></div>`;
+  el.classList.add('open'); el.setAttribute('aria-hidden', 'false');
+  renderFrames();
+}
+function closeFrames() { const el = $('#frames'); ui.fr = null; el.classList.remove('open'); el.setAttribute('aria-hidden', 'true'); setTimeout(() => { if (!el.classList.contains('open')) el.innerHTML = ''; }, 450); }
+function renderFrames() {
+  const f = ui.fr; if (!f) return;
+  const p = state.profile, cur = validFrame(p.frame);
+  const me = (frame, size) => withFrame(avatarFor({ ...p, frame: null }, size), frame, size);
+  $('#fr-hero').innerHTML = `<div class="fr-big">${me(f.draft, 132)}</div>
+    <b>${f.draft ? esc(FRAMES[f.draft].name) : 'No frame'}</b>
+    <span>${f.draft === cur ? (cur ? 'Your current frame' : 'You aren’t using a frame') : 'Preview · not applied yet'}</span>
+    <div class="fr-sizes" aria-label="How it looks in lists">${me(f.draft, 52)}${me(f.draft, 40)}<span class="fr-row-demo"><b>${esc(p.name || 'You')}</b><small>How others see you in chats</small></span></div>`;
+  $('#fr-tabs').innerHTML = FRAME_CATS.map(([k, l]) => `<button class="chip ${f.tab === k ? 'on' : ''}" data-action="fr-tab" data-v="${k}" role="tab" aria-selected="${f.tab === k}">${l}</button>`).join('');
+  const list = Object.entries(FRAMES).filter(([, x]) => f.tab === 'all' || (f.tab === 'premium' ? x.premium : x.cat === f.tab));
+  $('#fr-grid').innerHTML = (f.tab === 'all' || f.tab === 'classic' ? `<button class="fr-tile ${!f.draft ? 'on' : ''}" data-action="fr-pick" data-v="" aria-pressed="${!f.draft}">${me(null, 58)}<span>None</span></button>` : '')
+    + list.map(([k, x]) => `<button class="fr-tile ${f.draft === k ? 'on' : ''}" data-action="fr-pick" data-v="${k}" aria-pressed="${f.draft === k}">${me(k, 58)}<span>${esc(x.name)}</span>${x.anim ? '<i class="fr-badge">Animated</i>' : x.premium ? '<i class="fr-badge">Premium look</i>' : ''}</button>`).join('');
+  const changed = (f.draft || null) !== (cur || null);
+  $('#fr-acts').innerHTML = `${cur ? `<button class="btn secondary" data-action="fr-remove" ${f.busy ? 'disabled' : ''}>${I('x')}Remove frame</button>` : ''}
+    <button class="btn" data-action="fr-apply" ${!changed || f.busy ? 'disabled' : ''}>${f.busy ? 'Saving…' : `${I('check')}${f.draft ? 'Apply frame' : 'Save without frame'}`}</button>`;
+}
+async function saveFrame(frame) {
+  const f = ui.fr; if (f) { f.busy = true; renderFrames(); }
+  try {
+    const { error } = await sb.from('profiles').update({ frame: validFrame(frame) }).eq('id', Cloud.me);
+    if (error) throw error;
+    state.profile.frame = validFrame(frame); save();
+    refresh(); renderProfile();
+    toast(frame ? 'Frame applied. Others see it the next time their app refreshes.' : 'Frame removed', 'frame');
+    if (f) { f.busy = false; f.draft = validFrame(frame); renderFrames(); }
+  } catch (e) { if (f) { f.busy = false; renderFrames(); } toast(cloudError(e), 'info'); }
+}
+
+/* ---------- Customization hub ---------- */
+function customizationSheet() {
+  const walls = Object.keys(state.walls || {}).filter(id => getChat(id)).length;
+  openSheet(`<div class="sheet-head"><h3>Customization</h3><button class="icon-btn" data-action="close-overlay" aria-label="Close">${I('x')}</button></div>
+    <div class="card">
+      ${linkRow('cz-walls', 'wallpaper', 'Chat wallpapers', walls ? `${walls} chat${walls === 1 ? '' : 's'} customized` : 'Photo or colour, per chat')}
+      ${linkRow('cz-video', 'film', 'Video wallpapers', 'A silent, looping video behind a chat')}
+      ${linkRow('edit-profile', 'camera', 'Profile picture', 'Change, crop, and reposition')}
+      ${linkRow('open-frames', 'frame', 'Profile frames', state.profile.frame && FRAMES[state.profile.frame] ? FRAMES[state.profile.frame].name : 'No frame')}
+      ${linkRow('cz-reset', 'refresh', 'Reset customization', 'Remove all wallpapers and your frame', 'danger')}
+    </div>`);
+}
+async function resetCustomization() {
+  const ok = await confirmDialog({ title: 'Reset customization?', body: 'This removes every chat wallpaper and your profile frame, on all your devices. Your messages, photo, and other settings stay.', confirmLabel: 'Reset', danger: true });
+  if (!ok) return;
+  closeOverlay();
+  try {
+    const old = Object.values(state.walls || {}).flatMap(w => [w.path, w.poster]).filter(Boolean);
+    const { error } = await sb.from('chat_wallpapers').delete().eq('user_id', Cloud.me);
+    if (error) throw error;
+    state.walls = {}; save();
+    await Walls.forget(old);
+    const { data: files } = await sb.storage.from('wallpapers').list(Cloud.me, { limit: 1000 });
+    const left = (files || []).map(f => `${Cloud.me}/${f.name}`); if (left.length) await sb.storage.from('wallpapers').remove(left);
+    try { if ('caches' in window) await caches.delete('zyven-wallpapers-v1'); } catch (e) {}
+    const { error: e2 } = await sb.from('profiles').update({ frame: null }).eq('id', Cloud.me);
+    if (e2) throw e2;
+    state.profile.frame = null; save();
+    if (ui.openChatId) applyWallpaper(ui.openChatId);
+    refresh(); renderProfile();
+    toast('Customization reset', 'refresh');
+  } catch (e) { toast(cloudError(e), 'info'); }
+}
+
+Object.assign(actions, {
+  'pp-close': () => closePhotoPreview(),
+  'pp-pick': el => { if (ui.pp) { ui.pp.cur = +el.dataset.i; renderPhotoPreview(); } },
+  'pp-remove': () => { const pp = ui.pp; if (!pp) return; const [x] = pp.items.splice(pp.cur, 1); if (x) { URL.revokeObjectURL(x.url); if (x.thumbUrl) URL.revokeObjectURL(x.thumbUrl); } renderPhotoPreview(); },
+  'crop-cancel': () => ui.crop?.close(),
+  'crop-done': () => ui.crop?.done(),
+  'wp-open': el => openWallpaper(el.dataset.id || ui.openChatId, el.dataset.tab),
+  'wp-close': () => closeWallpaper(),
+  'wp-tab': el => { if (!ui.wp || ui.wp.busy) return; ui.wp.tab = el.dataset.v; ui.wp.err = ''; renderWallEditor(true); },
+  'wp-color': el => { if (!ui.wp) return; ui.wp.color = el.dataset.v; renderWallEditor(true); },
+  'wp-apply': () => applyWallEditor(),
+  'wp-remove': async () => {
+    const wp = ui.wp; if (!wp) return;
+    const ok = await confirmDialog({ title: 'Remove this wallpaper?', body: 'The chat goes back to the ZYVEN default background on all your devices.', confirmLabel: 'Remove', danger: true });
+    if (!ok) return; closeOverlay();
+    try { await Walls.remove(wp.chatId); const id = wp.chatId; closeWallpaper(); if (ui.openChatId === id) applyWallpaper(id); toast('Wallpaper removed', 'wallpaper'); }
+    catch (e) { wp.err = cloudError(e); renderWallEditor(false); }
+  },
+  'open-frames': () => openFrames(),
+  'fr-close': () => closeFrames(),
+  'fr-tab': el => { if (ui.fr) { ui.fr.tab = el.dataset.v; renderFrames(); } },
+  'fr-pick': el => { if (ui.fr) { ui.fr.draft = el.dataset.v || null; renderFrames(); } },
+  'fr-apply': () => ui.fr && saveFrame(ui.fr.draft),
+  'fr-remove': () => saveFrame(null),
+  'customize': () => customizationSheet(),
+  'cz-walls': () => wallChatPicker('photo'),
+  'cz-video': () => wallChatPicker('video'),
+  'cz-reset': () => resetCustomization(),
+});
+forms.pp = () => sendPhotoPreview();
+
+/* Wallpaper hooks into opening/closing chats and syncing. */
+{
+  const _open = openChat, _close = closeChat, _sync = Cloud._sync;
+  openChat = function (id) { _open(id); applyWallpaper(id); };
+  closeChat = function () { stopWallVideo(); _close(); const l = $('#cw-layer'); if (l) { l.innerHTML = ''; l.hidden = true; } $('#msgs')?.classList.remove('has-cw'); };
+  Cloud._sync = async function () { await _sync.call(this); await Walls.load().catch(e => console.warn('ZYVEN: wallpapers', e)); };
+}
+
+
 /* ---------- Event wiring (delegated) ---------- */
 let lpTimer = null, lpFired = false, lpStart = null;
 const openPressMenu = el => el.dataset.stkpress ? stickerSheet(el.dataset.stkpress)
@@ -6445,15 +7594,31 @@ document.addEventListener('click', e => {
 }, true);
 
 document.addEventListener('change', e => {
-  if (['img-in', 'vid-in', 'doc-in', 'any-in'].includes(e.target.id)) {
+  if (['img-in', 'cam-in', 'pp-add'].includes(e.target.id)) {
+    const all = [...(e.target.files || [])];
+    closeOverlay();
+    e.target.value = '';
+    const pics = all.filter(f => /^image\//.test(f.type || '') || /\.(jpe?g|png|webp|gif|heic|heif)$/i.test(f.name || ''));
+    if (all.length && !pics.length) { toast('That isn’t a picture. Choose a photo, or use Other files.', 'image'); return; }
+    if (pics.length < all.length) toast('Some files weren’t pictures and were skipped.', 'image');
+    openPhotoPreview(pics);
+    return;
+  }
+  if (e.target.id === 'wp-img' || e.target.id === 'wp-vid') {
+    const f = e.target.files && e.target.files[0];
+    e.target.value = '';
+    if (f) pickWallFile(f, e.target.id === 'wp-vid' ? 'video' : 'image');
+    return;
+  }
+  if (e.target.id === 'wp-custom') { if (ui.wp) { ui.wp.color = e.target.value; renderWallEditor(true); } return; }
+  if (['vid-in', 'doc-in', 'any-in'].includes(e.target.id)) {
     const f = e.target.files && e.target.files[0];
     const id = e.target.id;
     closeOverlay();
     e.target.value = '';
     if (!f) return;
-    if (id === 'img-in' && !f.type.startsWith('image/')) { toast('That isn’t an image. Choose a photo, or use Other files.', 'image'); return; }
     if (id === 'vid-in' && !f.type.startsWith('video/')) { toast('That isn’t a video. Choose a video, or use Other files.', 'film'); return; }
-    if (id === 'img-in' || id === 'vid-in') handleFile(f); else handleAnyFile(f);
+    if (id === 'vid-in') handleFile(f); else handleAnyFile(f);
     return;
   }
   if (e.target.id === 'backup-in') {
@@ -6476,7 +7641,10 @@ document.addEventListener('change', e => {
   }
   if (e.target.id === 'pfp-in') {
     const f = e.target.files && e.target.files[0];
-    if (f) squarePhoto(f, src => { ui.pdraft.photo = src; renderPfControls(); renderPfPreview(); toast('Photo ready. Save to apply.', 'camera'); });
+    if (f) {
+      if (!/^image\//.test(f.type || '')) toast('That isn’t a picture. Choose a JPG, PNG, or WebP photo.', 'image');
+      else openCropper(f, { title: 'Profile picture', frame: validFrame(state.profile.frame) }, src => { ui.pdraft.photo = src; renderPfControls(); renderPfPreview(); toast('Photo ready. Save to apply.', 'camera'); });
+    }
     e.target.value = '';
     return;
   }
@@ -6549,6 +7717,16 @@ document.addEventListener('input', e => {
   if (key === 'stk-search') { ui.stkQuery = e.target.value; const r = $('#stk-results'); if (r) r.innerHTML = stickerResultsHtml(); return; }
   if (key === 'lib-search') { ui.lib.q = e.target.value; renderLibGrid(); return; }
   if (key === 'cr-zoom') { setZoom(+e.target.value / 100); return; }
+  if (e.target.id === 'crop-zoom') { ui.crop?.zoom(e.target.value); return; }
+  if (key && key.startsWith('wp-') && ui.wp) {
+    const v = +e.target.value, s = ui.wp.s, out = $(`#${key}-v`);
+    const map = { 'wp-zoom': ['zoom', x => `${x.toFixed(1)}×`], 'wp-dim': ['dim', x => `${Math.round(x * 100)}%`], 'wp-bright': ['bright', x => `${Math.round(x * 100)}%`], 'wp-start': ['start', x => fmtDur(x)], 'wp-len': ['len', x => `${x}s`] };
+    const m = map[key]; if (!m) return;
+    s[m[0]] = v; if (out) out.textContent = m[1](v);
+    if (key === 'wp-start' || key === 'wp-len') { const vid = $('#wp-video'); if (vid) { try { vid.currentTime = s.start; } catch (x) {} } renderWallPreview(true); }
+    else renderWallPreview(false);
+    return;
+  }
   if (key === 'cr-frame') { ui.cr.frame = +e.target.value / 100; $('#cr-frame-v').textContent = `${e.target.value}%`; drawStage(); return; }
   if (key === 'cr-tol') {
     ui.cr.bg.tol = +e.target.value; $('#cr-tol-v').textContent = e.target.value;
@@ -6569,6 +7747,7 @@ document.addEventListener('input', e => {
 document.addEventListener('submit', e => {
   e.preventDefault();
   if (e.target.id === 'composer-form') { sendMessage(); return; }
+  if (e.target.id === 'pp-form') { sendPhotoPreview(); return; }
   const name = e.target.dataset.form;
   if (authForms[name]) { if (!Auth.busy) authForms[name](e.target).catch(err => { Auth.setBusy(false); Auth.err(authError(err)); }); return; }
   const f = forms[name];
@@ -6591,6 +7770,10 @@ document.addEventListener('keydown', e => {
     else if (!$('#overlay').hidden) closeOverlay();
     else if ($('#creator').classList.contains('open')) actions['cr-close']();
     else if ($('#appearance').classList.contains('open')) closeAppearance();
+    else if (ui.crop) ui.crop.close();
+    else if (ui.pp) closePhotoPreview();
+    else if ($('#wallpaper').classList.contains('open')) closeWallpaper();
+    else if ($('#frames').classList.contains('open')) closeFrames();
     else if ($('#saved').classList.contains('open')) closeSaved();
     else if ($('#stickers').classList.contains('open')) closeLibrary();
     else if (ui.rec) stopRecording(false);
