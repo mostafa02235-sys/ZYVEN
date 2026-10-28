@@ -76,8 +76,32 @@ In Supabase, go to **Authentication**:
 | Blocking, reporting, disappearing messages | |
 | Privacy for online status, last seen, profile photo, read receipts | |
 | Your theme, bubble design, stickers, saved messages (kept on the phone) | |
+| Photos from the gallery (up to 10 at once) or camera, with preview, compression, upload progress, retry, and pinch-zoom | |
+| Chat wallpapers per chat: photo, colour, or silent looping video, synced to your account | |
+| Profile picture crop and 21 profile frames that other people see | |
 
 There are no sample people or demo chats: a new account starts empty.
+
+### Photos, wallpapers, and frames
+- **Photos:** paperclip → Photos (pick up to 10) or Camera. You see a
+  preview, can remove photos or cancel, and add a caption. Big photos are
+  resized to 2560 px on the long side (same shape, high quality); a small
+  thumbnail is sent too so chats load fast. A ring shows upload progress;
+  if an upload fails, tap the photo to retry. Tap a photo for full screen;
+  pinch, double-tap, or scroll to zoom.
+- **Chat wallpapers:** in a chat, ⋯ → Wallpaper, or Profile →
+  Customization. Choose a photo (zoom, drag to reposition, brightness,
+  dark overlay), a colour, or a video (MP4/WebM up to 50 MB; pick a
+  segment of long videos; always silent; loops; pauses when the chat is
+  closed or the app is in the background; a still frame is used if the
+  video can't play). Each chat can have its own. Default restores the
+  AMOLED black background. Wallpapers are private to you and follow you to
+  other devices.
+- **Profile frames:** Profile → Customization → Profile frames. 21
+  original frames (Classic, Themed, Animated, Premium-ready), all free.
+  The frame is drawn around your photo (your photo isn't changed) and other
+  people see it in chats, lists, and headers.
+- **Profile picture:** choosing a new photo opens crop and reposition first.
 
 ### How your data is protected
 - Every table has **row-level security**: people can only read conversations
@@ -86,6 +110,9 @@ There are no sample people or demo chats: a new account starts empty.
   around these rules.
 - Photos, videos, voice messages, and files are stored privately. Only
   members of the chat get short-lived download links.
+- Chat wallpapers (table `chat_wallpapers`, bucket `wallpapers`) are
+  visible only to the person who set them. Frames can only be changed by
+  the profile's owner.
 - Passwords are handled by Supabase Auth (stored hashed, never in plain text).
 - Messages are protected by these access rules but are **not** end-to-end
   encrypted: whoever runs the Supabase project could read them.
@@ -102,7 +129,7 @@ There are no sample people or demo chats: a new account starts empty.
 Every change runs **Test ZYVEN backend** (Actions tab). It starts a private,
 temporary Supabase server on GitHub, loads the database, and checks:
 
-- 78 database rules (outsiders can’t read, post, react, pin, upload, or
+- 93 database rules (outsiders can’t read, post, react, pin, upload, or
   download in other people’s chats; blocked people can’t message; group
   admin rules; disappearing messages; no fake system messages or backdating)
 - accounts, search, contacts, live delivery between two accounts, file
@@ -110,6 +137,14 @@ temporary Supabase server on GitHub, loads the database, and checks:
 - the real app in two separate browsers: both sign up, one finds and adds
   the other, they chat live, see read receipts, share a photo, create a
   group, sign out and back in
+
+- photos, wallpapers, and frames in two browsers: multi-photo send with
+  preview, cancel, removal, compression, progress, thumbnails, aspect
+  ratio, zoom, failed upload + retry, history after restart; colour, photo
+  and video wallpapers (adjustments, muted playback, still frame, pause in
+  background, per-chat, kept after restart, restore default, file
+  cleanup); profile picture crop; frames chosen, saved, seen by the other
+  account, and removed
 
 The report appears on the run’s summary page and in the `test-results` branch.
 
@@ -323,7 +358,7 @@ so you must uninstall the old app before installing a new one.
 | Path | What it is |
 |---|---|
 | `src/app.html` | The ZYVEN app: screens, styles, logic, and the server connection (section “4b. CLOUD”) |
-| `supabase/migrations/` | The database: tables, security rules, functions, storage, realtime |
+| `supabase/migrations/` | The database: tables, security rules, functions, storage, realtime (`…_zyven_customization.sql` adds frames and wallpapers) |
 | `supabase/templates/recovery.html` | Password-reset email with the 6-digit code |
 | `scripts/build-web.mjs` | Builds `www/` and writes your public server values into it |
 | `scripts/configure-android.mjs` | App name, ID, permissions, black bars, icons, splash |
