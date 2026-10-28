@@ -238,16 +238,16 @@ async function uiTests() {
     await px.unroute('**/storage/v1/object/chat-media/**');
     await sleep(800);
     await px.click('.mrow.me .media:has(.up-fail)');
-    const sheet = await px.waitForSelector('[data-action="msg-retry"]', { timeout: 4000 }).catch(() => null);
+    const sheet = await px.waitForSelector('.overlay [data-action="msg-retry"]', { timeout: 4000 }).catch(() => null);
     if (!sheet) {
       const why = await px.evaluate(() => { const m = document.querySelector('.mrow.me .media:has(.up-fail)'); const r = m?.getBoundingClientRect(); const at = r ? document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2) : null; return `top=${at?.className || at?.tagName} id=${at?.id || ''} overlayHidden=${document.querySelector('#overlay').hidden} pp=${!!document.querySelector('#pp')} viewer=${!document.querySelector('#viewer').hidden}`; });
       ok('tapping a failed photo opens “Try again”', false, why);
       await shot(px, '05b-tap-failed');
       await px.keyboard.press('Escape'); await sleep(400);
       await px.click('.mrow.me .media:has(.up-fail)');
-      await px.waitForSelector('[data-action="msg-retry"]', { timeout: 6000 });
+      await px.waitForSelector('.overlay [data-action="msg-retry"]', { timeout: 6000 });
     } else ok('tapping a failed photo opens “Try again”', true);
-    await px.click('[data-action="msg-retry"]');
+    await px.click('.overlay [data-action="msg-retry"]');
     await px.waitForFunction(() => !document.querySelector('.mrow.me .media .up-fail,.mrow.me .media .up-ring') && document.querySelectorAll('.mrow.me .media').length === 3, null, { timeout: 30000 });
     ok('retry sends it', true);
     await py.waitForFunction(() => document.querySelectorAll('.mrow.them .media').length === 3, null, { timeout: 30000 });
