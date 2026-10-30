@@ -1,0 +1,72 @@
+PASS  sign up a_vgvnsz
+PASS  sign up b_vgvnsz
+PASS  sign up c_vgvnsz
+PASS  each account has a unique id
+PASS  profile row created at sign-up
+PASS  duplicate email rejected
+PASS  duplicate username rejected
+PASS  username_available sees taken name
+PASS  wrong password rejected
+PASS  search finds a real registered user
+PASS  search never returns yourself
+PASS  search with no match returns nothing (no invented people)
+PASS  signed-out visitors cannot search
+PASS  add contact
+PASS  duplicate contact rejected
+PASS  cannot add yourself
+PASS  contacts are private
+PASS  direct chat created
+PASS  no duplicate direct chats (either side)
+PASS  cannot open a chat with yourself
+PASS  A sends a message
+PASS  B receives it in real time
+PASS  outsider C gets no realtime event for it
+PASS  B can load the message history
+PASS  outsider C cannot read it
+PASS  outsider C cannot post into it
+PASS  cannot send as another person
+PASS  outsider C cannot see the members
+PASS  A sees B’s read receipt
+PASS  B reacts
+PASS  B cannot edit A’s message
+PASS  B cannot delete A’s message
+PASS  A edits own message
+PASS  A uploads a file into the chat
+PASS  B can download it
+PASS  outsider C cannot download it
+PASS  outsider C cannot upload into the chat
+PASS  members get signed links
+PASS  delete for everyone clears the text for B too
+PASS  B blocks A
+PASS  blocked: A can no longer message B
+PASS  after unblock A can message again
+PASS  create group
+PASS  non-admin cannot add members
+PASS  admin adds C
+PASS  C now sees the group
+PASS  C still cannot see the A–B chat
+PASS  password reset email requested
+PASS  reset email contains a code
+PASS  reset code accepted
+PASS  new password saved
+PASS  sign in with new password
+PASS  old password no longer works
+PASS  sign out
+PASS  X creates an account in the app
+PASS  Y creates an account in the app
+PASS  new account starts with no chats and no fake people
+PASS  search with no match shows an empty state
+PASS  X adds Y as a contact
+PASS  X sends a message (confirmed by the server)
+PASS  Y sees the new chat appear without reloading
+PASS  Y opens it and reads the message
+PASS  X receives Y’s reply live
+PASS  X sees the read receipt
+PASS  photo uploads and arrives for Y
+PASS  Y sees the group X created
+PASS  Y signs out
+PASS  wrong password shows a clear error
+PASS  after signing in again, chats load from the server
+PASS  no JavaScript errors in the app
+
+70 passed, 0 failed

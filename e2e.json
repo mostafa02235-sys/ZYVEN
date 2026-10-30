@@ -1,0 +1,422 @@
+[
+  {
+    "part": "api",
+    "name": "sign up a_vgvnsz",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "sign up b_vgvnsz",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "sign up c_vgvnsz",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "each account has a unique id",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "profile row created at sign-up",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "duplicate email rejected",
+    "pass": true,
+    "detail": "User already registered"
+  },
+  {
+    "part": "api",
+    "name": "duplicate username rejected",
+    "pass": true,
+    "detail": "Database error saving new user"
+  },
+  {
+    "part": "api",
+    "name": "username_available sees taken name",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "wrong password rejected",
+    "pass": true,
+    "detail": "Invalid login credentials"
+  },
+  {
+    "part": "api",
+    "name": "search finds a real registered user",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "search never returns yourself",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "search with no match returns nothing (no invented people)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "signed-out visitors cannot search",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "add contact",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "duplicate contact rejected",
+    "pass": true,
+    "detail": "duplicate key value violates unique constraint \"contacts_pkey\""
+  },
+  {
+    "part": "api",
+    "name": "cannot add yourself",
+    "pass": true,
+    "detail": "new row for relation \"contacts\" violates check constraint \"contacts_not_self\""
+  },
+  {
+    "part": "api",
+    "name": "contacts are private",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "direct chat created",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "no duplicate direct chats (either side)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "cannot open a chat with yourself",
+    "pass": true,
+    "detail": "ZYVEN_CANNOT_CHAT_WITH_SELF"
+  },
+  {
+    "part": "api",
+    "name": "A sends a message",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "B receives it in real time",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "outsider C gets no realtime event for it",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "B can load the message history",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "outsider C cannot read it",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "outsider C cannot post into it",
+    "pass": true,
+    "detail": "new row violates row-level security policy for table \"messages\""
+  },
+  {
+    "part": "api",
+    "name": "cannot send as another person",
+    "pass": true,
+    "detail": "permission denied for table messages"
+  },
+  {
+    "part": "api",
+    "name": "outsider C cannot see the members",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "A sees B’s read receipt",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "B reacts",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "B cannot edit A’s message",
+    "pass": true,
+    "detail": "ZYVEN_CANNOT_EDIT"
+  },
+  {
+    "part": "api",
+    "name": "B cannot delete A’s message",
+    "pass": true,
+    "detail": "ZYVEN_CANNOT_DELETE"
+  },
+  {
+    "part": "api",
+    "name": "A edits own message",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "A uploads a file into the chat",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "B can download it",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "outsider C cannot download it",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "outsider C cannot upload into the chat",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "members get signed links",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "delete for everyone clears the text for B too",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "B blocks A",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "blocked: A can no longer message B",
+    "pass": true,
+    "detail": "new row violates row-level security policy for table \"messages\""
+  },
+  {
+    "part": "api",
+    "name": "after unblock A can message again",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "create group",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "non-admin cannot add members",
+    "pass": true,
+    "detail": "ZYVEN_ADMINS_ONLY"
+  },
+  {
+    "part": "api",
+    "name": "admin adds C",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "C now sees the group",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "C still cannot see the A–B chat",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "password reset email requested",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "reset email contains a code",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "reset code accepted",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "new password saved",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "sign in with new password",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "old password no longer works",
+    "pass": true,
+    "detail": "Invalid login credentials"
+  },
+  {
+    "part": "api",
+    "name": "sign out",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "X creates an account in the app",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "Y creates an account in the app",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "new account starts with no chats and no fake people",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "search with no match shows an empty state",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "X adds Y as a contact",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "X sends a message (confirmed by the server)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "Y sees the new chat appear without reloading",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "Y opens it and reads the message",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "X receives Y’s reply live",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "X sees the read receipt",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "photo uploads and arrives for Y",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "Y sees the group X created",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "Y signs out",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "wrong password shows a clear error",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "after signing in again, chats load from the server",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "no JavaScript errors in the app",
+    "pass": true,
+    "detail": ""
+  }
+]

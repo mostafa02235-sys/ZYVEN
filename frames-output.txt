@@ -1,0 +1,64 @@
+PASS  sign up fsa_vgy242
+PASS  sign up fsb_vgy242
+PASS  frame file: saved in your own folder
+PASS  frame file: you can replace it (rename keeps the same file)
+PASS  frame file: nobody can save into someone else’s folder
+PASS  frame file: nobody can overwrite someone else’s frame
+PASS  frame file: signed-in people can load it (to draw it around your photo)
+PASS  frame file: signed-out visitors cannot load it
+PASS  frame file: only pictures are accepted
+PASS  profile: a custom frame can be applied
+PASS  profile: other people see the custom frame
+PASS  profile: nobody else can change your frame
+PASS  frame file: nobody else can delete it
+PASS  frame file: you can delete it
+PASS  two accounts sign up in two browsers
+PASS  a chat between them exists
+PASS  Frame Creator opens from Settings › Customization
+PASS  it says plainly that it’s not AI
+PASS  live preview uses your own avatar
+PASS  shape, thickness, glow and transparency change the design
+PASS  colours can be picked
+PASS  animated preview shows orbiting particles
+PASS  saving finishes and opens My frames
+PASS  the frame is applied to your profile
+PASS  the saved file is a 512 px PNG with a transparent background
+PASS  the middle is fully transparent (your photo is never covered)
+PASS  transparency setting is applied to the ring
+PASS  the name travels with the frame
+PASS  My frames shows it, marked as on your profile
+PASS  your own profile shows the frame
+PASS  the other person sees the custom frame in their chat list
+PASS  …small list pictures stay still (battery)
+PASS  the frame shows in the chat header
+PASS  the frame sits outside the photo circle
+PASS  animations pause when ZYVEN is in the background
+PASS  your frames sync to another device
+PASS  picture upload: colours are extracted locally
+PASS  picture upload: it is wrapped around the ring
+PASS  cut-out finds the shapes on a plain background
+PASS  saved without changing your profile frame
+PASS  transparent PNG: used as stickers around the ring
+PASS  transparent PNG frame saved
+PASS  video upload: frames are taken from the clip on the phone
+PASS  video upload: becomes a video loop frame
+PASS  video loop plays in the preview
+PASS  video frame saved and applied
+PASS  the profile now uses the video loop frame
+PASS  the other person sees the video loop frame
+PASS  My frames: “From video” group
+PASS  My frames: “Animated” group
+PASS  My frames: all 4 frames
+PASS  rename
+PASS  edit reopens the design with the video frames
+PASS  edited frame saved
+PASS  editing the applied frame keeps it applied (updated)
+PASS  the old version was removed (no duplicates)
+PASS  take the frame off your profile
+PASS  …and others stop seeing it
+PASS  restore: apply a saved frame again
+PASS  deleting the applied frame takes it off your profile
+PASS  …and deletes its files
+PASS  no JavaScript errors in the app
+
+62 passed, 0 failed

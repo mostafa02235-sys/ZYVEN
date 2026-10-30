@@ -1,0 +1,374 @@
+[
+  {
+    "part": "api",
+    "name": "sign up fsa_vgy242",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "sign up fsb_vgy242",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "frame file: saved in your own folder",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "frame file: you can replace it (rename keeps the same file)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "frame file: nobody can save into someone else’s folder",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "frame file: nobody can overwrite someone else’s frame",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "frame file: signed-in people can load it (to draw it around your photo)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "frame file: signed-out visitors cannot load it",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "frame file: only pictures are accepted",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "profile: a custom frame can be applied",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "profile: other people see the custom frame",
+    "pass": true,
+    "detail": "\"c-abcdefghij-k330-ffe58a\""
+  },
+  {
+    "part": "api",
+    "name": "profile: nobody else can change your frame",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "frame file: nobody else can delete it",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "frame file: you can delete it",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "two accounts sign up in two browsers",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "a chat between them exists",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "Frame Creator opens from Settings › Customization",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "it says plainly that it’s not AI",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "live preview uses your own avatar",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "shape, thickness, glow and transparency change the design",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "colours can be picked",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "animated preview shows orbiting particles",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "saving finishes and opens My frames",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "the frame is applied to your profile",
+    "pass": true,
+    "detail": "c-9x8mtdy50a-o530-ffffff"
+  },
+  {
+    "part": "app",
+    "name": "the saved file is a 512 px PNG with a transparent background",
+    "pass": true,
+    "detail": "{\"w\":512,\"type\":\"image/png\",\"center\":0,\"corner\":0,\"ring\":179,\"name\":\"Gold orbit\"}"
+  },
+  {
+    "part": "app",
+    "name": "the middle is fully transparent (your photo is never covered)",
+    "pass": true,
+    "detail": "0"
+  },
+  {
+    "part": "app",
+    "name": "transparency setting is applied to the ring",
+    "pass": true,
+    "detail": "179"
+  },
+  {
+    "part": "app",
+    "name": "the name travels with the frame",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "My frames shows it, marked as on your profile",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "your own profile shows the frame",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "the other person sees the custom frame in their chat list",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "…small list pictures stay still (battery)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "the frame shows in the chat header",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "the frame sits outside the photo circle",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "animations pause when ZYVEN is in the background",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "your frames sync to another device",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "picture upload: colours are extracted locally",
+    "pass": true,
+    "detail": "{\"kind\":\"image\",\"pal\":[\"#e53d48\",\"#1d4ed6\",\"#fffeff\",\"#f2ce15\",\"#5176d5\"],\"fill\":\"wrap\"}"
+  },
+  {
+    "part": "app",
+    "name": "picture upload: it is wrapped around the ring",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "cut-out finds the shapes on a plain background",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "saved without changing your profile frame",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "transparent PNG: used as stickers around the ring",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "transparent PNG frame saved",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "video upload: frames are taken from the clip on the phone",
+    "pass": true,
+    "detail": "{\"kind\":\"video\",\"frames\":8,\"anim\":\"v\",\"err\":\"\"}"
+  },
+  {
+    "part": "app",
+    "name": "video upload: becomes a video loop frame",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "video loop plays in the preview",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "video frame saved and applied",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "the profile now uses the video loop frame",
+    "pass": true,
+    "detail": "c-l78jyi9xut-v338-ffffff"
+  },
+  {
+    "part": "app",
+    "name": "the other person sees the video loop frame",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "My frames: “From video” group",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "My frames: “Animated” group",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "My frames: all 4 frames",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "rename",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "edit reopens the design with the video frames",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "edited frame saved",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "editing the applied frame keeps it applied (updated)",
+    "pass": true,
+    "detail": "c-jndqibw4gv-v338-ffffff"
+  },
+  {
+    "part": "app",
+    "name": "the old version was removed (no duplicates)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "take the frame off your profile",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "…and others stop seeing it",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "restore: apply a saved frame again",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "deleting the applied frame takes it off your profile",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "…and deletes its files",
+    "pass": true,
+    "detail": "2yd09oh9rz-src.jpg,2yd09oh9rz.png,6qu0ix0yn7-src.png,6qu0ix0yn7.png,9x8mtdy50a.png"
+  },
+  {
+    "part": "app",
+    "name": "no JavaScript errors in the app",
+    "pass": true,
+    "detail": ""
+  }
+]

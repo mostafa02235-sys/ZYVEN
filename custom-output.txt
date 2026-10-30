@@ -1,0 +1,88 @@
+PASS  sign up cza_vgwb7u
+PASS  sign up czb_vgwb7u
+PASS  sign up czc_vgwb7u
+PASS  frame: you can pick a frame
+PASS  frame: other people see your frame
+PASS  frame: search results include the frame
+PASS  frame: nobody else can change your frame
+PASS  frame: invalid frame names are rejected
+PASS  photo: full size and thumbnail upload to the chat folder
+PASS  photo: message saved with both files
+PASS  photo: the other person can open both
+PASS  photo: the thumbnail really downloads
+PASS  photo: outsiders cannot open private photos
+PASS  photo: stays in history for the receiver
+PASS  wallpaper: upload into your own folder
+PASS  wallpaper: cannot upload into someone else’s folder
+PASS  wallpaper: only image and video files are accepted
+PASS  wallpaper: saved for a chat
+PASS  wallpaper: other people can’t see it
+PASS  wallpaper: other people can’t open the file
+PASS  wallpaper: only for chats you’re in
+PASS  wallpaper: syncs to your other devices
+PASS  two accounts sign up in two browsers
+PASS  X and Y are in a chat
+PASS  camera option is available (opens the phone camera on Android)
+PASS  gallery picker allows several photos
+PASS  a preview appears before sending
+PASS  cancelling sends nothing
+PASS  three photos are prepared
+PASS  large photos are compressed, keeping the shape
+PASS  a photo can be removed before sending
+PASS  upload progress is shown on the photo
+PASS  both photos finish sending
+PASS  the receiver gets both, shown from small thumbnails
+PASS  aspect ratios are kept (4:3 and 3:4)
+PASS  the caption arrives
+PASS  tapping opens the full-size photo
+PASS  double-tap zooms in
+PASS  pinch/scroll zoom goes further
+PASS  double-tap again zooms back out
+PASS  a failed upload says “Tap to retry”
+PASS  tapping a failed photo opens “Try again”
+PASS  retry sends it
+PASS  the retried photo arrives
+PASS  photos are still there after restarting the app
+PASS  a colour wallpaper applies to the chat
+PASS  the message list stays readable on top
+PASS  the photo is previewed before applying
+PASS  zoom, reposition, and dark overlay can be adjusted
+PASS  the photo wallpaper appears behind the messages
+PASS  the overlay keeps text readable
+PASS  a different chat keeps the default background
+PASS  the wallpaper is still there after restarting
+PASS  its zoom and position were saved
+PASS  a test video was recorded
+PASS  unsupported video formats are refused with a clear message
+PASS  the video is previewed before applying
+PASS  the preview is muted
+PASS  the editor says sound is off
+PASS  the video plays behind the chat
+PASS  the wallpaper video is silent
+PASS  a still frame is saved as a fallback
+PASS  the video stops when the chat is closed
+PASS  switching chats shows each chat’s own background
+PASS  …and the video comes back in its chat
+PASS  the video pauses when the app goes to the background
+PASS  Default restores the ZYVEN background
+PASS  …and removes it from the server
+PASS  old wallpaper files are cleaned up
+PASS  choosing a profile picture opens crop and reposition
+PASS  the cropped photo shows in the preview before saving
+PASS  the new profile picture is saved
+PASS  the frame screen lists original frames
+PASS  frames have categories
+PASS  picking a frame shows a live preview first
+PASS  applying the frame saves it
+PASS  your own avatar shows the frame
+PASS  the frame is still there after restarting
+PASS  the other person sees the frame in their chat list
+PASS  …around the new profile picture
+PASS  the frame shows in the chat header too
+PASS  the frame sits outside the photo circle
+PASS  removing the frame removes it for others too
+PASS  the original photo is unchanged by frames
+PASS  on a server without the update, chats still load
+PASS  no JavaScript errors in the app
+
+86 passed, 0 failed

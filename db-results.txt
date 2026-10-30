@@ -1,0 +1,102 @@
+ n  | result |                          name                           |         detail         
+----+--------+---------------------------------------------------------+------------------------
+  1 | PASS   | duplicate username rejected                             | ZYVEN_USERNAME_TAKEN
+  2 | PASS   | invalid username rejected                               | ZYVEN_USERNAME_INVALID
+  3 | PASS   | profiles created for 3 users                            | 
+  4 | PASS   | anon: username_available works                          | 
+  5 | PASS   | anon cannot read messages                               | 
+  6 | PASS   | anon cannot search                                      | 
+  7 | PASS   | search finds bob by username                            | 
+  8 | PASS   | search finds by display name                            | 
+  9 | PASS   | search never returns yourself                           | 
+ 10 | PASS   | search with @ prefix                                    | 
+ 11 | PASS   | search wildcard is literal                              | 
+ 12 | PASS   | search no match → empty                                 | 
+ 13 | PASS   | cannot read other profile rows directly                 | 
+ 14 | PASS   | duplicate contact rejected                              | 
+ 15 | PASS   | self contact rejected                                   | 
+ 16 | PASS   | cannot add contacts for others                          | 
+ 17 | PASS   | cannot chat with self                                   | 
+ 18 | PASS   | cannot chat with unknown user                           | 
+ 19 | PASS   | direct chat is not duplicated                           | 
+ 20 | PASS   | A sees own message                                      | 
+ 21 | PASS   | cannot send as someone else                             | 
+ 22 | PASS   | cannot send system messages                             | 
+ 23 | PASS   | cannot backdate messages                                | 
+ 24 | PASS   | no direct updates                                       | 
+ 25 | PASS   | no direct deletes                                       | 
+ 26 | PASS   | empty text rejected                                     | 
+ 27 | PASS   | outsider sees no messages                               | 
+ 28 | PASS   | outsider sees no conversation                           | 
+ 29 | PASS   | outsider sees no members                                | 
+ 30 | PASS   | outsider gets no recent_messages                        | 
+ 31 | PASS   | outsider cannot post                                    | 
+ 32 | PASS   | outsider cannot react                                   | 
+ 33 | PASS   | outsider cannot delete                                  | 
+ 34 | PASS   | outsider cannot pin                                     | 
+ 35 | PASS   | outsider upload to non-conversation folder blocked      | 
+ 36 | PASS   | outsider upload into others chat blocked                | 
+ 37 | PASS   | outsider cannot list chat media                         | 
+ 38 | PASS   | B receives A message                                    | 
+ 39 | PASS   | B unread count is 1                                     | 
+ 40 | PASS   | B unread count is 0 after reading                       | 
+ 41 | PASS   | B read receipt visible                                  | 
+ 42 | PASS   | B cannot edit A message                                 | 
+ 43 | PASS   | B cannot delete A message                               | 
+ 44 | PASS   | reaction stored                                         | 
+ 45 | PASS   | one reaction per person                                 | 
+ 46 | PASS   | same emoji removes reaction                             | 
+ 47 | PASS   | cannot edit someone else profile                        | 
+ 48 | PASS   | cannot write presence directly                          | 
+ 49 | PASS   | member upload into conversation folder allowed          | 
+ 50 | PASS   | A sees B reply                                          | 
+ 51 | PASS   | A sees B read receipt                                   | 
+ 52 | PASS   | photo privacy hides avatar                              | 
+ 53 | PASS   | A can read media in shared chat                         | 
+ 54 | PASS   | blocked person cannot send                              | 
+ 55 | PASS   | sender can edit                                         | 
+ 56 | PASS   | pin stored                                              | 
+ 57 | PASS   | sender can delete for everyone                          | 
+ 58 | PASS   | deleting unpins                                         | 
+ 59 | PASS   | group member sees group message                         | 
+ 60 | PASS   | group member sees system messages                       | 
+ 61 | PASS   | C still cannot see the A–B chat                         | 
+ 62 | PASS   | non-admin cannot add members                            | 
+ 63 | PASS   | non-admin cannot remove members                         | 
+ 64 | PASS   | non-admin cannot promote self                           | 
+ 65 | PASS   | member can edit info when allowed                       | 
+ 66 | PASS   | removed member keeps old history                        | 
+ 67 | PASS   | removed member cannot see new messages                  | 
+ 68 | PASS   | removed member cannot post                              | 
+ 69 | PASS   | removed member cannot edit group                        | 
+ 70 | PASS   | edit_info=admins blocks members                         | 
+ 71 | PASS   | group has no active members left                        | 
+ 72 | PASS   | last admin leaving promotes someone                     | 
+ 73 | PASS   | ttl sets expiry                                         | 
+ 74 | PASS   | expired message hidden                                  | 
+ 75 | PASS   | hidden chat flagged                                     | 
+ 76 | PASS   | new message un-hides chat                               | 
+ 77 | PASS   | outsider cannot join typing channel                     | 
+ 78 | PASS   | member can join typing channel                          | 
+ 79 | PASS   | frame: owner can pick a frame                           | 
+ 80 | PASS   | frame: invalid frame name rejected                      | 
+ 81 | PASS   | frame: other people see the frame                       | 
+ 82 | PASS   | frame: search shows the frame                           | 
+ 83 | PASS   | frame: nobody can change someone else's frame           | 
+ 84 | PASS   | wallpaper: owner can set and change a chat wallpaper    | 
+ 85 | PASS   | wallpaper: file must be in your own folder              | 
+ 86 | PASS   | wallpaper: only for chats you are in                    | 
+ 87 | PASS   | wallpaper: colour must be #RRGGBB                       | 
+ 88 | PASS   | wallpaper: cannot upload into someone else's folder     | 
+ 89 | PASS   | wallpaper: other people cannot see your wallpaper       | 
+ 90 | PASS   | wallpaper: other people cannot see your wallpaper files | 
+ 91 | PASS   | wallpaper: other people cannot delete it                | 
+ 92 | PASS   | wallpaper: owner can remove it                          | 
+ 93 | PASS   | wallpaper: signed-out visitors blocked                  | 
+(93 rows)
+
+ passed | failed 
+--------+--------
+     93 |      0
+(1 row)
+

@@ -1,0 +1,518 @@
+[
+  {
+    "part": "api",
+    "name": "sign up cza_vgwb7u",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "sign up czb_vgwb7u",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "sign up czc_vgwb7u",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "frame: you can pick a frame",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "frame: other people see your frame",
+    "pass": true,
+    "detail": "{\"id\":\"015c13da-ad0c-4596-a9c0-42a8c4b91141\",\"username\":\"cza_vgwb7u\",\"display_name\":\"CZ a\",\"bio\":\"\",\"hue\":250,\"avatar_path\":null,\"online\":null,\"last_seen_at\":null,\"read_receipts\":true,\"frame\":\"gold\"}"
+  },
+  {
+    "part": "api",
+    "name": "frame: search results include the frame",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "frame: nobody else can change your frame",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "frame: invalid frame names are rejected",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "photo: full size and thumbnail upload to the chat folder",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "photo: message saved with both files",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "photo: the other person can open both",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "photo: the thumbnail really downloads",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "photo: outsiders cannot open private photos",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "photo: stays in history for the receiver",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "wallpaper: upload into your own folder",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "wallpaper: cannot upload into someone else’s folder",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "wallpaper: only image and video files are accepted",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "wallpaper: saved for a chat",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "wallpaper: other people can’t see it",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "wallpaper: other people can’t open the file",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "wallpaper: only for chats you’re in",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "api",
+    "name": "wallpaper: syncs to your other devices",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "two accounts sign up in two browsers",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "X and Y are in a chat",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "camera option is available (opens the phone camera on Android)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "gallery picker allows several photos",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "a preview appears before sending",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "cancelling sends nothing",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "three photos are prepared",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "large photos are compressed, keeping the shape",
+    "pass": true,
+    "detail": "2560×1920 · 385 KB → 118 KB"
+  },
+  {
+    "part": "app",
+    "name": "a photo can be removed before sending",
+    "pass": true,
+    "detail": "2560×1920 · 385 KB → 118 KB"
+  },
+  {
+    "part": "app",
+    "name": "upload progress is shown on the photo",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "both photos finish sending",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "the receiver gets both, shown from small thumbnails",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "aspect ratios are kept (4:3 and 3:4)",
+    "pass": true,
+    "detail": "0.75,1.333"
+  },
+  {
+    "part": "app",
+    "name": "the caption arrives",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "tapping opens the full-size photo",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "double-tap zooms in",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "pinch/scroll zoom goes further",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "double-tap again zooms back out",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "a failed upload says “Tap to retry”",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "tapping a failed photo opens “Try again”",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "retry sends it",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "the retried photo arrives",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "photos are still there after restarting the app",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "a colour wallpaper applies to the chat",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "the message list stays readable on top",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "the photo is previewed before applying",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "zoom, reposition, and dark overlay can be adjusted",
+    "pass": true,
+    "detail": "{\"zoom\":1.8,\"x\":0.3666666666666667,\"y\":0.4499992187377928,\"dim\":0.5,\"bright\":1,\"start\":0,\"len\":0}"
+  },
+  {
+    "part": "app",
+    "name": "the photo wallpaper appears behind the messages",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "the overlay keeps text readable",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "a different chat keeps the default background",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "the wallpaper is still there after restarting",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "its zoom and position were saved",
+    "pass": true,
+    "detail": "{\"zoom\":1.8,\"x\":0.3666666666666667,\"y\":0.4499992187377928,\"dim\":0.5,\"bright\":1,\"start\":0,\"len\":0}"
+  },
+  {
+    "part": "app",
+    "name": "a test video was recorded",
+    "pass": true,
+    "detail": "87635"
+  },
+  {
+    "part": "app",
+    "name": "unsupported video formats are refused with a clear message",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "the video is previewed before applying",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "the preview is muted",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "the editor says sound is off",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "the video plays behind the chat",
+    "pass": true,
+    "detail": "{\"t\":1.5068,\"muted\":true,\"paused\":false,\"poster\":true} 2.7127"
+  },
+  {
+    "part": "app",
+    "name": "the wallpaper video is silent",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "a still frame is saved as a fallback",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "the video stops when the chat is closed",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "switching chats shows each chat’s own background",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "…and the video comes back in its chat",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "the video pauses when the app goes to the background",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "Default restores the ZYVEN background",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "…and removes it from the server",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "old wallpaper files are cleaned up",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "choosing a profile picture opens crop and reposition",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "the cropped photo shows in the preview before saving",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "the new profile picture is saved",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "the frame screen lists original frames",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "frames have categories",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "picking a frame shows a live preview first",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "applying the frame saves it",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "your own avatar shows the frame",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "the frame is still there after restarting",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "the other person sees the frame in their chat list",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "…around the new profile picture",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "the frame shows in the chat header too",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "the frame sits outside the photo circle",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "removing the frame removes it for others too",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "the original photo is unchanged by frames",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "on a server without the update, chats still load",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "part": "app",
+    "name": "no JavaScript errors in the app",
+    "pass": true,
+    "detail": ""
+  }
+]

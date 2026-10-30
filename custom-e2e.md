@@ -1,0 +1,95 @@
+# ZYVEN photos, wallpapers & frames test results
+
+86 passed, 0 failed
+
+## Server rules
+
+- ✅ sign up cza_vgwb7u
+- ✅ sign up czb_vgwb7u
+- ✅ sign up czc_vgwb7u
+- ✅ frame: you can pick a frame
+- ✅ frame: other people see your frame
+- ✅ frame: search results include the frame
+- ✅ frame: nobody else can change your frame
+- ✅ frame: invalid frame names are rejected
+- ✅ photo: full size and thumbnail upload to the chat folder
+- ✅ photo: message saved with both files
+- ✅ photo: the other person can open both
+- ✅ photo: the thumbnail really downloads
+- ✅ photo: outsiders cannot open private photos
+- ✅ photo: stays in history for the receiver
+- ✅ wallpaper: upload into your own folder
+- ✅ wallpaper: cannot upload into someone else’s folder
+- ✅ wallpaper: only image and video files are accepted
+- ✅ wallpaper: saved for a chat
+- ✅ wallpaper: other people can’t see it
+- ✅ wallpaper: other people can’t open the file
+- ✅ wallpaper: only for chats you’re in
+- ✅ wallpaper: syncs to your other devices
+
+## App in two browsers
+
+- ✅ two accounts sign up in two browsers
+- ✅ X and Y are in a chat
+- ✅ camera option is available (opens the phone camera on Android)
+- ✅ gallery picker allows several photos
+- ✅ a preview appears before sending
+- ✅ cancelling sends nothing
+- ✅ three photos are prepared
+- ✅ large photos are compressed, keeping the shape
+- ✅ a photo can be removed before sending
+- ✅ upload progress is shown on the photo
+- ✅ both photos finish sending
+- ✅ the receiver gets both, shown from small thumbnails
+- ✅ aspect ratios are kept (4:3 and 3:4)
+- ✅ the caption arrives
+- ✅ tapping opens the full-size photo
+- ✅ double-tap zooms in
+- ✅ pinch/scroll zoom goes further
+- ✅ double-tap again zooms back out
+- ✅ a failed upload says “Tap to retry”
+- ✅ tapping a failed photo opens “Try again”
+- ✅ retry sends it
+- ✅ the retried photo arrives
+- ✅ photos are still there after restarting the app
+- ✅ a colour wallpaper applies to the chat
+- ✅ the message list stays readable on top
+- ✅ the photo is previewed before applying
+- ✅ zoom, reposition, and dark overlay can be adjusted
+- ✅ the photo wallpaper appears behind the messages
+- ✅ the overlay keeps text readable
+- ✅ a different chat keeps the default background
+- ✅ the wallpaper is still there after restarting
+- ✅ its zoom and position were saved
+- ✅ a test video was recorded
+- ✅ unsupported video formats are refused with a clear message
+- ✅ the video is previewed before applying
+- ✅ the preview is muted
+- ✅ the editor says sound is off
+- ✅ the video plays behind the chat
+- ✅ the wallpaper video is silent
+- ✅ a still frame is saved as a fallback
+- ✅ the video stops when the chat is closed
+- ✅ switching chats shows each chat’s own background
+- ✅ …and the video comes back in its chat
+- ✅ the video pauses when the app goes to the background
+- ✅ Default restores the ZYVEN background
+- ✅ …and removes it from the server
+- ✅ old wallpaper files are cleaned up
+- ✅ choosing a profile picture opens crop and reposition
+- ✅ the cropped photo shows in the preview before saving
+- ✅ the new profile picture is saved
+- ✅ the frame screen lists original frames
+- ✅ frames have categories
+- ✅ picking a frame shows a live preview first
+- ✅ applying the frame saves it
+- ✅ your own avatar shows the frame
+- ✅ the frame is still there after restarting
+- ✅ the other person sees the frame in their chat list
+- ✅ …around the new profile picture
+- ✅ the frame shows in the chat header too
+- ✅ the frame sits outside the photo circle
+- ✅ removing the frame removes it for others too
+- ✅ the original photo is unchanged by frames
+- ✅ on a server without the update, chats still load
+- ✅ no JavaScript errors in the app
