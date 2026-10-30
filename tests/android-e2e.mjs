@@ -24,6 +24,8 @@ const PKG = 'com.zyven.messaging';
 const ASSETS = process.env.ASSETS_URL;
 
 let device, page;
+/* Never hang the job: give up after 15 minutes with a report. */
+const watchdog = setTimeout(() => { ok('Android test run finished in time', false, 'stopped after 15 minutes'); finish(); }, 15 * 60e3);
 const shot = async name => { try { writeFileSync(`${OUT}/screens/android-${name}.png`, await device.screenshot()); } catch (e) {} };
 const until = (fn, arg, ms = 20000) => page.waitForFunction(fn, arg, { timeout: ms }).then(() => true, () => false);
 
@@ -34,8 +36,15 @@ try {
   const info = await device.shell('getprop ro.build.version.release').then(String);
   const wv = await device.shell('dumpsys package com.google.android.webview | grep versionName | head -1').then(String).catch(() => '');
   console.log(`Android ${info.trim()}, WebView ${wv.trim()}`);
-  await device.shell(`am start -n ${PKG}/.MainActivity`);
-  const webview = await device.webView({ pkg: PKG }, { timeout: 90000 });
+  const openApp = async () => {
+    for (let i = 0; i < 3; i++) {
+      await device.shell(`am start -n ${PKG}/.MainActivity`);
+      try { return await device.webView({ pkg: PKG }, { timeout: 60000 }); }
+      catch (e) { console.log(`WebView not ready yet (${i + 1}/3): ${e.message.split('\n')[0]}`); await device.shell(`am force-stop ${PKG}`); await sleep(3000); }
+    }
+    throw new Error('The app’s WebView never became reachable');
+  };
+  const webview = await openApp();
   page = await webview.page();
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
@@ -106,8 +115,7 @@ try {
 
   // Restart the app: still there
   await device.shell(`am force-stop ${PKG}`); await sleep(1500);
-  await device.shell(`am start -n ${PKG}/.MainActivity`);
-  const wv2 = await device.webView({ pkg: PKG }, { timeout: 90000 }); page = await wv2.page();
+  const wv2 = await openApp(); page = await wv2.page();
   ok('after restarting the app, the frame is still on the profile', await until(() => /^c-/.test(state?.profile?.frame || ''), null, 40000));
   await shot('07-restart');
   ok('no JavaScript errors in the app', errors.length === 0, errors.slice(0, 5).join(' | '));
@@ -116,9 +124,13 @@ try {
   await shot('error');
 }
 
+function finish() {
 const failed = results.filter(r => !r.pass);
 writeFileSync(`${OUT}/android-e2e.md`, [`# ZYVEN on Android (emulator) — Frame Creator`, '', `${results.length - failed.length} passed, ${failed.length} failed`, '',
   ...results.map(r => `- ${r.pass ? '✅' : '❌'} ${r.name}${r.pass ? '' : ` — ${r.detail}`}`)].join('\n'));
 console.log(`\n${results.length - failed.length} passed, ${failed.length} failed`);
-try { await device?.close(); } catch (e) {}
+clearTimeout(watchdog);
+try { device?.close(); } catch (e) {}
 process.exit(failed.length ? 1 : 0);
+}
+finish();

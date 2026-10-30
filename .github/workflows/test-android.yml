@@ -18,7 +18,7 @@ jobs:
   android:
     name: Frame Creator on an Android emulator
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
       - name: Check out the repository
         uses: actions/checkout@v5

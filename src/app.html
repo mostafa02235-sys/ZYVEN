@@ -7615,7 +7615,11 @@ const CF = {
   owners: new Map(), urls: new Map(), pending: new Set(), timer: 0,
   parse(code) { const m = CF_RE.exec(code || ''); return m ? { id: m[1], anim: m[2], speed: +m[3], amt: +m[4], frames: +m[5], color: `#${m[6]}` } : null; },
   code(id, o) { return `c-${id}-${o.anim}${o.speed}${o.amt}${o.frames}-${o.color.slice(1).toLowerCase()}`; },
-  own(code, uid) { if (uid && CF_RE.test(code || '')) this.owners.set(code, uid); },
+  own(code, uid) {
+    if (!uid || !CF_RE.test(code || '') || this.owners.get(code) === uid) return;
+    this.owners.set(code, uid);
+    clearTimeout(this.ut); this.ut = setTimeout(() => cfUpgrade(), 30); /* avatars drawn before we knew whose frame it is */
+  },
   paths(code, uid) {
     const p = this.parse(code), u = uid || this.owners.get(code); if (!p || !u) return null;
     const d = `${u}/frames/${p.id}`;
@@ -7706,7 +7710,8 @@ function cfUpgrade() {
   document.querySelectorAll('.fr-ov.cf[data-cf]').forEach(el => {
     if (el.querySelector('.cf-base')) return;
     const code = el.dataset.cf, ps = CF.paths(code), p = CF.parse(code);
-    if (!ps || !p || !CF.url(ps.base)) return;
+    if (!ps || !p) return;
+    if (!CF.url(ps.base)) { if (!CF.urls.has(ps.base)) { CF.want(ps.base); if (ps.sprite) CF.want(ps.sprite); } return; }
     el.innerHTML = cfMarkup(p, CF.url(ps.base), ps.sprite ? CF.url(ps.sprite) : null, +el.dataset.sz);
   });
 }
