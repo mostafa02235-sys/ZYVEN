@@ -39,8 +39,12 @@ try {
   const openApp = async () => {
     for (let i = 0; i < 3; i++) {
       await device.shell(`am start -n ${PKG}/.MainActivity`);
-      try { return await device.webView({ pkg: PKG }, { timeout: 60000 }); }
-      catch (e) { console.log(`WebView not ready yet (${i + 1}/3): ${e.message.split('\n')[0]}`); await device.shell(`am force-stop ${PKG}`); await sleep(3000); }
+      try {
+        for (let k = 0; k < 60 && !String(await device.shell(`pidof ${PKG}`)).trim(); k++) await sleep(1000);
+        return await device.webView({ pkg: PKG }, { timeout: 60000 });
+      } catch (e) {
+        console.log(`WebView not ready yet (${i + 1}/3): ${e.message.split('\n')[0]}`);
+        console.log('pid:', String(await device.shell(`pidof ${PKG}`)).trim(), 'webviews:', device.webViews().map(w => w.pkg()).join(',') || 'none', 'sockets:', String(await device.shell('cat /proc/net/unix | grep -a devtools_remote')).trim().slice(0, 300)); await device.shell(`am force-stop ${PKG}`); await sleep(3000); }
     }
     throw new Error('The app’s WebView never became reachable');
   };

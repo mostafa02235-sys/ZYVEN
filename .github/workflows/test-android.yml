@@ -103,6 +103,10 @@ jobs:
         run: |
           cat tests/results/android-e2e.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo "No report" >> "$GITHUB_STEP_SUMMARY"
           echo "::notice title=Android::$(tail -1 android-output.txt 2>/dev/null)"
+          if grep -q '^FAIL\|WebView not ready' android-output.txt 2>/dev/null; then
+            msg=$(grep -E '^FAIL|WebView not ready|pid:|Android 1' android-output.txt | head -30 | sed 's/%/%25/g' | sed ':a;N;$!ba;s/\n/%0A/g')
+            echo "::error title=Android details::${msg}"
+          fi
 
       - name: Upload screenshots
         if: always()
