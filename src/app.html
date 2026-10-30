@@ -7929,7 +7929,9 @@ async function cfLoadVideo(file, start = null) {
   const wait = (ev, ms) => new Promise((res, rej) => { const t = setTimeout(() => rej(new Error('timeout')), ms); v.addEventListener(ev, () => { clearTimeout(t); res(); }, { once: true }); v.addEventListener('error', () => { clearTimeout(t); rej(new Error('This video can’t be opened on this phone. Try an MP4.')); }, { once: true }); });
   try {
     await wait('loadeddata', 15000);
-    const dur = Number.isFinite(v.duration) && v.duration > 0 ? v.duration : 0;
+    /* Some recorded videos (e.g. WebM from a phone's recorder) don't say how long they are until the end is read. */
+    if (!(Number.isFinite(v.duration) && v.duration > 0)) { v.currentTime = 1e7; await wait('seeked', 8000).catch(() => {}); }
+    const dur = Number.isFinite(v.duration) && v.duration > 0 ? v.duration : (v.currentTime > 0 && v.currentTime < 1e6 ? v.currentTime : 0);
     const len = Math.min(dur || 0, 2.4), s0 = start == null ? Math.max(0, dur / 2 - len / 2) : Math.min(Math.max(0, start), Math.max(0, dur - len));
     const frames = [];
     for (let i = 0; i < CF_MAX_FRAMES; i++) {

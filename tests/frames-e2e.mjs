@@ -128,7 +128,7 @@ async function uiTests() {
     await page.waitForSelector('#fstudio.open #fs-big .av', { timeout: 10000 });
     await sleep(500);
   };
-  const preview = (page, sel) => page.waitForFunction(s => document.querySelectorAll(s).length > 0, sel, { timeout: 10000 }).then(() => true, () => false);
+  const preview = (page, sel, ms = 25000) => page.waitForFunction(s => document.querySelectorAll(s).length > 0, sel, { timeout: ms }).then(() => true, () => false);
   const saved = page => page.waitForFunction(() => ui.fs && ui.fs.tab === 'library' && Array.isArray(ui.fs.lib) && !ui.fs.busy, null, { timeout: 30000 }).then(() => true, () => false);
   try {
     const px = await session('X'), py = await session('Y');
