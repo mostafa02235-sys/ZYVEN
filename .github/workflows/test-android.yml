@@ -1,0 +1,114 @@
+name: Test ZYVEN on Android
+
+# Builds a test copy of the ZYVEN APK, runs it on an Android emulator
+# (real Android + Android System WebView), and tests the Frame Creator there
+# against a private, temporary Supabase server on GitHub's machine.
+# Nothing here touches your own Supabase project, and the APK built here is
+# only for testing (the one you install comes from "Build ZYVEN Android APK").
+on:
+  push:
+    branches: [main]
+    paths: ['src/**', 'scripts/**', 'tests/android-e2e.mjs', 'package.json', 'capacitor.config.json', '.github/workflows/test-android.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  android:
+    name: Frame Creator on an Android emulator
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm install; fi
+          npm install --no-save playwright@1 http-server@14
+
+      - name: Set up the Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Start a local Supabase server with the ZYVEN database
+        run: |
+          [ -f supabase/config.toml ] || supabase init --force
+          supabase start -x studio,imgproxy,edge-runtime,logflare,vector,mailpit,inbucket || supabase start -x studio,imgproxy,edge-runtime,logflare,vector || supabase start
+          supabase status -o env > supabase.env
+          sed 's/=.*/=…/' supabase.env
+
+      - name: Build a test copy of the app (talks to the test server)
+        run: |
+          set -a; . ./supabase.env; set +a
+          # The emulator reaches this machine at 10.0.2.2.
+          SUPABASE_URL="http://10.0.2.2:54321" SUPABASE_ANON_KEY="${ANON_KEY:-$PUBLISHABLE_KEY}" npm run build
+          # Test-only settings: plain http to the local test server, and
+          # WebView debugging so the test can drive the app.
+          node -e "const f='capacitor.config.json',c=JSON.parse(require('fs').readFileSync(f));c.server={androidScheme:'http',cleartext:true};c.android.webContentsDebuggingEnabled=true;c.android.allowMixedContent=true;require('fs').writeFileSync(f,JSON.stringify(c,null,2))"
+          npx cap add android
+          npm run android:configure
+          npx cap sync android
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+
+      - name: Build the test APK
+        working-directory: android
+        run: |
+          echo "sdk.dir=${ANDROID_HOME:-/usr/local/lib/android/sdk}" > local.properties
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon -q
+          ls -lh app/build/outputs/apk/debug/
+
+      - name: Test pictures and an MP4 video
+        run: |
+          mkdir -p tests/assets
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg > /dev/null
+          ffmpeg -y -loglevel error -f lavfi -i "testsrc2=size=480x360:rate=24:duration=4" -pix_fmt yuv420p -c:v libx264 -movflags +faststart tests/assets/clip.mp4
+          ffmpeg -y -loglevel error -f lavfi -i "color=white:size=900x600" -vf "drawbox=x=150:y=150:w=300:h=300:color=red@1:t=fill,drawbox=x=520:y=180:w=260:h=240:color=blue@1:t=fill,drawbox=x=600:y=250:w=100:h=100:color=yellow@1:t=fill" -frames:v 1 tests/assets/shapes.jpg
+          ls -lh tests/assets
+          nohup npx http-server tests/assets -p 8090 -a 0.0.0.0 --cors -s > assets.log 2>&1 &
+
+      - name: Let the emulator use hardware acceleration
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Run ZYVEN on an Android emulator and test the Frame Creator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          ram-size: 4096M
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: bash -c 'set -a; . ./supabase.env; set +a; SUPABASE_URL="$API_URL" SUPABASE_ANON_KEY="${ANON_KEY:-$PUBLISHABLE_KEY}" ASSETS_URL="http://10.0.2.2:8090" APK=android/app/build/outputs/apk/debug/app-debug.apk node tests/android-e2e.mjs 2>&1 | tee android-output.txt; exit ${PIPESTATUS[0]}'
+
+      - name: Report
+        if: always()
+        run: |
+          cat tests/results/android-e2e.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo "No report" >> "$GITHUB_STEP_SUMMARY"
+          echo "::notice title=Android::$(tail -1 android-output.txt 2>/dev/null)"
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: android-test-screens
+          path: tests/results
+          if-no-files-found: ignore
+          retention-days: 14

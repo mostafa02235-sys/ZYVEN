@@ -1097,6 +1097,65 @@ input[type=range]:disabled{opacity:.4}
 .fr-anim-pulse{animation:frPulse 2.6s ease-in-out infinite}
 @keyframes frSpin{to{transform:rotate(360deg)}}
 @keyframes frPulse{0%,100%{opacity:.75;transform:scale(.985)}50%{opacity:1;transform:scale(1.015)}}
+.fr-ov.cf > *{position:absolute;inset:0;width:100%;height:100%}
+.fr-ov.cf img.cf-base{display:block;object-fit:contain;-webkit-user-drag:none}
+.cf-vid{overflow:hidden;display:block}
+.cf-vid i{position:absolute;top:0;left:0;height:100%;background-size:100% 100%;background-repeat:no-repeat}
+.cf-vid i.run{animation:cfVid calc(var(--d) * .28) steps(var(--n)) infinite}
+@keyframes cfVid{to{transform:translateX(-100%)}}
+.fr-ov.cf.a-s.live{animation:frSpin calc(var(--d) * 1.4) linear infinite}
+.fr-ov.cf.a-p.live img.cf-base{animation:cfPulse calc(var(--d) * .35) ease-in-out infinite}
+@keyframes cfPulse{0%,100%{filter:drop-shadow(0 0 0 transparent);transform:scale(.985)}50%{filter:drop-shadow(0 0 calc(var(--amt) * 2.2px) var(--fc));transform:scale(1.02)}}
+@property --cfa{syntax:'<angle>';inherits:false;initial-value:0deg}
+.cf-sweep{display:block;background:conic-gradient(from var(--cfa),transparent 0 62%,color-mix(in srgb,var(--fc) 90%,transparent) 80%,transparent 92%);-webkit-mask-size:100% 100%;mask-size:100% 100%;opacity:calc(.2 + var(--amt) * .16);animation:cfSweep calc(var(--d) * .5) linear infinite;mix-blend-mode:screen}
+@keyframes cfSweep{to{--cfa:360deg}}
+.cf-pts{display:block}
+.cf-pts i{position:absolute;width:calc(var(--s) * .07 * var(--z));height:calc(var(--s) * .07 * var(--z));transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,#fff 0,var(--fc) 32%,transparent 70%);animation:cfTw 2.6s ease-in-out infinite}
+@keyframes cfTw{0%,100%{opacity:.15;scale:.5}50%{opacity:1;scale:1.15}}
+.fr-ov.cf.a-o .cf-pts{animation:frSpin calc(var(--d) * .9) linear infinite}
+.zv-away .fr-ov,.zv-away .fr-ov *{animation-play-state:paused!important}
+@media (prefers-reduced-motion:reduce){.fr-ov.cf,.fr-ov.cf *{animation:none!important}}
+.fs-tabs{margin:12px 16px 0}
+.fs-body{padding:6px 16px 130px;display:flex;flex-direction:column;gap:14px}
+.fs-body > *{flex:none}
+.fs-hero{padding:16px 0 0}
+.fs-hero .fr-sizes{gap:16px;flex-wrap:wrap}
+.fs-honest{margin:8px 0 0;text-align:left}
+.fs-sec{border:1px solid var(--line);border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:12px}
+.fs-sec h4{margin:0;font-size:13px;font-weight:600;color:var(--muted);letter-spacing:.02em}
+.fs-drop{display:flex;flex-direction:column;align-items:center;gap:6px;padding:22px 14px;border:1.5px dashed var(--line);border-radius:18px;color:var(--muted);text-align:center;font-size:12.5px;line-height:1.45}
+.fs-drop svg{width:28px;height:28px;color:var(--tint)}
+.fs-drop b{color:var(--fg);font-size:15px}
+.fs-or{margin:0;font-size:12.5px;color:var(--muted);text-align:center}
+.fs-src{display:flex;align-items:center;gap:10px}
+.fs-src img{width:56px;height:56px;border-radius:14px;object-fit:cover;background:repeating-conic-gradient(#1c1c1c 0 25%,#2c2c2c 0 50%) 0 0/12px 12px;flex:none}
+.fs-src > div{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;font-size:12.5px;color:var(--muted)}
+.fs-src b{color:var(--fg);font-size:14.5px}
+.fs-src .icon-btn{flex:none;width:38px;height:38px}
+.fs-pal{display:flex;align-items:center;gap:4px;margin-top:4px}
+.fs-pal i{width:14px;height:14px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
+.fs-pal small{margin-left:4px;font-size:11.5px}
+.fs-err{margin:0;color:#FF6B6B;font-size:13px;line-height:1.45}
+.fs-hint{margin:0;font-size:12px;color:var(--muted);line-height:1.45}
+.fs-lbl{font-size:12px;color:var(--muted);margin-bottom:-4px}
+.fs-sw{display:flex;flex-wrap:wrap;gap:9px}
+.fs-dot{width:30px;height:30px;border-radius:50%;background:var(--c);box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
+.fs-dot.on,.fs-slot.on{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--fg)}
+.fs-slots{display:flex;gap:10px;align-items:center}
+.fs-slot{width:46px;height:46px;border-radius:14px;background:var(--c);position:relative;box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
+.fs-slot span{position:absolute;right:5px;bottom:3px;font:600 10px var(--f-mono);color:#fff;text-shadow:0 1px 2px #000}
+.fs-slot.add{background:transparent;border:1.5px dashed var(--line);color:var(--muted);font-size:20px;box-shadow:none}
+.fs-tog{display:flex;align-items:center;gap:10px;font-size:14px}
+.fs-tog input{width:20px;height:20px;accent-color:var(--tint);flex:none}
+.fs-tog small{display:block;color:var(--muted);font-size:12px}
+.fs-chips{flex-wrap:wrap}
+.chip:disabled,.seg button:disabled{opacity:.35}
+.fr-acts .btn.fs-ic{flex:none;width:46px;padding:0}
+.fs-load .pp-spin{position:static;flex:none}
+.fs-load{display:flex;gap:10px;align-items:center;justify-content:center;padding:60px 0;color:var(--muted)}
+.fs-libtabs{padding-top:12px}
+.fs-sheet-prev{display:flex;flex-direction:column;align-items:center;gap:12px;padding:40px 0 26px}
+.fs-sheet-prev small{color:var(--muted)}
 .fr-body{padding:18px 16px 120px;display:flex;flex-direction:column;gap:14px}
 .fr-hero{display:flex;flex-direction:column;align-items:center;gap:6px;padding:26px 0 8px;text-align:center}
 .fr-big{padding:36px;margin-bottom:6px}
@@ -1236,6 +1295,7 @@ input[type=range]:disabled{opacity:.4}
   <section class="screen" id="appearance" aria-label="Chat design" aria-hidden="true"></section>
   <section class="screen" id="wallpaper" aria-label="Chat wallpaper" aria-hidden="true"></section>
   <section class="screen" id="frames" aria-label="Profile frames" aria-hidden="true"></section>
+  <section class="screen" id="fstudio" aria-label="Frame Creator" aria-hidden="true"></section>
   <div class="overlay" id="overlay" hidden></div>
   <div class="viewer" id="viewer" hidden role="dialog" aria-modal="true" aria-label="Media viewer"></div>
   <div class="toasts" id="toasts" aria-live="polite"></div>
@@ -2005,7 +2065,8 @@ function renderProfile() {
           ${linkRow('cz-walls', 'wallpaper', 'Chat wallpapers', Object.keys(state.walls || {}).length ? `${Object.keys(state.walls).length} chat${Object.keys(state.walls).length === 1 ? '' : 's'} customized` : 'Photo or colour, per chat')}
           ${linkRow('cz-video', 'film', 'Video wallpapers', 'A silent, looping video behind a chat')}
           ${linkRow('edit-profile', 'camera', 'Profile picture', 'Change, crop, and reposition')}
-          ${linkRow('open-frames', 'frame', 'Profile frames', validFrame(state.profile.frame) ? FRAMES[state.profile.frame].name : 'Decorate your photo')}
+          ${linkRow('fs-open', 'brush', 'Frame Creator', 'Design your own frame from a picture or video')}
+          ${linkRow('open-frames', 'frame', 'Profile frames', validFrame(state.profile.frame) ? esc(frameLabel(state.profile.frame)) : 'Decorate your photo')}
           ${linkRow('cz-reset', 'refresh', 'Reset customization', 'Remove all wallpapers and your frame', 'danger')}
         </div>
       </div>
@@ -5133,7 +5194,7 @@ function sysText(m) {
 function profileToUser(p, prev) {
   return {
     id: p.id, name: str(p.display_name, 32) || p.username, username: str(p.username, 24), bio: str(p.bio, 140),
-    hue: num(p.hue, 0, 360, 250), photoPath: p.avatar_path || null, photo: Media.url(p.avatar_path, 'avatars'), frame: validFrame(p.frame),
+    hue: num(p.hue, 0, 360, 250), photoPath: p.avatar_path || null, photo: Media.url(p.avatar_path, 'avatars'), frame: (CF.own(p.frame, p.id), validFrame(p.frame)),
     online: !!p.online, lastSeen: p.last_seen_at ? Date.parse(p.last_seen_at) : null, readReceipts: p.read_receipts !== false,
     contact: prev?.contact || false,
   };
@@ -5273,7 +5334,7 @@ const Cloud = {
     await Media.sign([data.avatar_path], 'avatars');
     Object.assign(state.profile, {
       id: data.id, name: data.display_name, username: data.username, bio: data.bio || '', hue: num(data.hue, 0, 360, 250),
-      photoPath: data.avatar_path || null, photo: Media.url(data.avatar_path, 'avatars'), since: Date.parse(data.created_at), frame: validFrame(data.frame),
+      photoPath: data.avatar_path || null, photo: Media.url(data.avatar_path, 'avatars'), since: Date.parse(data.created_at), frame: (CF.own(data.frame, data.id), validFrame(data.frame)),
     });
     Object.assign(S().privacy, { onlineStatus: data.privacy_online, lastSeen: data.privacy_last_seen, photo: data.privacy_photo, readReceipts: data.read_receipts });
     renderProfile();
@@ -5857,7 +5918,7 @@ const authForms = {
 async function signOut(erase) {
   const id = Cloud.me;
   closeOverlay();
-  try { if (ui.pp) closePhotoPreview(); if (ui.crop) ui.crop.close(); if ($('#wallpaper').classList.contains('open')) closeWallpaper(); if ($('#frames').classList.contains('open')) closeFrames(); stopWallVideo(); } catch (x) {}
+  try { if (ui.pp) closePhotoPreview(); if (ui.crop) ui.crop.close(); if ($('#wallpaper').classList.contains('open')) closeWallpaper(); if ($('#frames').classList.contains('open')) closeFrames(); if ($('#fstudio').classList.contains('open')) closeFrameStudio(); stopWallVideo(); } catch (x) {}
   ui.wallUrls.forEach(u => { if (u.startsWith('blob:')) URL.revokeObjectURL(u); }); ui.wallUrls.clear();
   if (erase) { try { if ('caches' in window) caches.delete('zyven-wallpapers-v1'); } catch (x) {} }
   if (ui.openChatId) closeChat();
@@ -6736,10 +6797,10 @@ const FRAMES = {
   pulse: { name: 'Pulse glow', cat: 'animated', anim: 'pulse', svg: u => `<defs>${FR.glow(u, 3.4)}</defs>` + FR.ring(45.4, '#4ADE9F', 4.8, `filter="url(#${u})"`) + FR.ring(45, '#D9FFEE', 1.4) },
 };
 const FRAME_CATS = [['all', 'All'], ['classic', 'Classic'], ['themed', 'Themed'], ['animated', 'Animated'], ['premium', 'Premium-ready']];
-const validFrame = f => (typeof f === 'string' && Object.prototype.hasOwnProperty.call(FRAMES, f)) ? f : null;
+const validFrame = f => (typeof f === 'string' && (Object.prototype.hasOwnProperty.call(FRAMES, f) || /^c-[a-z0-9]{10}-[nspwkov][1-5][1-5][0-8]-[0-9a-f]{6}$/.test(f))) ? f : null;
 let frameSeq = 0;
 function frameSvg(id, size) {
-  const f = FRAMES[id]; if (!f) return '';
+  const f = FRAMES[id]; if (!f) return typeof cfOverlay === 'function' ? cfOverlay(id, size) : '';
   const u = `fr${++frameSeq}`;
   const anim = f.anim && size >= 64 ? ` fr-anim-${f.anim}` : '';
   return `<svg class="fr-svg${anim}" viewBox="-60 -60 120 120" aria-hidden="true" focusable="false">${f.svg(u)}</svg>`;
@@ -6747,7 +6808,8 @@ function frameSvg(id, size) {
 /* Puts a frame around any avatar span. Tiny avatars (reactions, etc.) skip it. */
 function withFrame(html, frame, size) {
   if (!validFrame(frame) || size < 28) return html;
-  return html.replace(/<\/span>\s*$/, `<i class="fr-ov">${frameSvg(frame, size)}</i></span>`).replace('class="av', 'class="av framed');
+  const ov = FRAMES[frame] ? `<i class="fr-ov">${frameSvg(frame, size)}</i>` : cfOverlay(frame, size);
+  return html.replace(/<\/span>\s*$/, `${ov}</span>`).replace('class="av', 'class="av framed');
 }
 
 /* =========================================================
@@ -6758,9 +6820,10 @@ Object.assign(ICONS, {
   frame: '<circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="8.5" stroke-dasharray="2.6 2.4"/>',
   palette: '<path d="M12 3.5a8.5 8.5 0 1 0 0 17c1.4 0 1.9-1 1.9-1.9 0-1.6-1.3-1.6-1.3-2.9 0-.9.7-1.6 1.7-1.6h2.1a4.1 4.1 0 0 0 4.1-4.1C20.5 6.6 16.7 3.5 12 3.5z"/><circle cx="7.6" cy="11" r="1.1"/><circle cx="10" cy="7.4" r="1.1"/><circle cx="14.4" cy="7.4" r="1.1"/>',
   crop: '<path d="M7 3.5v13.5h13.5M3.5 7H17v13.5"/>',
+  brush: '<path d="M14.5 4.5l5 5-8.2 8.2a2.5 2.5 0 0 1-1.8.7H6.5v-3a2.5 2.5 0 0 1 .7-1.8z"/><path d="M12.5 6.5l5 5"/><path d="M4 20.5h5"/>',
   zoomIn: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="m20 20-4.8-4.8M10.5 8v5M8 10.5h5"/>',
 });
-Object.assign(ICON_TINT, { wallpaper: '#5CB0FF', frame: '#FFC15E', palette: '#FF7AB6', crop: '#4ADE9F' });
+Object.assign(ICON_TINT, { wallpaper: '#5CB0FF', frame: '#FFC15E', palette: '#FF7AB6', crop: '#4ADE9F', brush: '#C084FC' });
 
 const PHOTO_MAX_DIM = 2560, PHOTO_KEEP_BYTES = 1.5e6, PHOTO_BATCH = 10;
 const WALL_MAX_BYTES = 50 * 1024 * 1024;
@@ -7462,7 +7525,7 @@ function renderFrames() {
   const p = state.profile, cur = validFrame(p.frame);
   const me = (frame, size) => withFrame(avatarFor({ ...p, frame: null }, size), frame, size);
   $('#fr-hero').innerHTML = `<div class="fr-big">${me(f.draft, 132)}</div>
-    <b>${f.draft ? esc(FRAMES[f.draft].name) : 'No frame'}</b>
+    <b>${f.draft ? esc(frameLabel(f.draft)) : 'No frame'}</b>
     <span>${f.draft === cur ? (cur ? 'Your current frame' : 'You aren’t using a frame') : 'Preview · not applied yet'}</span>
     <div class="fr-sizes" aria-label="How it looks in lists">${me(f.draft, 52)}${me(f.draft, 40)}<span class="fr-row-demo"><b>${esc(p.name || 'You')}</b><small>How others see you in chats</small></span></div>`;
   $('#fr-tabs').innerHTML = FRAME_CATS.map(([k, l]) => `<button class="chip ${f.tab === k ? 'on' : ''}" data-action="fr-tab" data-v="${k}" role="tab" aria-selected="${f.tab === k}">${l}</button>`).join('');
@@ -7473,16 +7536,17 @@ function renderFrames() {
   $('#fr-acts').innerHTML = `${cur ? `<button class="btn secondary" data-action="fr-remove" ${f.busy ? 'disabled' : ''}>${I('x')}Remove frame</button>` : ''}
     <button class="btn" data-action="fr-apply" ${!changed || f.busy ? 'disabled' : ''}>${f.busy ? 'Saving…' : `${I('check')}${f.draft ? 'Apply frame' : 'Save without frame'}`}</button>`;
 }
-async function saveFrame(frame) {
+async function saveFrame(frame, quiet) {
   const f = ui.fr; if (f) { f.busy = true; renderFrames(); }
   try {
     const { error } = await sb.from('profiles').update({ frame: validFrame(frame) }).eq('id', Cloud.me);
     if (error) throw error;
+    CF.own(frame, Cloud.me);
     state.profile.frame = validFrame(frame); save();
     refresh(); renderProfile();
-    toast(frame ? 'Frame applied. Others see it the next time their app refreshes.' : 'Frame removed', 'frame');
+    if (!quiet) toast(frame ? 'Frame applied. Others see it the next time their app refreshes.' : 'Frame removed', 'frame');
     if (f) { f.busy = false; f.draft = validFrame(frame); renderFrames(); }
-  } catch (e) { if (f) { f.busy = false; renderFrames(); } toast(cloudError(e), 'info'); }
+  } catch (e) { if (f) { f.busy = false; renderFrames(); } if (quiet) throw e; toast(cloudError(e), 'info'); }
 }
 
 /* ---------- Customization hub ---------- */
@@ -7493,7 +7557,8 @@ function customizationSheet() {
       ${linkRow('cz-walls', 'wallpaper', 'Chat wallpapers', walls ? `${walls} chat${walls === 1 ? '' : 's'} customized` : 'Photo or colour, per chat')}
       ${linkRow('cz-video', 'film', 'Video wallpapers', 'A silent, looping video behind a chat')}
       ${linkRow('edit-profile', 'camera', 'Profile picture', 'Change, crop, and reposition')}
-      ${linkRow('open-frames', 'frame', 'Profile frames', state.profile.frame && FRAMES[state.profile.frame] ? FRAMES[state.profile.frame].name : 'No frame')}
+      ${linkRow('fs-open', 'brush', 'Frame Creator', 'Design your own frame')}
+      ${linkRow('open-frames', 'frame', 'Profile frames', state.profile.frame ? esc(frameLabel(state.profile.frame)) : 'No frame')}
       ${linkRow('cz-reset', 'refresh', 'Reset customization', 'Remove all wallpapers and your frame', 'danger')}
     </div>`);
 }
@@ -7518,6 +7583,823 @@ async function resetCustomization() {
     toast('Customization reset', 'refresh');
   } catch (e) { toast(cloudError(e), 'info'); }
 }
+
+/* ---------- Frame Creator: custom frames designed on the phone ----------
+   Everything here runs locally (canvas image processing, no AI and no paid
+   service). A custom frame is a transparent PNG ring (its center is always cut
+   out, so the profile photo shows) plus optional animation done by the app:
+   spin, pulse, light sweep, sparkles, orbiting particles, or a short loop made
+   from frames of the person's own video (a sprite strip PNG).
+
+   Files live in the existing private "avatars" bucket, which every signed-in
+   person can read and only the owner can write:
+     <user id>/frames/<id>.png       the frame (512 px). Its PNG text chunk
+                                     "zyven-frame" holds the name and design.
+     <user id>/frames/<id>-v.png     video loop frames, side by side (optional)
+     <user id>/frames/<id>-src.jpg   the picture it was made from (for editing)
+   profiles.frame stores "c-<id>-<anim><speed><amount><frames>-<colour>", so
+   other people's apps know how to draw it without extra server tables.
+
+   Optional AI later: FRAME_SOURCES.ai can be filled with a function that
+   returns a ring picture; nothing in the app uses or advertises it now. */
+const FRAME_SOURCES = { local: true, ai: null };
+const CF_RE = /^c-([a-z0-9]{10})-([nspwkov])([1-5])([1-5])([0-8])-([0-9a-f]{6})$/;
+const CF_N = 512, CF_RI = 172, CF_SPR = 320, CF_MAX_FRAMES = 8;
+const CF_ANIMS = { n: 'Static', s: 'Spin', p: 'Pulse', w: 'Light sweep', k: 'Sparkle', o: 'Orbit', v: 'Video loop' };
+const CF_SHAPES = [['circle', 'Circle'], ['rounded', 'Rounded'], ['hex', 'Hexagon'], ['scallop', 'Scallop'], ['burst', 'Burst'], ['wave', 'Wave']];
+const CF_PRESETS = ['#FFFFFF', '#FFC15E', '#FF7A59', '#FF4D6D', '#FF7AB6', '#C084FC', '#7C5CFF', '#5CB0FF', '#22D3EE', '#4ADE9F', '#A3E635', '#111111'];
+const CF_DUR = [0, 18, 12, 8, 5, 3];
+const hexOk = c => typeof c === 'string' && /^#[0-9a-f]{6}$/i.test(c);
+
+const CF = {
+  owners: new Map(), urls: new Map(), pending: new Set(), timer: 0,
+  parse(code) { const m = CF_RE.exec(code || ''); return m ? { id: m[1], anim: m[2], speed: +m[3], amt: +m[4], frames: +m[5], color: `#${m[6]}` } : null; },
+  code(id, o) { return `c-${id}-${o.anim}${o.speed}${o.amt}${o.frames}-${o.color.slice(1).toLowerCase()}`; },
+  own(code, uid) { if (uid && CF_RE.test(code || '')) this.owners.set(code, uid); },
+  paths(code, uid) {
+    const p = this.parse(code), u = uid || this.owners.get(code); if (!p || !u) return null;
+    const d = `${u}/frames/${p.id}`;
+    return { base: `${d}.png`, sprite: p.frames ? `${d}-v.png` : null, src: `${d}-src.jpg`, srcPng: `${d}-src.png` };
+  },
+  url(path) { return path ? this.urls.get(path) || null : null; },
+  key: path => `https://zyven.local/frames/${path}`,
+  want(path) {
+    if (!path || this.urls.has(path) || this.pending.has(path) || !sb) return;
+    this.pending.add(path);
+    clearTimeout(this.timer); this.timer = setTimeout(() => this.flush(), 40);
+  },
+  async flush() {
+    const list = [...this.pending]; if (!list.length) return;
+    await Promise.all(list.map(p => this.fetch(p, false).catch(() => null)));
+    list.forEach(p => this.pending.delete(p));
+    cfUpgrade();
+  },
+  /* A local URL for a frame file: cache first (or network first for your own library). */
+  async fetch(path, fresh) {
+    let blob = null;
+    try {
+      const cache = 'caches' in window ? await caches.open('zyven-frames-v1') : null;
+      if (cache && !fresh) { const hit = await cache.match(this.key(path)); if (hit) blob = await hit.blob(); }
+      if (!blob) {
+        const { data, error } = await sb.storage.from('avatars').download(path);
+        if (error || !data) throw error || new Error('missing');
+        blob = data;
+        if (cache) await cache.put(this.key(path), new Response(blob, { headers: { 'Content-Type': blob.type || 'image/png' } }));
+      }
+    } catch (e) { if (!blob) { this.urls.set(path, null); return null; } }
+    const old = this.urls.get(path); if (old?.startsWith?.('blob:')) URL.revokeObjectURL(old);
+    const u = URL.createObjectURL(blob); this.urls.set(path, u);
+    return blob;
+  },
+  async put(path, blob) {
+    const { error } = await sb.storage.from('avatars').upload(path, blob, { contentType: blob.type, upsert: true, cacheControl: '60' });
+    if (error) throw error;
+    const old = this.urls.get(path); if (old?.startsWith?.('blob:')) URL.revokeObjectURL(old);
+    this.urls.set(path, URL.createObjectURL(blob));
+    try { if ('caches' in window) await (await caches.open('zyven-frames-v1')).put(this.key(path), new Response(blob, { headers: { 'Content-Type': blob.type } })); } catch (e) {}
+  },
+  async drop(paths) {
+    paths = paths.filter(Boolean); if (!paths.length) return;
+    paths.forEach(p => { const u = this.urls.get(p); if (u?.startsWith?.('blob:')) URL.revokeObjectURL(u); this.urls.delete(p); });
+    try { if ('caches' in window) { const c = await caches.open('zyven-frames-v1'); await Promise.all(paths.map(p => c.delete(this.key(p)))); } } catch (e) {}
+    await sb.storage.from('avatars').remove(paths);
+  },
+};
+
+/* Same pseudo-random numbers on every phone for the same frame. */
+function cfRand(seed) { let h = 2166136261; for (const ch of String(seed)) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); } return () => { h ^= h << 13; h ^= h >>> 17; h ^= h << 5; return ((h >>> 0) % 10000) / 10000; }; }
+
+/* The overlay markup for a custom frame (shared by the creator preview and every avatar). */
+function cfMarkup(p, base, sprite, size) {
+  if (!base) return '';
+  const live = size >= 64 && p.anim !== 'n';
+  let s = '';
+  if (p.frames && sprite) s += `<b class="cf-vid"><i class="${live && p.anim === 'v' ? 'run' : ''}" style="width:${p.frames * 100}%;background-image:url('${sprite}');--n:${p.frames}"></i></b>`;
+  s += `<img class="cf-base" src="${base}" alt="" draggable="false">`;
+  if (live && p.anim === 'w') s += `<b class="cf-sweep" style="-webkit-mask-image:url('${base}');mask-image:url('${base}')"></b>`;
+  if (live && (p.anim === 'k' || p.anim === 'o')) {
+    const r = cfRand(base.length + p.color + p.amt), n = p.amt * 3;
+    let dots = '';
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * Math.PI * 2 + r() * .5, rad = 38.5 + r() * 9; /* % of the overlay: the ring band */
+      dots += `<i style="left:${(50 + Math.cos(a) * rad).toFixed(2)}%;top:${(50 + Math.sin(a) * rad).toFixed(2)}%;--z:${(.6 + r() * .9).toFixed(2)};animation-delay:${(-r() * 3).toFixed(2)}s"></i>`;
+    }
+    s += `<b class="cf-pts">${dots}</b>`;
+  }
+  return s;
+}
+function cfOverlay(code, size) {
+  const p = CF.parse(code), ps = CF.paths(code);
+  if (!p) return '';
+  const live = size >= 64 && p.anim !== 'n';
+  let inner = '';
+  if (ps) {
+    const base = CF.url(ps.base), spr = ps.sprite ? CF.url(ps.sprite) : null;
+    if (!CF.urls.has(ps.base)) CF.want(ps.base);
+    if (ps.sprite && !CF.urls.has(ps.sprite)) CF.want(ps.sprite);
+    inner = cfMarkup(p, base, spr, size);
+  }
+  return `<i class="fr-ov cf a-${p.anim}${live ? ' live' : ''}" data-cf="${code}" data-sz="${size}" style="--fc:${p.color};--d:${CF_DUR[p.speed]}s;--amt:${p.amt}">${inner}</i>`;
+}
+/* Frame files arrive after the avatar was drawn: fill them in where they are. */
+function cfUpgrade() {
+  document.querySelectorAll('.fr-ov.cf[data-cf]').forEach(el => {
+    if (el.querySelector('.cf-base')) return;
+    const code = el.dataset.cf, ps = CF.paths(code), p = CF.parse(code);
+    if (!ps || !p || !CF.url(ps.base)) return;
+    el.innerHTML = cfMarkup(p, CF.url(ps.base), ps.sprite ? CF.url(ps.sprite) : null, +el.dataset.sz);
+  });
+}
+const frameLabel = f => !f ? '' : FRAMES[f] ? FRAMES[f].name : CF.parse(f) ? (ui.fsNames?.[CF.parse(f).id] || 'Your own frame') : '';
+
+/* ---------- PNG text chunk: the frame's name and design travel inside its PNG ---------- */
+const CRC_T = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+const crc32 = b => { let c = 0xFFFFFFFF; for (let i = 0; i < b.length; i++) c = CRC_T[(c ^ b[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; };
+async function pngWithMeta(blob, meta) {
+  const png = new Uint8Array(await blob.arrayBuffer());
+  const txt = JSON.stringify(meta).replace(/[\u007f-￿]/g, ch => `\\u${ch.charCodeAt(0).toString(16).padStart(4, '0')}`);
+  const data = new TextEncoder().encode(`zyven-frame\0${txt}`);
+  const chunk = new Uint8Array(12 + data.length), dv = new DataView(chunk.buffer);
+  dv.setUint32(0, data.length); chunk.set([116, 69, 88, 116], 4); chunk.set(data, 8);
+  dv.setUint32(8 + data.length, crc32(chunk.subarray(4, 8 + data.length)));
+  const at = 33; /* after the 8-byte signature and the IHDR chunk */
+  const out = new Uint8Array(png.length + chunk.length);
+  out.set(png.subarray(0, at)); out.set(chunk, at); out.set(png.subarray(at), at + chunk.length);
+  return new Blob([out], { type: 'image/png' });
+}
+async function pngMeta(blob) {
+  try {
+    const b = new Uint8Array(await blob.slice(0, 65536).arrayBuffer()), dv = new DataView(b.buffer);
+    let o = 8;
+    while (o + 12 <= b.length) {
+      const len = dv.getUint32(o), type = String.fromCharCode(...b.subarray(o + 4, o + 8));
+      if (type === 'tEXt') {
+        const s = new TextDecoder('latin1').decode(b.subarray(o + 8, o + 8 + len));
+        if (s.startsWith('zyven-frame\0')) return JSON.parse(s.slice(12));
+      }
+      if (type === 'IDAT' || type === 'IEND') break;
+      o += 12 + len;
+    }
+  } catch (e) {}
+  return null;
+}
+
+/* ---------- Local image processing ---------- */
+function cfCanvas(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
+function toCanvas(src, max) {
+  const w = src.videoWidth || src.naturalWidth || src.width, h = src.videoHeight || src.naturalHeight || src.height;
+  const s = Math.min(1, max / Math.max(w, h)), c = cfCanvas(Math.max(1, Math.round(w * s)), Math.max(1, Math.round(h * s)));
+  const g = c.getContext('2d', { willReadFrequently: true }); g.imageSmoothingQuality = 'high'; g.drawImage(src, 0, 0, c.width, c.height);
+  return c;
+}
+function hasAlpha(cv) {
+  const d = cv.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, cv.width, cv.height).data;
+  let clear = 0; for (let i = 3; i < d.length; i += 16) if (d[i] < 200) clear++;
+  return clear / (d.length / 16) > 0.02;
+}
+/* Main colours: k-means on a small copy. Vivid colours first. */
+function extractPalette(cvs) {
+  const px = [];
+  for (const cv of cvs) {
+    const s = toCanvas(cv, 56), d = s.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, s.width, s.height).data;
+    for (let i = 0; i < d.length; i += 4) if (d[i + 3] > 160) px.push([d[i], d[i + 1], d[i + 2]]);
+  }
+  if (px.length < 8) return [];
+  const K = 6; let cs = Array.from({ length: K }, (_, i) => px[Math.floor((i + .5) * px.length / K)].slice());
+  let counts = new Array(K).fill(0);
+  for (let it = 0; it < 8; it++) {
+    const sum = cs.map(() => [0, 0, 0]); counts = new Array(K).fill(0);
+    for (const p of px) {
+      let best = 0, bd = 1e9;
+      for (let k = 0; k < K; k++) { const d = (p[0] - cs[k][0]) ** 2 + (p[1] - cs[k][1]) ** 2 + (p[2] - cs[k][2]) ** 2; if (d < bd) { bd = d; best = k; } }
+      counts[best]++; sum[best][0] += p[0]; sum[best][1] += p[1]; sum[best][2] += p[2];
+    }
+    cs = cs.map((c, k) => counts[k] ? sum[k].map(v => v / counts[k]) : c);
+  }
+  const sat = ([r, g, b]) => { const mx = Math.max(r, g, b), mn = Math.min(r, g, b); return mx ? (mx - mn) / mx : 0; };
+  const hex = c => '#' + c.map(v => Math.round(v).toString(16).padStart(2, '0')).join('');
+  const out = cs.map((c, k) => ({ c, n: counts[k], score: counts[k] * (0.12 + sat(c) * 1.5) * (0.4 + Math.max(...c) / 255) }))
+    .filter(x => x.n > px.length * 0.02).sort((a, b) => b.score - a.score);
+  const picked = [];
+  for (const x of out) if (!picked.some(p => Math.hypot(p[0] - x.c[0], p[1] - x.c[1], p[2] - x.c[2]) < 38)) picked.push(x.c);
+  return picked.slice(0, 5).map(hex);
+}
+/* Crop to what isn't transparent. */
+function trimAlpha(cv) {
+  const { width: w, height: h } = cv, d = cv.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, w, h).data;
+  let x0 = w, y0 = h, x1 = -1, y1 = -1;
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (d[(y * w + x) * 4 + 3] > 24) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+  if (x1 < 0) return null;
+  const c = cfCanvas(x1 - x0 + 1, y1 - y0 + 1); c.getContext('2d').drawImage(cv, -x0, -y0);
+  return c;
+}
+/* Wraps a picture around the ring (polar mapping), mirrored so there is no seam. */
+function polarWrap(img, N, ri, ro) {
+  const sw = img.width, sh = img.height, sd = img.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, sw, sh).data;
+  const out = cfCanvas(N, N), g = out.getContext('2d'), od = g.createImageData(N, N), o = od.data, c = N / 2;
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+    const dx = x + .5 - c, dy = y + .5 - c, d = Math.hypot(dx, dy);
+    if (d < ri - 2 || d > ro + 2) continue;
+    let u = (Math.atan2(dy, dx) / (Math.PI * 2) + .5) * 2; if (u > 1) u = 2 - u;
+    const v = Math.min(1, Math.max(0, (ro - d) / Math.max(1, ro - ri)));
+    const sx = Math.min(sw - 1, Math.floor(u * (sw - 1))), sy = Math.min(sh - 1, Math.floor(v * (sh - 1)));
+    const si = (sy * sw + sx) * 4, oi = (y * N + x) * 4;
+    o[oi] = sd[si]; o[oi + 1] = sd[si + 1]; o[oi + 2] = sd[si + 2]; o[oi + 3] = sd[si + 3];
+  }
+  g.putImageData(od, 0, 0);
+  return out;
+}
+function cfShape(g, kind, c, R, rot = 0) {
+  g.beginPath();
+  if (kind === 'rounded') { const h = R * .9, r = R * .38; g.roundRect ? g.roundRect(c - h, c - h, h * 2, h * 2, r) : g.rect(c - h, c - h, h * 2, h * 2); return; }
+  if (kind === 'circle') { g.arc(c, c, R, 0, Math.PI * 2); return; }
+  const n = kind === 'hex' ? 6 : kind === 'scallop' ? 14 : kind === 'burst' ? 18 : 10, steps = kind === 'hex' ? 6 : 360;
+  for (let i = 0; i <= steps; i++) {
+    const a = (i / steps) * Math.PI * 2 + rot;
+    let r = R;
+    if (kind === 'scallop') r = R * (.9 + .1 * Math.abs(Math.sin(a * n / 2)));
+    else if (kind === 'burst') { const t = (a * n / (Math.PI * 2)) % 1; r = R * (.84 + .16 * (1 - Math.abs(t * 2 - 1))); }
+    else if (kind === 'wave') r = R * (.93 + .07 * Math.sin(a * n));
+    const x = c + Math.cos(a - (kind === 'hex' ? Math.PI / 2 : 0)) * r, y = c + Math.sin(a - (kind === 'hex' ? Math.PI / 2 : 0)) * r;
+    i ? g.lineTo(x, y) : g.moveTo(x, y);
+  }
+  g.closePath();
+}
+function star(g, x, y, r) { g.beginPath(); g.moveTo(x, y - r); g.quadraticCurveTo(x, y, x + r, y); g.quadraticCurveTo(x, y, x, y + r); g.quadraticCurveTo(x, y, x - r, y); g.quadraticCurveTo(x, y, x, y - r); g.fill(); }
+
+/* Draws a frame. layer: 'all' (everything), 'base' (everything but a video fill), 'fill' (only the band fill, for video loop frames). */
+function cfDraw(spec, src, N, layer = 'all', frameImg = null) {
+  const out = cfCanvas(N, N), g = out.getContext('2d'), k = N / CF_N, c = N / 2;
+  const ri = CF_RI * k, R = Math.min(N / 2 - 14 * k, ri + spec.thick * k);
+  const cols = spec.colors.filter(hexOk); if (!cols.length) cols.push('#FFFFFF');
+  const pic = frameImg || (src && (spec.fill === 'image' || spec.fill === 'wrap') ? (src.cut && spec.cut ? src.cut : src.img) : null);
+  const usesPic = !!pic && (spec.fill === 'image' || spec.fill === 'wrap');
+  const skipFill = layer === 'base' && spec.anim === 'v' && usesPic;
+  const tmp = cfCanvas(N, N), t = tmp.getContext('2d');
+  /* glow behind the ring */
+  if (layer !== 'fill' && spec.glow > 0) {
+    t.save(); t.shadowColor = spec.glowColor || cols[0]; t.shadowBlur = spec.glow / 100 * 30 * k; t.fillStyle = spec.glowColor || cols[0];
+    cfShape(t, spec.shape, c, R, spec.rot); t.fill(); t.restore();
+    /* keep only the halo: the ring itself is drawn next */
+    t.save(); t.globalCompositeOperation = 'destination-out'; cfShape(t, spec.shape, c, R, spec.rot); t.fill(); t.restore();
+  }
+  /* band fill */
+  if (!skipFill) {
+    t.save(); cfShape(t, spec.shape, c, R, spec.rot); t.clip();
+    if (usesPic && spec.fill === 'wrap') t.drawImage(polarWrap(toCanvas(pic, 640), N, ri, R), 0, 0);
+    else if (usesPic) {
+      const z = (spec.zoom || 100) / 100, w = pic.width, h = pic.height, s = (2 * R / Math.min(w, h)) * z;
+      t.fillStyle = cols[0]; t.fillRect(0, 0, N, N);
+      t.drawImage(pic, c - w * s / 2, c - h * s / 2, w * s, h * s);
+    } else if (spec.fill === 'solid' || cols.length === 1) { t.fillStyle = cols[0]; t.fillRect(0, 0, N, N); }
+    else {
+      let gr;
+      if (spec.grad === 'linear') gr = t.createLinearGradient(c - R, c - R, c + R, c + R);
+      else if (t.createConicGradient) gr = t.createConicGradient(spec.rot || 0, c, c);
+      else gr = t.createLinearGradient(0, 0, N, N);
+      const list = spec.grad === 'linear' ? cols : [...cols, cols[0]];
+      list.forEach((col, i) => gr.addColorStop(i / Math.max(1, list.length - 1), col));
+      t.fillStyle = gr; t.fillRect(0, 0, N, N);
+    }
+    t.restore();
+  }
+  if (layer !== 'fill') {
+    /* rims */
+    if (spec.rim > 0) {
+      t.save(); t.strokeStyle = spec.rimColor; t.lineWidth = spec.rim * k;
+      cfShape(t, spec.shape, c, R - spec.rim * k / 2, spec.rot); t.stroke();
+      t.beginPath(); t.arc(c, c, ri + spec.rim * k / 2, 0, Math.PI * 2); t.stroke(); t.restore();
+    }
+    /* stickers: the subject taken from the upload, repeated around the ring */
+    const sticker = src && spec.els > 0 ? (src.sticker || (spec.cut ? src.cutTrim : null)) : null;
+    if (sticker) {
+      const band = R - ri, sz = band * (spec.elSize / 100) * 1.5, mid = (ri + R) / 2;
+      for (let i = 0; i < spec.els; i++) {
+        const a = (i / spec.els) * Math.PI * 2 + (spec.elRot || 0) * Math.PI / 180 - Math.PI / 2;
+        const s = sz / Math.max(sticker.width, sticker.height);
+        t.save(); t.translate(c + Math.cos(a) * mid, c + Math.sin(a) * mid); if (spec.elTurn) t.rotate(a + Math.PI / 2);
+        t.drawImage(sticker, -sticker.width * s / 2, -sticker.height * s / 2, sticker.width * s, sticker.height * s); t.restore();
+      }
+    }
+    /* sparkles baked into the picture */
+    if (spec.dots > 0) {
+      const r = cfRand(spec.seed || 'zyven'); t.save(); t.fillStyle = spec.dotColor || '#FFFFFF'; t.shadowColor = t.fillStyle; t.shadowBlur = 6 * k;
+      for (let i = 0; i < spec.dots; i++) { const a = r() * Math.PI * 2, d = ri + (R - ri) * (.15 + r() * .7); star(t, c + Math.cos(a) * d, c + Math.sin(a) * d, (2.5 + r() * 5) * k); }
+      t.restore();
+    }
+  }
+  /* the photo circle always stays clear */
+  t.save(); t.globalCompositeOperation = 'destination-out'; t.beginPath(); t.arc(c, c, ri, 0, Math.PI * 2); t.fill(); t.restore();
+  g.globalAlpha = Math.min(1, Math.max(.2, spec.opacity / 100)); g.drawImage(tmp, 0, 0);
+  return out;
+}
+function cfSprite(spec, src) {
+  const n = src.frames.length, sh = cfCanvas(CF_SPR * n, CF_SPR), g = sh.getContext('2d');
+  src.frames.forEach((f, i) => g.drawImage(cfDraw(spec, src, CF_SPR, 'fill', spec.cut && src.cutFrames ? src.cutFrames[i] : f), i * CF_SPR, 0));
+  return sh;
+}
+
+/* Pictures and videos to work from. */
+async function cfLoadImage(file) {
+  if (file.size > 40 * 1024 * 1024) throw new Error('That picture is over 40 MB. Choose a smaller one.');
+  let frames = null;
+  if (/gif|webp|apng|png/.test(file.type) && 'ImageDecoder' in window) {
+    try {
+      const dec = new ImageDecoder({ data: await file.arrayBuffer(), type: file.type });
+      await dec.tracks.ready; const count = dec.tracks.selectedTrack?.frameCount || 1;
+      if (count > 1) {
+        frames = [];
+        const take = Math.min(CF_MAX_FRAMES, count);
+        for (let i = 0; i < take; i++) { const { image } = await dec.decode({ frameIndex: Math.floor(i * count / take) }); frames.push(toCanvas(image, 640)); image.close?.(); }
+      }
+      dec.close?.();
+    } catch (e) { frames = null; }
+  }
+  const bm = await decodeImage(file), img = toCanvas(bm, 1024); bm.close?.();
+  const alpha = hasAlpha(img);
+  const src = { kind: frames ? 'animated' : alpha ? 'png' : 'image', name: file.name || 'picture', img, frames, file };
+  src.sticker = alpha ? trimAlpha(img) : null;
+  src.palette = extractPalette(frames || [img]);
+  return src;
+}
+async function cfLoadVideo(file, start = null) {
+  if (file.size > 300 * 1024 * 1024) throw new Error('That video is over 300 MB. Choose a shorter one.');
+  const url = URL.createObjectURL(file), v = document.createElement('video');
+  v.muted = true; v.playsInline = true; v.preload = 'auto'; v.src = url;
+  const wait = (ev, ms) => new Promise((res, rej) => { const t = setTimeout(() => rej(new Error('timeout')), ms); v.addEventListener(ev, () => { clearTimeout(t); res(); }, { once: true }); v.addEventListener('error', () => { clearTimeout(t); rej(new Error('This video can’t be opened on this phone. Try an MP4.')); }, { once: true }); });
+  try {
+    await wait('loadeddata', 15000);
+    const dur = Number.isFinite(v.duration) && v.duration > 0 ? v.duration : 0;
+    const len = Math.min(dur || 0, 2.4), s0 = start == null ? Math.max(0, dur / 2 - len / 2) : Math.min(Math.max(0, start), Math.max(0, dur - len));
+    const frames = [];
+    for (let i = 0; i < CF_MAX_FRAMES; i++) {
+      const t = dur ? s0 + (len * i) / CF_MAX_FRAMES : 0;
+      if (Math.abs(v.currentTime - t) > .01) { v.currentTime = t; await wait('seeked', 8000); }
+      frames.push(toCanvas(v, 640));
+      if (!dur) break;
+    }
+    return { kind: 'video', name: file.name || 'video', img: frames[Math.floor(frames.length / 2)], frames: frames.length > 1 ? frames : null, file, dur, start: s0, palette: extractPalette(frames), sticker: null };
+  } catch (e) {
+    throw new Error(/timeout/.test(e.message) ? 'This video took too long to read. Try a shorter MP4.' : e.message);
+  } finally { v.removeAttribute('src'); v.load(); URL.revokeObjectURL(url); }
+}
+function cfCutout(src, tol) {
+  if (!src || src.sticker) return;
+  const res = removePlainBackground(src.img, tol);
+  src.cut = res.canvas; src.cutTrim = res.ratio > 0.02 ? trimAlpha(res.canvas) : null; src.cutRatio = res.ratio; src.cutSpread = res.spread;
+  src.cutFrames = src.frames ? src.frames.map(f => removePlainBackground(f, tol).canvas) : null;
+}
+
+/* ---------- The Frame Creator screen ---------- */
+ui.fs = null; ui.fsNames = {};
+const cfDefault = () => ({
+  name: 'My frame', shape: 'circle', thick: 46, fill: 'gradient', grad: 'sweep', colors: ['#7C5CFF', '#22D3EE', '#FF7AB6'], slot: 0,
+  rim: 3, rimColor: '#FFFFFF', glow: 35, glowColor: '', opacity: 100, rot: 0, zoom: 100,
+  els: 0, elSize: 70, elRot: 0, elTurn: false, cut: false, tol: 40, dots: 0, dotColor: '#FFFFFF',
+  anim: 'n', speed: 3, amt: 3, pcolor: '#FFFFFF', seed: Math.random().toString(36).slice(2, 8),
+});
+function openFrameStudio(tab = 'create') {
+  closeOverlay();
+  if (!sb || !Cloud.me) { toast('Sign in to make frames.', 'info'); return; }
+  ui.fs = { tab, spec: cfDefault(), src: null, busy: '', err: '', editId: null, lib: null, libTab: 'all', libErr: '', prev: {}, rt: 0 };
+  const el = $('#fstudio');
+  el.innerHTML = `
+    <header class="scr-head">
+      <button class="icon-btn ghost" data-action="fs-close" aria-label="Back">${I('back')}</button>
+      <h2>Frame Creator</h2>
+    </header>
+    <div class="seg fs-tabs" id="fs-tabs" role="tablist"></div>
+    <div class="scr-body fs-body" id="fs-body"></div>
+    <div class="fr-acts" id="fs-acts"></div>
+    <input type="file" id="fs-in" accept="image/*,video/*" hidden>`;
+  el.classList.add('open'); el.setAttribute('aria-hidden', 'false');
+  renderStudio();
+  if (tab === 'library') loadLibrary();
+}
+function closeFrameStudio() {
+  const el = $('#fstudio'), f = ui.fs; ui.fs = null;
+  if (f) Object.values(f.prev).forEach(u => u && URL.revokeObjectURL(u));
+  el.classList.remove('open'); el.setAttribute('aria-hidden', 'true');
+  setTimeout(() => { if (!el.classList.contains('open')) el.innerHTML = ''; }, 450);
+}
+function studioDirty() { const f = ui.fs; return !!(f && (f.src || f.touched)); }
+const fsChips = (action, cur, opts, dis = []) => `<div class="chips fs-chips">${opts.map(([v, l]) => `<button type="button" class="chip ${cur === v ? 'on' : ''}" data-action="${action}" data-v="${v}" ${dis.includes(v) ? 'disabled' : ''} aria-pressed="${cur === v}">${l}</button>`).join('')}</div>`;
+const fsSeg = (action, cur, opts, dis = []) => `<div class="seg" style="grid-template-columns:repeat(${opts.length},1fr);margin:0" role="radiogroup">${opts.map(([v, l]) => `<button type="button" class="${cur === v ? 'on' : ''}" data-action="${action}" data-v="${v}" role="radio" aria-checked="${cur === v}" ${dis.includes(v) ? 'disabled' : ''}>${l}</button>`).join('')}</div>`;
+const fsSw = (action, cur, list, extra = '') => `<div class="fs-sw">${[...new Set(list.map(c => c.toLowerCase()))].map(c => `<button type="button" class="fs-dot ${cur && cur.toLowerCase() === c.toLowerCase() ? 'on' : ''}" style="--c:${c}" data-action="${action}" data-v="${c}" aria-label="Colour ${c}" ${extra}></button>`).join('')}</div>`;
+function renderStudio() {
+  const f = ui.fs; if (!f) return;
+  $('#fs-tabs').innerHTML = [['create', f.editId ? 'Edit frame' : 'Create'], ['library', 'My frames']].map(([v, l]) => `<button type="button" class="${f.tab === v ? 'on' : ''}" data-action="fs-tab" data-v="${v}" role="tab" aria-selected="${f.tab === v}">${l}</button>`).join('');
+  if (f.tab === 'library') { renderLibrary(); return; }
+  const s = f.spec, src = f.src, vid = !!(src && src.frames);
+  const kindName = { image: 'Picture', png: 'Transparent PNG', video: 'Video', animated: 'Animated picture' };
+  const pal = src?.palette || [];
+  $('#fs-body').innerHTML = `
+    <div class="fr-hero fs-hero">
+      <div class="fr-big" id="fs-big"></div>
+      <div class="fr-sizes" id="fs-sizes"></div>
+      <p class="sim-tag fs-honest">${I('info')}<span>Made on your phone from your own picture or video. No AI, no paid service. The middle stays empty, so your photo is never covered or changed.</span></p>
+    </div>
+    <section class="fs-sec">
+      <h4>1 · Start from</h4>
+      ${src ? `<div class="fs-src">
+          <img src="${f.prev.src || ''}" alt="">
+          <div><b>${esc(kindName[src.kind] || 'Picture')}</b><span>${esc(src.name).slice(0, 40)}${vid ? ` · ${src.frames.length} frames` : ''}</span>
+          ${pal.length ? `<span class="fs-pal">${pal.map(c => `<i style="background:${c}"></i>`).join('')}<small>colours found</small></span>` : ''}</div>
+          <button type="button" class="icon-btn" data-action="fs-pick" aria-label="Choose another">${I('refresh')}</button>
+          <button type="button" class="icon-btn" data-action="fs-unsrc" aria-label="Remove">${I('x')}</button>
+        </div>
+        ${src.kind === 'video' && src.dur > 2.6 ? rangeRow('fs-vstart', 'Clip start', 0, Math.max(0, Math.floor((src.dur - 2.4) * 10) / 10), .1, src.start.toFixed(1), v => `${v.toFixed(1)}s`) : ''}`
+      : `<button type="button" class="fs-drop" data-action="fs-pick" ${f.busy ? 'disabled' : ''}>${I('image')}<b>Upload a picture or video</b><span>JPG, PNG (transparent works), GIF, WebP, MP4. We take its colours, shapes and frames.</span></button>
+         <p class="fs-or">Or just design with colours below.</p>`}
+      ${f.err ? `<p class="fs-err" role="alert">${esc(f.err)}</p>` : ''}
+    </section>
+    <section class="fs-sec">
+      <h4>2 · Shape</h4>
+      ${fsChips('fs-set', s.shape, CF_SHAPES).replace(/data-action="fs-set"/g, 'data-action="fs-set" data-k="shape"')}
+      ${rangeRow('fs-thick', 'Thickness', 14, 70, 1, s.thick, v => `${Math.round(v)}`)}
+      ${['hex', 'scallop', 'burst', 'wave'].includes(s.shape) ? rangeRow('fs-rot', 'Turn', 0, 360, 1, Math.round((s.rot || 0) * 180 / Math.PI), v => `${Math.round(v)}°`) : ''}
+    </section>
+    <section class="fs-sec">
+      <h4>3 · Fill and colours</h4>
+      ${fsSeg('fs-fill', s.fill, [['gradient', 'Gradient'], ['solid', 'Solid'], ['image', 'Picture'], ['wrap', 'Wrap']], src ? [] : ['image', 'wrap'])}
+      ${s.fill === 'gradient' ? fsSeg('fs-grad', s.grad, [['sweep', 'Around'], ['linear', 'Across']]) : ''}
+      ${s.fill === 'image' ? rangeRow('fs-zoom', 'Zoom', 60, 300, 1, s.zoom, v => `${Math.round(v)}%`) : ''}
+      <div class="fs-slots">${s.colors.slice(0, s.fill === 'solid' ? 1 : 3).map((c, i) => `<button type="button" class="fs-slot ${s.slot === i ? 'on' : ''}" style="--c:${c}" data-action="fs-slot" data-v="${i}" aria-label="Colour ${i + 1}"><span>${i + 1}</span></button>`).join('')}
+        ${s.fill !== 'solid' && s.colors.length < 3 ? '<button type="button" class="fs-slot add" data-action="fs-addcol" aria-label="Add colour">+</button>' : ''}
+        ${s.fill !== 'solid' && s.colors.length > 1 ? '<button type="button" class="fs-slot add" data-action="fs-delcol" aria-label="Remove colour">−</button>' : ''}</div>
+      ${pal.length ? `<span class="fs-lbl">From your upload</span>${fsSw('fs-col', s.colors[s.slot], pal)}` : ''}
+      <span class="fs-lbl">Colours</span>${fsSw('fs-col', s.colors[s.slot], CF_PRESETS)}
+      ${rangeRow('fs-hue', 'Fine-tune hue', 0, 360, 1, Math.round(hexHue(s.colors[s.slot])), v => `${Math.round(v)}°`)}
+    </section>
+    <section class="fs-sec">
+      <h4>4 · Border, glow, transparency</h4>
+      ${rangeRow('fs-rim', 'Border lines', 0, 10, 1, s.rim, v => `${Math.round(v)}`)}
+      ${s.rim ? fsSw('fs-rimc', s.rimColor, ['#FFFFFF', '#FFC15E', '#111111', ...pal.slice(0, 3)]) : ''}
+      ${rangeRow('fs-glow', 'Glow', 0, 100, 1, s.glow, v => `${Math.round(v)}%`)}
+      ${rangeRow('fs-op', 'Transparency', 0, 80, 1, 100 - s.opacity, v => `${Math.round(v)}%`)}
+    </section>
+    ${src ? `<section class="fs-sec">
+      <h4>5 · Elements from your upload</h4>
+      ${src.sticker ? '<p class="fs-hint">Your transparent picture is used as a sticker around the ring.</p>'
+        : `<label class="fs-tog"><input type="checkbox" data-input="fs-cut" ${s.cut ? 'checked' : ''}><span>Cut out the subject <small>Works on plain backgrounds</small></span></label>
+           ${s.cut ? rangeRow('fs-tol', 'Cut-out strength', 8, 120, 1, s.tol, v => `${Math.round(v)}`) : ''}
+           ${s.cut && src.cutRatio != null ? `<p class="fs-hint">${src.cutRatio < 0.02 ? 'Nothing was cut out: the edges aren’t one plain colour. Try more strength, or a picture on a plain background.' : src.cutSpread > 38 ? `Cut out ${Math.round(src.cutRatio * 100)}%. The background is busy, so edges may be rough.` : `Cut out ${Math.round(src.cutRatio * 100)}% as background.`}</p>` : ''}`}
+      ${src.sticker || src.cutTrim ? `${rangeRow('fs-els', 'Stickers', 0, 12, 1, s.els, v => `${Math.round(v)}`)}
+        ${s.els ? `${rangeRow('fs-elsize', 'Sticker size', 30, 100, 1, s.elSize, v => `${Math.round(v)}%`)}${rangeRow('fs-elrot', 'Sticker position', 0, 360, 1, s.elRot, v => `${Math.round(v)}°`)}
+        <label class="fs-tog"><input type="checkbox" data-input="fs-elturn" ${s.elTurn ? 'checked' : ''}><span>Turn stickers with the ring</span></label>` : ''}` : ''}
+    </section>` : ''}
+    <section class="fs-sec">
+      <h4>${src ? 6 : 5} · Sparkles and animation</h4>
+      ${rangeRow('fs-dots', 'Sparkles', 0, 40, 1, s.dots, v => `${Math.round(v)}`)}
+      ${s.dots ? fsSw('fs-dotc', s.dotColor, ['#FFFFFF', '#FFE58A', '#FF7AB6', '#5CB0FF', ...pal.slice(0, 2)]) : ''}
+      ${fsSeg('fs-anim-on', s.anim === 'n' ? 'static' : 'anim', [['static', 'Static'], ['anim', 'Animated']])}
+      ${s.anim !== 'n' ? `${fsChips('fs-anim', s.anim, Object.entries(CF_ANIMS).filter(([k]) => k !== 'n'), vid && (s.fill === 'image' || s.fill === 'wrap') ? [] : ['v'])}
+        ${s.anim === 'v' && !(vid && (s.fill === 'image' || s.fill === 'wrap')) ? '' : ''}
+        ${!vid ? '<p class="fs-hint">Video loop needs a video or an animated GIF/WebP, with the fill set to Picture or Wrap.</p>' : (s.fill !== 'image' && s.fill !== 'wrap') ? '<p class="fs-hint">For a video loop, set the fill to Picture or Wrap.</p>' : ''}
+        ${rangeRow('fs-speed', 'Speed', 1, 5, 1, s.speed, v => ['', 'Very slow', 'Slow', 'Medium', 'Fast', 'Very fast'][Math.round(v)])}
+        ${['k', 'o', 'p', 'w'].includes(s.anim) ? rangeRow('fs-amt', s.anim === 'k' || s.anim === 'o' ? 'Particles' : 'Strength', 1, 5, 1, s.amt, v => `${Math.round(v)}`) : ''}
+        ${['k', 'o', 'p', 'w'].includes(s.anim) ? `<span class="fs-lbl">Effect colour</span>${fsSw('fs-pcol', s.pcolor, ['#FFFFFF', '#FFE58A', '#FF7AB6', '#5CB0FF', '#4ADE9F', ...pal.slice(0, 3)])}` : ''}
+        <p class="fs-hint">Animations play on bigger pictures (profile, chat header) and pause when ZYVEN isn’t on screen. Small list pictures stay still to save battery.</p>` : ''}
+    </section>
+    <section class="fs-sec">
+      <h4>Name</h4>
+      <div class="fld"><input id="fs-name" data-input="fs-name" maxlength="24" value="${esc(s.name)}" autocomplete="off" aria-label="Frame name"></div>
+    </section>`;
+  renderStudioActs();
+  studioPreview();
+}
+function renderStudioActs() {
+  const f = ui.fs; if (!f) return;
+  if (f.tab === 'library') { $('#fs-acts').innerHTML = `<button class="btn secondary" data-action="open-frames">${I('frame')}Built-in frames</button><button class="btn" data-action="fs-new">${I('plus')}New frame</button>`; return; }
+  const b = f.busy;
+  $('#fs-acts').innerHTML = `
+    <button class="btn secondary fs-ic" data-action="fs-export" ${b ? 'disabled' : ''} aria-label="Save as PNG">${I('down')}</button>
+    <button class="btn secondary" data-action="fs-save" data-apply="0" ${b ? 'disabled' : ''}>${f.editId ? 'Save changes' : 'Save'}</button>
+    <button class="btn" data-action="fs-save" data-apply="1" ${b ? 'disabled' : ''}>${b ? `<span class="pp-spin sm"></span>${esc(b)}` : `${I('check')}Apply`}</button>`;
+}
+function hexHue(hex) {
+  if (!hexOk(hex)) return 0;
+  const r = parseInt(hex.slice(1, 3), 16) / 255, g = parseInt(hex.slice(3, 5), 16) / 255, b = parseInt(hex.slice(5, 7), 16) / 255;
+  const mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn; if (!d) return 0;
+  const h = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4;
+  return (h * 60 + 360) % 360;
+}
+function hueShift(hex, hue) {
+  const r = parseInt(hex.slice(1, 3), 16) / 255, g = parseInt(hex.slice(3, 5), 16) / 255, b = parseInt(hex.slice(5, 7), 16) / 255;
+  const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2, d = mx - mn;
+  const s = d ? d / (1 - Math.abs(2 * l - 1)) : 0.75, L = d ? l : Math.min(.6, Math.max(.4, l));
+  const C = (1 - Math.abs(2 * L - 1)) * (d ? s : .75), X = C * (1 - Math.abs((hue / 60) % 2 - 1)), m = L - C / 2;
+  const [R, G, B] = hue < 60 ? [C, X, 0] : hue < 120 ? [X, C, 0] : hue < 180 ? [0, C, X] : hue < 240 ? [0, X, C] : hue < 300 ? [X, 0, C] : [C, 0, X];
+  return '#' + [R, G, B].map(v => Math.round((v + m) * 255).toString(16).padStart(2, '0')).join('');
+}
+/* Live preview with your own photo, at the sizes people will see. */
+function studioPreview(soon) {
+  const f = ui.fs; if (!f || f.tab !== 'create') return;
+  clearTimeout(f.rt);
+  f.rt = setTimeout(async () => {
+    if (!ui.fs || ui.fs !== f) return;
+    const s = f.spec, src = f.src, vid = s.anim === 'v' && src?.frames && (s.fill === 'image' || s.fill === 'wrap');
+    try {
+      const base = await canvasBlob(cfDraw(s, src, 384, vid ? 'base' : 'all'), 'image/png');
+      const spr = vid ? await canvasBlob(cfSprite(s, src), 'image/png') : null;
+      ['base', 'spr'].forEach(k => { if (f.prev[k]) URL.revokeObjectURL(f.prev[k]); });
+      f.prev.base = base && URL.createObjectURL(base); f.prev.spr = spr && URL.createObjectURL(spr);
+      const p = { anim: s.anim, speed: s.speed, amt: s.amt, frames: vid ? src.frames.length : 0, color: s.pcolor };
+      const me = state.profile;
+      const one = size => avatarFor({ ...me, frame: null }, size).replace(/<\/span>\s*$/, `<i class="fr-ov cf a-${p.anim}${size >= 64 && p.anim !== 'n' ? ' live' : ''}" style="--fc:${p.color};--d:${CF_DUR[p.speed]}s;--amt:${p.amt}">${cfMarkup(p, f.prev.base, f.prev.spr, size)}</i></span>`).replace('class="av', 'class="av framed');
+      const big = $('#fs-big'), sizes = $('#fs-sizes'); if (!big) return;
+      big.innerHTML = one(132);
+      sizes.innerHTML = `${one(64)}${one(48)}${one(36)}<span class="fr-row-demo"><b>${esc(s.name || 'My frame')}</b><small>${esc(CF_ANIMS[s.anim])}${vid ? ` · ${src.frames.length} video frames` : ''}</small></span>`;
+    } catch (e) { console.warn('ZYVEN: frame preview', e); }
+  }, soon ? 0 : 70);
+}
+function studioSet(k, v, rerender = true) {
+  const f = ui.fs; if (!f) return;
+  f.spec[k] = v; f.touched = true;
+  if (k === 'fill' && v === 'solid') f.spec.slot = 0;
+  if (rerender) { const y = $('#fs-body').scrollTop; renderStudio(); $('#fs-body').scrollTop = y; } else studioPreview();
+}
+async function studioLoad(file) {
+  const f = ui.fs; if (!f || !file) return;
+  const isVid = /^video\//.test(file.type || '') || /\.(mp4|webm|mov|3gp|m4v)$/i.test(file.name || '');
+  const isImg = /^image\//.test(file.type || '');
+  if (!isVid && !isImg) { f.err = 'That file isn’t a picture or a video.'; renderStudio(); return; }
+  f.busy = isVid ? 'Reading video…' : 'Reading picture…'; f.err = ''; renderStudioActs();
+  try {
+    const src = isVid ? await cfLoadVideo(file) : await cfLoadImage(file);
+    if (ui.fs !== f) return;
+    f.src = src; f.touched = true;
+    const s = f.spec;
+    if (src.palette.length >= 2) { s.colors = src.palette.slice(0, 3); s.slot = 0; }
+    if (src.sticker) { s.els = s.els || 6; s.fill = s.fill === 'image' || s.fill === 'wrap' ? 'gradient' : s.fill; }
+    else s.fill = 'wrap';
+    if (src.frames && (s.fill === 'image' || s.fill === 'wrap')) s.anim = 'v';
+    if (f.prev.src) URL.revokeObjectURL(f.prev.src);
+    const th = await canvasBlob(toCanvas(src.img, 160), 'image/png'); f.prev.src = th ? URL.createObjectURL(th) : '';
+  } catch (e) { f.err = e?.message || 'That file couldn’t be read.'; }
+  f.busy = ''; renderStudio();
+}
+async function studioReloadVideo(start) {
+  const f = ui.fs; if (!f?.src || f.src.kind !== 'video') return;
+  f.busy = 'Reading video…'; renderStudioActs();
+  try { const src = await cfLoadVideo(f.src.file, start); if (ui.fs !== f) return; f.src = src; if (f.spec.cut) cfCutout(src, f.spec.tol); }
+  catch (e) { f.err = e?.message || 'That video couldn’t be read.'; }
+  f.busy = ''; renderStudio();
+}
+const newFrameId = () => { const a = new Uint8Array(10); crypto.getRandomValues(a); return [...a].map(x => 'abcdefghijklmnopqrstuvwxyz0123456789'[x % 36]).join(''); };
+/* Save to your library (your own folder) and optionally put it on your profile. */
+async function studioSave(apply) {
+  const f = ui.fs; if (!f || f.busy) return;
+  const s = f.spec, src = f.src, vid = s.anim === 'v' && src?.frames && (s.fill === 'image' || s.fill === 'wrap');
+  if (s.anim === 'v' && !vid) { toast('Video loop needs a video with the fill set to Picture or Wrap. Pick another animation.', 'film'); return; }
+  s.name = (s.name || '').trim().slice(0, 24) || 'My frame';
+  f.busy = 'Saving…'; renderStudioActs();
+  const id = newFrameId(), me = Cloud.me, old = f.editId;
+  const code = CF.code(id, { anim: s.anim, speed: s.speed, amt: s.amt, frames: vid ? src.frames.length : 0, color: hexOk(s.pcolor) ? s.pcolor : '#ffffff' });
+  const ps = CF.paths(code, me);
+  try {
+    const raw = await canvasBlob(cfDraw(s, src, CF_N, vid ? 'base' : 'all'), 'image/png');
+    if (!raw) throw new Error('This phone couldn’t create the picture.');
+    const { slot, ...design } = s;
+    const base = await pngWithMeta(raw, { v: 1, name: s.name, code, spec: design, src: src ? src.kind : null, at: Date.now() });
+    if (base.size > 4.5e6) throw new Error('This frame is too detailed to save. Try fewer stickers or a simpler fill.');
+    if (vid) { const spr = await canvasBlob(cfSprite(s, src), 'image/png'); if (!spr) throw new Error('This phone couldn’t create the video loop.'); await CF.put(ps.sprite, spr); }
+    if (src) {
+      const keep = src.kind === 'png' || src.sticker;
+      const sb2 = await canvasBlob(toCanvas(src.img, 1024), keep ? 'image/png' : 'image/jpeg', .86);
+      if (sb2 && sb2.size < 4.5e6) await CF.put(keep ? ps.srcPng : ps.src, sb2);
+    } else if (old?.srcBlob) await CF.put(old.srcKind === 'png' ? ps.srcPng : ps.src, old.srcBlob);
+    await CF.put(ps.base, base);
+    CF.own(code, me); ui.fsNames[id] = s.name;
+    const wasApplied = old && state.profile.frame === old.code;
+    if (apply || wasApplied) await saveFrame(code, true);
+    if (old) await CF.drop(Object.values(CF.paths(old.code, me) || {})).catch(() => {});
+    f.lib = null; f.busy = ''; f.editId = null; f.touched = false; f.spec = cfDefault(); f.src = null;
+    toast(apply || wasApplied ? 'Frame saved and applied. Others see it the next time their app refreshes.' : 'Saved to My frames', 'frame');
+    f.tab = 'library'; renderStudio(); loadLibrary();
+  } catch (e) {
+    await CF.drop([ps.base, ps.sprite, ps.src, ps.srcPng]).catch(() => {});
+    f.busy = ''; renderStudioActs();
+    toast(e?.message && !e.statusCode && !/fetch|network|JWT|row-level/i.test(e.message) ? e.message : cloudError(e), 'info');
+  }
+}
+async function studioExport() {
+  const f = ui.fs; if (!f) return;
+  const s = f.spec, src = f.src;
+  const blob = await canvasBlob(cfDraw(s, src, 1024, 'all'), 'image/png');
+  if (!blob) { toast('This phone couldn’t create the picture.', 'info'); return; }
+  const r = await saveBlobToDevice(`${(s.name || 'frame').replace(/[^\w\- ]+/g, '').trim() || 'frame'}.png`, blob);
+  toast(r.ok ? `${r.msg}. It’s a transparent PNG.` : r.msg, r.ok ? 'down' : 'info');
+}
+
+/* ---------- My frames ---------- */
+async function loadLibrary() {
+  const f = ui.fs; if (!f) return;
+  f.libErr = ''; if (!f.lib) f.lib = 'loading';
+  renderLibrary();
+  try {
+    const me = Cloud.me;
+    const { data, error } = await sb.storage.from('avatars').list(`${me}/frames`, { limit: 300, sortBy: { column: 'created_at', order: 'desc' } });
+    if (error) throw error;
+    const names = new Set((data || []).map(x => x.name));
+    const bases = (data || []).filter(x => /^[a-z0-9]{10}\.png$/.test(x.name));
+    const out = [];
+    await Promise.all(bases.map(async x => {
+      const id = x.name.slice(0, 10), path = `${me}/frames/${x.name}`;
+      const blob = await CF.fetch(path, true); if (!blob) return;
+      const meta = await pngMeta(blob); if (!meta || !CF.parse(meta.code) || CF.parse(meta.code).id !== id) return;
+      CF.own(meta.code, me); ui.fsNames[id] = meta.name;
+      const p = CF.parse(meta.code);
+      if (p.frames && names.has(`${id}-v.png`)) await CF.fetch(`${me}/frames/${id}-v.png`, false);
+      out.push({ id, code: meta.code, name: String(meta.name || 'My frame').slice(0, 24), spec: meta.spec || null, src: meta.src || null, at: meta.at || Date.parse(x.created_at) || 0, hasSrc: names.has(`${id}-src.jpg`) ? 'jpg' : names.has(`${id}-src.png`) ? 'png' : null });
+    }));
+    out.sort((a, b) => b.at - a.at);
+    if (ui.fs === f) { f.lib = out; renderLibrary(); }
+  } catch (e) { if (ui.fs === f) { f.lib = []; f.libErr = cloudError(e, 'Your frames couldn’t be loaded. Pull to refresh later.'); renderLibrary(); } }
+}
+function libAvatar(fr, size) {
+  const p = CF.parse(fr.code), ps = CF.paths(fr.code, Cloud.me);
+  return avatarFor({ ...state.profile, frame: null }, size).replace(/<\/span>\s*$/, `<i class="fr-ov cf a-${p.anim}${size >= 64 && p.anim !== 'n' ? ' live' : ''}" style="--fc:${p.color};--d:${CF_DUR[p.speed]}s;--amt:${p.amt}">${cfMarkup(p, CF.url(ps.base), ps.sprite ? CF.url(ps.sprite) : null, size)}</i></span>`).replace('class="av', 'class="av framed');
+}
+function renderLibrary() {
+  const f = ui.fs; if (!f || f.tab !== 'library') return;
+  renderStudioActs();
+  const cur = state.profile.frame;
+  if (f.lib === 'loading' || !f.lib) { $('#fs-body').innerHTML = '<div class="fs-load"><span class="pp-spin"></span>Loading your frames…</div>'; return; }
+  const cats = [['all', 'All'], ['animated', 'Animated'], ['static', 'Static'], ['video', 'From video']];
+  const list = f.lib.filter(x => { const p = CF.parse(x.code); return f.libTab === 'all' || (f.libTab === 'animated' ? p.anim !== 'n' : f.libTab === 'static' ? p.anim === 'n' : p.frames > 0 || x.src === 'video' || x.src === 'animated'); });
+  $('#fs-body').innerHTML = `
+    <div class="chips fr-tabs fs-libtabs" role="tablist">${cats.map(([k, l]) => `<button class="chip ${f.libTab === k ? 'on' : ''}" data-action="fs-libtab" data-v="${k}" role="tab" aria-selected="${f.libTab === k}">${l}</button>`).join('')}</div>
+    ${f.libErr ? `<p class="fs-err" role="alert">${esc(f.libErr)}</p>` : ''}
+    ${list.length ? `<div class="fr-grid">${list.map(x => {
+      const p = CF.parse(x.code);
+      return `<button class="fr-tile ${cur === x.code ? 'on' : ''}" data-action="fs-item" data-v="${x.id}" aria-label="${esc(x.name)}">${libAvatar(x, 58)}<span>${esc(x.name)}</span><i class="fr-badge">${cur === x.code ? 'On your profile' : p.anim === 'n' ? 'Static' : esc(CF_ANIMS[p.anim])}</i></button>`;
+    }).join('')}</div>`
+    : `<div class="empty fs-empty">${I('frame')}<b>${f.lib.length ? 'Nothing in this group' : 'No frames yet'}</b><span>${f.lib.length ? 'Try another group.' : 'Make your first frame from a picture, a video, or just colours.'}</span>${f.lib.length ? '' : `<button class="btn" data-action="fs-new">${I('plus')}Create a frame</button>`}</div>`}
+    <p class="sim-tag">${I('info')}<span>Frames are saved with your profile pictures, so they follow you to every phone you sign in on. The frame you apply is shown to everyone who sees your photo.</span></p>`;
+}
+function libItem(id) { return Array.isArray(ui.fs?.lib) ? ui.fs.lib.find(x => x.id === id) : null; }
+function libSheet(id) {
+  const x = libItem(id); if (!x) return;
+  const on = state.profile.frame === x.code, p = CF.parse(x.code);
+  openSheet(`<div class="sheet-head"><h3>${esc(x.name)}</h3><button class="icon-btn" data-action="close-overlay" aria-label="Close">${I('x')}</button></div>
+    <div class="fs-sheet-prev">${libAvatar(x, 120)}<small>${esc(CF_ANIMS[p.anim])}${p.frames ? ` · ${p.frames}-frame video loop` : ''}</small></div>
+    <div class="card">
+      ${on ? linkRow('fs-unapply', 'x', 'Take off my profile', 'Your photo stays the same') : linkRow('fs-apply', 'check', 'Use on my profile', 'Everyone sees it around your photo')}
+      ${x.spec ? linkRow('fs-edit', 'pen', 'Edit', 'Change colours, shape, animation') : ''}
+      ${linkRow('fs-rename', 'pen', 'Rename', esc(x.name))}
+      ${linkRow('fs-dl', 'down', 'Save as PNG', 'Transparent picture of this frame')}
+      ${linkRow('fs-del', 'trash', 'Delete', on ? 'Also takes it off your profile' : 'Removes it from all your phones', 'danger')}
+    </div>`);
+  ui.fsItem = id;
+}
+async function libApply(on) {
+  const x = libItem(ui.fsItem); if (!x) return; closeOverlay();
+  await saveFrame(on ? x.code : null, true);
+  toast(on ? 'Frame applied. Others see it the next time their app refreshes.' : 'Frame taken off your profile', 'frame');
+  renderLibrary();
+}
+async function libRename() {
+  const x = libItem(ui.fsItem); if (!x) return;
+  openSheet(`<div class="sheet-head"><h3>Rename frame</h3><button class="icon-btn" data-action="close-overlay" aria-label="Close">${I('x')}</button></div>
+    <form class="form fs-rn" data-form="fs-rename"><div class="fld"><label for="fs-rn">Name</label><input id="fs-rn" maxlength="24" value="${esc(x.name)}" autocomplete="off" aria-label="New name"></div>
+    <button class="btn block" type="submit">Save name</button></form>`, { onMount: () => setTimeout(() => $('#fs-rn')?.select(), 60) });
+}
+async function libRenameSave() {
+  const x = libItem(ui.fsItem), name = ($('#fs-rn')?.value || '').trim().slice(0, 24); if (!x || !name) return;
+  closeOverlay();
+  try {
+    const ps = CF.paths(x.code, Cloud.me), blob = await CF.fetch(ps.base, true); if (!blob) throw new Error('missing');
+    const meta = (await pngMeta(blob)) || {};
+    const fresh = await pngWithMeta(await stripMeta(blob), { ...meta, name, spec: meta.spec ? { ...meta.spec, name } : meta.spec });
+    await CF.put(ps.base, fresh);
+    x.name = name; if (x.spec) x.spec.name = name; ui.fsNames[x.id] = name;
+    toast('Renamed', 'check'); renderLibrary(); if (state.profile.frame === x.code) renderProfile();
+  } catch (e) { toast(cloudError(e, 'The name couldn’t be saved. Try again.'), 'info'); }
+}
+/* The PNG without its old text chunk (so renaming doesn't stack chunks). */
+async function stripMeta(blob) {
+  const b = new Uint8Array(await blob.arrayBuffer()), dv = new DataView(b.buffer), parts = [b.subarray(0, 8)];
+  let o = 8;
+  while (o + 12 <= b.length) {
+    const len = dv.getUint32(o), type = String.fromCharCode(...b.subarray(o + 4, o + 8)), end = o + 12 + len;
+    const isOurs = type === 'tEXt' && new TextDecoder('latin1').decode(b.subarray(o + 8, o + 8 + Math.min(len, 12))) === 'zyven-frame\0';
+    if (!isOurs) parts.push(b.subarray(o, end));
+    o = end;
+  }
+  return new Blob(parts, { type: 'image/png' });
+}
+async function libDelete() {
+  const x = libItem(ui.fsItem); if (!x) return;
+  const on = state.profile.frame === x.code;
+  const ok = await confirmDialog({ title: `Delete “${x.name}”?`, body: on ? 'It’s on your profile now. Deleting it takes it off, and others stop seeing it.' : 'It will be removed from all your phones.', confirmLabel: 'Delete', danger: true });
+  if (!ok) return;
+  closeOverlay();
+  try {
+    if (on) await saveFrame(null, true);
+    await CF.drop(Object.values(CF.paths(x.code, Cloud.me) || {}));
+    ui.fs.lib = ui.fs.lib.filter(y => y.id !== x.id); renderLibrary();
+    toast('Frame deleted', 'trash');
+  } catch (e) { toast(cloudError(e), 'info'); }
+}
+async function libEdit() {
+  const x = libItem(ui.fsItem), f = ui.fs; if (!x || !f || !x.spec) return;
+  closeOverlay();
+  f.busy = 'Opening…'; f.tab = 'create'; renderStudio();
+  const me = Cloud.me, ps = CF.paths(x.code, me);
+  let src = null, srcBlob = null;
+  try {
+    if (x.hasSrc) {
+      srcBlob = await CF.fetch(x.hasSrc === 'png' ? ps.srcPng : ps.src, true);
+      if (srcBlob) src = await cfLoadImage(new File([srcBlob], `${x.name}.${x.hasSrc}`, { type: srcBlob.type || (x.hasSrc === 'png' ? 'image/png' : 'image/jpeg') }));
+      const p = CF.parse(x.code);
+      if (src && p.frames && ps.sprite && CF.url(ps.sprite)) {
+        /* Rebuild the video frames from the saved loop strip. */
+        const strip = await decodeImage(await (await fetch(CF.url(ps.sprite))).blob());
+        src.frames = Array.from({ length: p.frames }, (_, i) => { const c = cfCanvas(CF_SPR, CF_SPR); c.getContext('2d').drawImage(strip, i * CF_SPR, 0, CF_SPR, CF_SPR, 0, 0, CF_SPR, CF_SPR); return c; });
+        src.kind = x.src || 'video';
+      }
+    }
+  } catch (e) { src = null; }
+  if (ui.fs !== f) return;
+  f.spec = { ...cfDefault(), ...x.spec, slot: 0 }; f.src = src; f.editId = { code: x.code, srcBlob, srcKind: x.hasSrc };
+  if (src) { if (f.spec.cut) cfCutout(src, f.spec.tol); const th = await canvasBlob(toCanvas(src.img, 160), 'image/png'); f.prev.src = th ? URL.createObjectURL(th) : ''; }
+  else if (f.spec.fill === 'image' || f.spec.fill === 'wrap') { f.spec.fill = 'gradient'; f.err = 'The picture this frame was made from isn’t available. Upload it again to use it.'; }
+  f.busy = ''; renderStudio();
+}
+async function libExport() {
+  const x = libItem(ui.fsItem); if (!x) return; closeOverlay();
+  const ps = CF.paths(x.code, Cloud.me), blob = await CF.fetch(ps.base, false);
+  if (!blob) { toast('This frame isn’t available right now. Check your connection.', 'info'); return; }
+  const r = await saveBlobToDevice(`${x.name.replace(/[^\w\- ]+/g, '').trim() || 'frame'}.png`, await stripMeta(blob));
+  toast(r.ok ? `${r.msg}. It’s a transparent PNG.` : r.msg, r.ok ? 'down' : 'info');
+}
+
+Object.assign(actions, {
+  'fs-open': () => openFrameStudio('create'),
+  'fs-close': async () => {
+    const f = ui.fs;
+    if (f && f.tab === 'create' && studioDirty() && !f.busy) {
+      const ok = await confirmDialog({ title: 'Leave without saving?', body: 'Your design will be lost. Your current profile frame stays as it is.', confirmLabel: 'Leave', danger: true });
+      if (!ok) return;
+    }
+    closeFrameStudio();
+  },
+  'fs-tab': el => { const f = ui.fs; if (!f || f.busy) return; f.tab = el.dataset.v; renderStudio(); if (f.tab === 'library' && !Array.isArray(f.lib)) loadLibrary(); },
+  'fs-new': () => { const f = ui.fs; if (!f) return; f.tab = 'create'; if (f.editId) { f.editId = null; f.spec = cfDefault(); f.src = null; } renderStudio(); },
+  'fs-pick': () => { if (!ui.fs?.busy) $('#fs-in')?.click(); },
+  'fs-unsrc': () => { const f = ui.fs; if (!f) return; f.src = null; if (f.spec.fill === 'image' || f.spec.fill === 'wrap') f.spec.fill = 'gradient'; if (f.spec.anim === 'v') f.spec.anim = 'n'; f.spec.els = 0; renderStudio(); },
+  'fs-set': el => studioSet(el.dataset.k, el.dataset.v),
+  'fs-fill': el => { const f = ui.fs; if (!f) return; studioSet('fill', el.dataset.v); },
+  'fs-grad': el => studioSet('grad', el.dataset.v),
+  'fs-slot': el => studioSet('slot', +el.dataset.v),
+  'fs-addcol': () => { const f = ui.fs; if (!f || f.spec.colors.length >= 3) return; f.spec.colors.push(CF_PRESETS[(f.spec.colors.length * 3 + 2) % CF_PRESETS.length]); studioSet('slot', f.spec.colors.length - 1); },
+  'fs-delcol': () => { const f = ui.fs; if (!f || f.spec.colors.length < 2) return; f.spec.colors.splice(f.spec.slot, 1); studioSet('slot', 0); },
+  'fs-col': el => { const f = ui.fs; if (!f) return; f.spec.colors[f.spec.slot] = el.dataset.v; studioSet('colors', f.spec.colors); },
+  'fs-rimc': el => studioSet('rimColor', el.dataset.v),
+  'fs-dotc': el => studioSet('dotColor', el.dataset.v),
+  'fs-pcol': el => studioSet('pcolor', el.dataset.v),
+  'fs-anim-on': el => { const f = ui.fs; if (!f) return; const vid = f.src?.frames && (f.spec.fill === 'image' || f.spec.fill === 'wrap'); studioSet('anim', el.dataset.v === 'static' ? 'n' : (f.spec.anim !== 'n' ? f.spec.anim : vid ? 'v' : 'w')); },
+  'fs-anim': el => studioSet('anim', el.dataset.v),
+  'fs-save': el => studioSave(el.dataset.apply === '1'),
+  'fs-export': () => studioExport(),
+  'fs-libtab': el => { if (ui.fs) { ui.fs.libTab = el.dataset.v; renderLibrary(); } },
+  'fs-item': el => libSheet(el.dataset.v),
+  'fs-apply': () => libApply(true),
+  'fs-unapply': () => libApply(false),
+  'fs-rename': () => libRename(),
+  'fs-del': () => libDelete(),
+  'fs-edit': () => libEdit(),
+  'fs-dl': () => libExport(),
+});
+/* Sliders and toggles. */
+document.addEventListener('input', e => {
+  const key = e.target.dataset?.input, f = ui.fs; if (!f || !key || !key.startsWith('fs-')) return;
+  const v = +e.target.value, out = $(`#${key}-v`), s = f.spec;
+  const fmt = { 'fs-thick': x => `${x}`, 'fs-rot': x => `${x}°`, 'fs-zoom': x => `${x}%`, 'fs-rim': x => `${x}`, 'fs-glow': x => `${x}%`, 'fs-op': x => `${x}%`, 'fs-tol': x => `${x}`, 'fs-els': x => `${x}`, 'fs-elsize': x => `${x}%`, 'fs-elrot': x => `${x}°`, 'fs-dots': x => `${x}`, 'fs-speed': x => ['', 'Very slow', 'Slow', 'Medium', 'Fast', 'Very fast'][x], 'fs-amt': x => `${x}`, 'fs-hue': x => `${x}°`, 'fs-vstart': x => `${x.toFixed(1)}s` };
+  if (out && fmt[key]) out.textContent = fmt[key](v);
+  f.touched = true;
+  const map = { 'fs-thick': 'thick', 'fs-zoom': 'zoom', 'fs-glow': 'glow', 'fs-elsize': 'elSize', 'fs-elrot': 'elRot', 'fs-speed': 'speed', 'fs-amt': 'amt' };
+  if (map[key]) { s[map[key]] = v; studioPreview(); return; }
+  if (key === 'fs-op') { s.opacity = 100 - v; studioPreview(); return; }
+  if (key === 'fs-rot') { s.rot = v * Math.PI / 180; studioPreview(); return; }
+  if (key === 'fs-hue') { s.colors[s.slot] = hueShift(s.colors[s.slot], v); const dot = document.querySelector(`.fs-slot[data-v="${s.slot}"]`); if (dot) dot.style.setProperty('--c', s.colors[s.slot]); studioPreview(); return; }
+  if (key === 'fs-name') { s.name = e.target.value; studioPreview(); return; }
+  /* these change which controls are shown, so redraw the panel once the finger lifts */
+  if (key === 'fs-rim' || key === 'fs-dots' || key === 'fs-els') { const was = s[{ 'fs-rim': 'rim', 'fs-dots': 'dots', 'fs-els': 'els' }[key]]; s[{ 'fs-rim': 'rim', 'fs-dots': 'dots', 'fs-els': 'els' }[key]] = v; if (!!was !== !!v) studioSet(key === 'fs-rim' ? 'rim' : key === 'fs-dots' ? 'dots' : 'els', v); else studioPreview(); return; }
+  if (key === 'fs-tol') { s.tol = v; clearTimeout(f.tt); f.tt = setTimeout(() => { if (ui.fs === f && f.src) { cfCutout(f.src, s.tol); studioSet('tol', s.tol); } }, 250); return; }
+  if (key === 'fs-vstart') { clearTimeout(f.vt); f.vt = setTimeout(() => studioReloadVideo(v), 450); return; }
+  if (key === 'fs-cut') { s.cut = e.target.checked; if (s.cut && f.src) { cfCutout(f.src, s.tol); if (!s.els && f.src.cutTrim) s.els = 6; } studioSet('cut', s.cut); return; }
+  if (key === 'fs-elturn') { studioSet('elTurn', e.target.checked, false); return; }
+}, true);
+document.addEventListener('change', e => {
+  if (e.target.id !== 'fs-in') return;
+  const file = e.target.files && e.target.files[0]; e.target.value = '';
+  if (file) studioLoad(file);
+}, true);
+Object.assign(forms, { 'fs-rename': () => libRenameSave() });
+/* Animated frames rest when ZYVEN isn't on screen. */
+document.addEventListener('visibilitychange', () => document.documentElement.classList.toggle('zv-away', document.visibilityState === 'hidden'));
 
 Object.assign(actions, {
   'pp-close': () => closePhotoPreview(),
@@ -7780,6 +8662,7 @@ document.addEventListener('keydown', e => {
     else if (ui.pp) closePhotoPreview();
     else if ($('#wallpaper').classList.contains('open')) closeWallpaper();
     else if ($('#frames').classList.contains('open')) closeFrames();
+    else if ($('#fstudio').classList.contains('open')) actions['fs-close']();
     else if ($('#saved').classList.contains('open')) closeSaved();
     else if ($('#stickers').classList.contains('open')) closeLibrary();
     else if (ui.rec) stopRecording(false);

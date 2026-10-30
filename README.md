@@ -102,6 +102,28 @@ There are no sample people or demo chats: a new account starts empty.
   The frame is drawn around your photo (your photo isn't changed) and other
   people see it in chats, lists, and headers.
 - **Profile picture:** choosing a new photo opens crop and reposition first.
+- **Frame Creator:** Profile → Customization → Frame Creator. Design your
+  own profile frame **on the phone, without AI and without any paid
+  service**:
+  - start from a picture, a transparent PNG, a GIF/WebP, a video, or just
+    colours. The app takes the main colours, cuts out the subject (plain
+    backgrounds), wraps the picture around the ring, or uses 8 frames of
+    your video as a looping frame;
+  - choose the shape (circle, rounded, hexagon, scallop, burst, wave),
+    thickness, colours and gradient, border lines, glow, transparency,
+    stickers, sparkles, and the animation (spin, pulse, light sweep,
+    sparkle, orbit, video loop) with its speed and strength;
+  - live preview with your own photo at the sizes people see;
+  - **My frames**: save many frames, filter (Animated / Static / From
+    video), apply, take off, edit, rename, delete, save as transparent PNG.
+  The frame's middle is always cut out, so your photo is never covered or
+  changed. Frames are stored in your folder of the `avatars` bucket
+  (`<your id>/frames/`), so they sync to all your phones and others can draw
+  the one you apply. Animations play only on larger pictures, and pause
+  when ZYVEN is in the background or the phone asks for reduced motion.
+  No server update is needed for this feature.
+  For later: the code has an empty `FRAME_SOURCES.ai` slot where an optional
+  AI design service could be added; nothing uses or needs one today.
 
 ### How your data is protected
 - Every table has **row-level security**: people can only read conversations
@@ -145,6 +167,15 @@ temporary Supabase server on GitHub, loads the database, and checks:
   background, per-chat, kept after restart, restore default, file
   cleanup); profile picture crop; frames chosen, saved, seen by the other
   account, and removed
+- Frame Creator in two browsers (plus a second device): colour, picture,
+  transparent PNG and video frames made on the device, transparent middle,
+  saved, applied, seen by the other account, animations and pausing,
+  synced, renamed, edited, removed, deleted
+
+**Test ZYVEN on Android** runs a test copy of the APK on an Android
+emulator and tests the Frame Creator inside the real Android WebView
+(picture processing, MP4 video frames, animation, saving, the other
+account seeing it, still there after restarting the app).
 
 The report appears on the run’s summary page and in the `test-results` branch.
 
